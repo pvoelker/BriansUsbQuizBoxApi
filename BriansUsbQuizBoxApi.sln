@@ -16,7 +16,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BriansUsbQuizBoxApi.Tests", "BriansUsbQuizBoxApi.Tests\BriansUsbQuizBoxApi.Tests.csproj", "{DA38FAC7-AFB4-40C3-B287-54AB99D0EBD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BriansUsbQuizBoxApi.Tests", "BriansUsbQuizBoxApi.Tests\BriansUsbQuizBoxApi.Tests.csproj", "{DA38FAC7-AFB4-40C3-B287-54AB99D0EBD5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{CCD3BFF5-DFEE-4CDE-8A97-677C3D61EB41}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Quixbox_Instructions.docx = docs\Quixbox_Instructions.docx
+		docs\DOCS_README.md = docs\DOCS_README.md
+		docs\USB QUIZ BOX SOFTWARE 1p1.docx = docs\USB QUIZ BOX SOFTWARE 1p1.docx
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
