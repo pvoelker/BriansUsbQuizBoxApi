@@ -1,5 +1,5 @@
 ﻿using BriansUsbQuizBoxApi.Exceptions;
-using BriansUsbQuizBoxApi.Protocol;
+using BriansUsbQuizBoxApi.Protocols;
 using BriansUsbQuizBoxApi.StateMachines;
 using System;
 using System.Threading;

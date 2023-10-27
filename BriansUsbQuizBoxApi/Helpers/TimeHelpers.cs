@@ -5,7 +5,7 @@ namespace BriansUsbQuizBoxApi.Helpers
     /// <summary>
     /// Various time related helpers
     /// </summary>
-    static internal class TimeHelpers
+    static public class TimeHelpers
     {
         static readonly private decimal COUNTER_INCREMENT_VALUE = 1.02m;
 
@@ -22,7 +22,7 @@ namespace BriansUsbQuizBoxApi.Helpers
                 throw new ArgumentException("Byte array must be of length 2", nameof(data));
             }
 
-            var intData = BitConverter.ToInt16(data);
+            var intData = BitConverter.ToUInt16(data);
 
             return intData * COUNTER_INCREMENT_VALUE;
         }

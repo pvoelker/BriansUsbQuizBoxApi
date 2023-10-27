@@ -1,4 +1,4 @@
-﻿using BriansUsbQuizBoxApi.Protocol;
+﻿using BriansUsbQuizBoxApi.Protocols;
 using System;
 
 namespace BriansUsbQuizBoxApi.StateMachines
@@ -10,7 +10,7 @@ namespace BriansUsbQuizBoxApi.StateMachines
     /// <summary>
     /// Winner Byte state machine
     /// </summary>
-    internal class WinnerByteSM
+    public class WinnerByteSM
     {
         private BuzzInCallback _buzzInCallback;
         private FiveSecondTimerExpiredCallback _fiveSecondTimerExpiredCallback;

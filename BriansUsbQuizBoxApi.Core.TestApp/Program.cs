@@ -1,5 +1,5 @@
 ﻿using BriansUsbQuizBoxApi;
-using BriansUsbQuizBoxApi.Protocol;
+using BriansUsbQuizBoxApi.Protocols;
 
 Console.WriteLine("--- Brian's Boxes Core API Test ---");
 

@@ -1,26 +1,29 @@
-﻿using BriansUsbQuizBoxApi.Protocol;
+﻿using BriansUsbQuizBoxApi.Protocols;
 using System;
 
 namespace BriansUsbQuizBoxApi.StateMachines
 {
-    public delegate void GameWaitingCallback();
+    public delegate void QuizBoxReadyCallback();
 
-    public delegate void GameLightOnCallback();
+    public delegate void FiveSecondTimerStartedCallback();
 
-    public delegate void GameBuzzInCallback();
+    public delegate void LockoutTimerStartedCallback();
 
-    public delegate void GameDoneCallback();
+    public delegate void LockoutTimerExpiredCallback();
 
     /// <summary>
-    /// Status Byte state machine for quiz box game mode
+    /// Status Byte state machine
     /// </summary>
-    internal class GameStatusByteSM
+    public class StatusByteSM
     {
-        private enum GameStates { Off, Waiting, LightOn, BuzzIn, Done }
+        private QuizBoxReadyCallback _quizBoxReadyCallback;
+        private FiveSecondTimerStartedCallback _fiveSecondTimerStartedCallback;
+        private LockoutTimerStartedCallback _lockoutTimerStartedCallback;
+        private LockoutTimerExpiredCallback _lockoutTimerExpiredCallback;
 
-        private GameStates _lastGameState = GameStates.Off;
-
-        private GameWaitingCallback _gameWaitingCallback;
+        private bool _lastInitialIdleMode = false; // Tracks initial idle mode state
+        private bool _lastFiveSecondTimerStarted = false;
+        private bool _lastLockoutTimerStarted = false;
 
         /// <summary>
         /// Constructor
@@ -30,7 +33,7 @@ namespace BriansUsbQuizBoxApi.StateMachines
         /// <param name="lockoutTimerStartedCallback">Callback for lockout timer started event</param>
         /// <param name="lockoutTimerExpiredCallback">Callback for lockout timer stopped event</param>
         /// <exception cref="ArgumentNullException">One or more arguments passed in where null</exception>
-        public GameStatusByteSM(
+        public StatusByteSM(
             QuizBoxReadyCallback quizBoxReadyCallback,
             FiveSecondTimerStartedCallback fiveSecondTimerStartedCallback,
             LockoutTimerStartedCallback lockoutTimerStartedCallback,
@@ -64,7 +67,9 @@ namespace BriansUsbQuizBoxApi.StateMachines
         /// </summary>
         public void Reset()
         {
-            _lastGameState = GameStates.Off
+            // Don't reset - _lastIdleModeOneShot
+            _lastFiveSecondTimerStarted = false;
+            _lastLockoutTimerStarted = false;
         }
 
         /// <summary>
@@ -77,9 +82,9 @@ namespace BriansUsbQuizBoxApi.StateMachines
             var fiveSecondTimerStarted = statusByte == StatusByte.RUNNING_5_SEC_TIMER;
             var lockoutTimerStarted = statusByte == StatusByte.EXTENDED_TIMER_RUNNING;
 
-            if(idleMode != _lastInitialIdleMode)
+            if (idleMode != _lastInitialIdleMode)
             {
-                if(idleMode == true)
+                if (idleMode == true)
                 {
                     _quizBoxReadyCallback();
                 }
