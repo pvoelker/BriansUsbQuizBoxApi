@@ -37,11 +37,21 @@ namespace BriansUsbQuizBoxApi.Tests.Helpers
         }
 
         [Fact]
-        public void CalculateResponseTime1()
+        public void CalculateResponseTime()
         {
-            var value = TimeHelpers.CalculateResponseTime(new byte[] { 0x01, 0x00 });
+            var value = TimeHelpers.CalculateResponseTime(new byte[] { 0x00, 0x01 });
 
             value.Should().Be(1.02m);
+        }
+
+        [Fact]
+        public void CalculateResponseTime325()
+        {
+            var value = TimeHelpers.CalculateResponseTime(new byte[] { 0x01, 0x45 });
+
+            // As documented from the 'USB Quiz Box Interface Document' by Brian's Boxes (McKevett Enterprises) on 7/9/2013
+
+            value.Should().Be(331.5m);
         }
 
         [Fact]

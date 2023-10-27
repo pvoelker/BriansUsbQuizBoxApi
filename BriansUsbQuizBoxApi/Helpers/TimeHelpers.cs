@@ -22,7 +22,8 @@ namespace BriansUsbQuizBoxApi.Helpers
                 throw new ArgumentException("Byte array must be of length 2", nameof(data));
             }
 
-            var intData = BitConverter.ToUInt16(data);
+            // MSB is contained in the lower number byte of the two byte array
+            var intData = BitConverter.ToUInt16(new byte[] { data[1], data[0] });
 
             return intData * COUNTER_INCREMENT_VALUE;
         }

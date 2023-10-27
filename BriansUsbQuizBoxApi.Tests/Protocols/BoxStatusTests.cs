@@ -350,14 +350,14 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
         public void AllTimesNonZero()
         {
             var array = new byte[65];
-            array[4] = 0x01;
-            array[6] = 0x01;
-            array[8] = 0x01;
-            array[10] = 0x01;
-            array[12] = 0x01;
-            array[14] = 0x01;
-            array[16] = 0x01;
-            array[18] = 0x01;
+            array[5] = 0x01;
+            array[7] = 0x01;
+            array[9] = 0x01;
+            array[11] = 0x01;
+            array[13] = 0x01;
+            array[15] = 0x01;
+            array[17] = 0x01;
+            array[19] = 0x01;
 
             var value = BoxStatus.Parse(array);
 
@@ -379,14 +379,14 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[2] = 0x02;
             array[3] = 0x03;
-            array[4] = 0x01;
-            array[6] = 0x01;
-            array[8] = 0x01;
-            array[10] = 0x01;
-            array[12] = 0x01;
-            array[14] = 0x01;
-            array[16] = 0x01;
-            array[18] = 0x01;
+            array[5] = 0x01;
+            array[7] = 0x01;
+            array[9] = 0x01;
+            array[11] = 0x01;
+            array[13] = 0x01;
+            array[15] = 0x01;
+            array[17] = 0x01;
+            array[19] = 0x01;
 
             var value = BoxStatus.Parse(array);
 
