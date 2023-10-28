@@ -2,6 +2,7 @@
 using BriansUsbQuizBoxApi.Protocols;
 using BriansUsbQuizBoxApi.StateMachines;
 using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace BriansUsbQuizBoxApi
@@ -12,6 +13,7 @@ namespace BriansUsbQuizBoxApi
 
         private WinnerByteSM _winnerByteSM;
         private StatusByteSM _statusByteSM;
+        private GameStatusByteSM _gameStatusByteSM;
 
         private EventWaitHandle? _done = null;
         private EventWaitHandle? _doneComplete = null;
@@ -32,6 +34,14 @@ namespace BriansUsbQuizBoxApi
 
         public event EventHandler? LockoutTimerExpired;
 
+        public event EventHandler? GameStarted;
+
+        public event EventHandler? GameLightOn;
+
+        public event EventHandler? GameFirstBuzzIn;
+
+        public event EventHandler<GameDoneEventArgs> GameDone;
+
         #endregion
 
         public QuizBoxApi()
@@ -45,6 +55,12 @@ namespace BriansUsbQuizBoxApi
                 () => FiveSecondTimerStarted?.Invoke(this, null),
                 () => LockoutTimerStarted?.Invoke(this, null),
                 () => LockoutTimerExpired?.Invoke(this, null)
+            );
+            _gameStatusByteSM = new GameStatusByteSM(
+                () => GameStarted?.Invoke(this, null),
+                () => GameLightOn?.Invoke(this, null),
+                () => GameFirstBuzzIn?.Invoke(this, null),
+                (r1, r2, r3, r4, g1, g2, g3, g4) => GameDone?.Invoke(this, new GameDoneEventArgs(r1, r2, r3, r4, g1, g2, g3, g4))
             );
         }
 
@@ -108,6 +124,7 @@ namespace BriansUsbQuizBoxApi
 
                 _winnerByteSM.Reset();
                 _statusByteSM.Reset();
+                _gameStatusByteSM.Reset();
             }
             else
             {
@@ -237,6 +254,8 @@ namespace BriansUsbQuizBoxApi
             _winnerByteSM.Process(status.Winner);
 
             _statusByteSM.Process(status.Status);
+
+            _gameStatusByteSM.Process(status);
         }
 
         protected virtual void Dispose(bool disposing)

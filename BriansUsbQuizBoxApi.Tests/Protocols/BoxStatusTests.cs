@@ -74,7 +74,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
 
             var value = BoxStatus.Parse(array);
 
-            value.Status.Should().Be(StatusByte.GAME_PERSON_BUZZED_IN);
+            value.Status.Should().Be(StatusByte.PERSON_BUZZED_IN);
             value.Winner.Should().Be(WinnerByte.NO_VALID_WINNER);
             value.Red1Time.Should().Be(0);
             value.Red2Time.Should().Be(0);

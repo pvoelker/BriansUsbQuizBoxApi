@@ -11,6 +11,57 @@ api.FiveSecondTimerStarted += Api_FiveSecondTimerStarted;
 api.FiveSecondTimerExpired += Api_FiveSecondTimerExpired;
 api.LockoutTimerStarted += Api_LockoutTimerStarted;
 api.LockoutTimerExpired += Api_LockoutTimerExpired;
+api.GameStarted += Api_GameStarted;
+api.GameLightOn += Api_GameLightOn;
+api.GameFirstBuzzIn += Api_GameFirstBuzzIn;
+api.GameDone += Api_GameDone;
+
+void Api_GameStarted(object? sender, EventArgs e)
+{
+    Console.ForegroundColor = ConsoleColor.Magenta;
+
+    Console.WriteLine("Game mode started.  Wait for yellow light to come on and press a paddle!");
+
+    Console.ForegroundColor = ConsoleColor.White;
+}
+
+void Api_GameLightOn(object? sender, EventArgs e)
+{
+    Console.ForegroundColor = ConsoleColor.Magenta;
+
+    Console.WriteLine("Game light on!");
+
+    Console.ForegroundColor = ConsoleColor.White;
+}
+
+void Api_GameFirstBuzzIn(object? sender, EventArgs e)
+{
+    Console.ForegroundColor = ConsoleColor.Magenta;
+
+    Console.WriteLine("Game first buzz in!");
+
+    Console.ForegroundColor = ConsoleColor.White;
+}
+
+void Api_GameDone(object? sender, GameDoneEventArgs e)
+{
+    Console.ForegroundColor = ConsoleColor.Magenta;
+
+    Console.WriteLine("Game done!");
+    Console.WriteLine($"Red 1 Time = {e.Red1Time}ms");
+    Console.WriteLine($"Red 2 Time = {e.Red2Time}ms");
+    Console.WriteLine($"Red 3 Time = {e.Red3Time}ms");
+    Console.WriteLine($"Red 4 Time = {e.Red4Time}ms");
+    Console.WriteLine($"Green 1 Time = {e.Green1Time}ms");
+    Console.WriteLine($"Green 2 Time = {e.Green2Time}ms");
+    Console.WriteLine($"Green 3 Time = {e.Green3Time}ms");
+    Console.WriteLine($"Green 4 Time = {e.Green4Time}ms");
+
+    Console.ForegroundColor = ConsoleColor.White;
+
+    Console.WriteLine();
+    Console.WriteLine("Press Reset to continue...");
+}
 
 void Api_QuizBoxReady(object? sender, EventArgs e)
 {
@@ -80,6 +131,16 @@ else
     api.Reset();
 }
 
-Console.WriteLine("Press [ENTER] to stop...");
+Console.WriteLine("Press 'G' to start reaction timing game. Press [ENTER] to stop...");
 
-Console.ReadLine();
+var key = Console.ReadKey();
+while(key.Key != ConsoleKey.Enter)
+{
+    if(key.Key == ConsoleKey.G)
+    {
+        Console.WriteLine("Starting reaction time game...");
+        api.StartReactionTimingGame();
+    }
+
+    key = Console.ReadKey();
+}

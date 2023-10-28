@@ -1,117 +1,130 @@
-﻿//using BriansUsbQuizBoxApi.Protocol;
-//using System;
+﻿using BriansUsbQuizBoxApi.Protocols;
+using System;
 
-//namespace BriansUsbQuizBoxApi.StateMachines
-//{
-//    public delegate void QuizBoxReadyCallback();
+namespace BriansUsbQuizBoxApi.StateMachines
+{
+    public delegate void GameStartedCallback();
 
-//    public delegate void FiveSecondTimerStartedCallback();
+    public delegate void GameLightOnCallback();
 
-//    public delegate void LockoutTimerStartedCallback();
+    public delegate void GameFirstBuzzInCallback();
 
-//    public delegate void LockoutTimerExpiredCallback();
-    
-//    /// <summary>
-//    /// Status Byte state machine
-//    /// </summary>
-//    public class GameStatusByteSM
-//    {
-//        private QuizBoxReadyCallback _quizBoxReadyCallback;
-//        private FiveSecondTimerStartedCallback _fiveSecondTimerStartedCallback;
-//        private LockoutTimerStartedCallback _lockoutTimerStartedCallback;
-//        private LockoutTimerExpiredCallback _lockoutTimerExpiredCallback;
+    public delegate void GameDoneCallback(decimal Red1Time, decimal Red2Time, decimal Red3Time, decimal Red4Time,
+        decimal Green1Time, decimal Green2Time, decimal Green3Time, decimal Green4Time);
 
-//        private bool _lastInitialIdleMode = false; // Tracks initial idle mode state
-//        private bool _lastFiveSecondTimerStarted = false;
-//        private bool _lastLockoutTimerStarted = false;
+    public enum QuizBoxGameState { Off, Waiting, LightOn, FirstBuzzIn, Done }
 
-//        /// <summary>
-//        /// Constructor
-//        /// </summary>
-//        /// <param name="quizBoxReadyCallback">Callback for quiz box ready event</param>
-//        /// <param name="fiveSecondTimerStartedCallback">Callback for five second timer started event</param>
-//        /// <param name="lockoutTimerStartedCallback">Callback for lockout timer started event</param>
-//        /// <param name="lockoutTimerExpiredCallback">Callback for lockout timer stopped event</param>
-//        /// <exception cref="ArgumentNullException">One or more arguments passed in where null</exception>
-//        public GameStatusByteSM(
-//            QuizBoxReadyCallback quizBoxReadyCallback,
-//            FiveSecondTimerStartedCallback fiveSecondTimerStartedCallback,
-//            LockoutTimerStartedCallback lockoutTimerStartedCallback,
-//            LockoutTimerExpiredCallback lockoutTimerExpiredCallback)
-//        {
-//            if (quizBoxReadyCallback == null)
-//            {
-//                throw new ArgumentNullException(nameof(quizBoxReadyCallback));
-//            }
-//            if (fiveSecondTimerStartedCallback == null)
-//            {
-//                throw new ArgumentNullException(nameof(fiveSecondTimerStartedCallback));
-//            }
-//            if (lockoutTimerStartedCallback == null)
-//            {
-//                throw new ArgumentNullException(nameof(lockoutTimerStartedCallback));
-//            }
-//            if (lockoutTimerExpiredCallback == null)
-//            {
-//                throw new ArgumentNullException(nameof(lockoutTimerExpiredCallback));
-//            }
+    /// <summary>
+    /// Status Byte state machine
+    /// </summary>
+    public class GameStatusByteSM
+    {
+        private GameStartedCallback _gameStartedCallback;
+        private GameLightOnCallback _gameLightOnCallback;
+        private GameFirstBuzzInCallback _gameFirstBuzzInCallback;
+        private GameDoneCallback _gameDoneCallback;
 
-//            _quizBoxReadyCallback = quizBoxReadyCallback;
-//            _fiveSecondTimerStartedCallback = fiveSecondTimerStartedCallback;
-//            _lockoutTimerStartedCallback = lockoutTimerStartedCallback;
-//            _lockoutTimerExpiredCallback = lockoutTimerExpiredCallback;
-//        }
+        private QuizBoxGameState _lastGameState = QuizBoxGameState.Off;
 
-//        /// <summary>
-//        /// Reset state machine to reset state of quiz box
-//        /// </summary>
-//        public void Reset()
-//        {
-//            // Don't reset - _lastIdleModeOneShot
-//            _lastFiveSecondTimerStarted = false;
-//            _lastLockoutTimerStarted = false;
-//        }
+        private bool _inGameMode = false;
 
-//        /// <summary>
-//        /// Process a new winner byte
-//        /// </summary>
-//        /// <param name="statusByte">Status byte</param>
-//        public void Process(StatusByte statusByte)
-//        {
-//            var idleMode = statusByte == StatusByte.IDLE_MODE;
-//            var fiveSecondTimerStarted = statusByte == StatusByte.RUNNING_5_SEC_TIMER;
-//            var lockoutTimerStarted = statusByte == StatusByte.EXTENDED_TIMER_RUNNING;
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="gameLightOnCallback">Callback for the light turning on</param>
+        /// <exception cref="ArgumentNullException">One or more arguments passed in where null</exception>
+        public GameStatusByteSM(
+            GameStartedCallback gameStartedCallback,
+            GameLightOnCallback gameLightOnCallback,
+            GameFirstBuzzInCallback gameFirstBuzzInCallback,
+            GameDoneCallback gameDoneCallback)
+        {
+            if (gameStartedCallback == null)
+            {
+                throw new ArgumentNullException(nameof(gameStartedCallback));
+            }
+            if (gameLightOnCallback == null)
+            {
+                throw new ArgumentNullException(nameof(gameLightOnCallback));
+            }
+            if (gameFirstBuzzInCallback == null)
+            {
+                throw new ArgumentNullException(nameof(gameFirstBuzzInCallback));
+            }
+            if (gameDoneCallback == null)
+            {
+                throw new ArgumentNullException(nameof(gameDoneCallback));
+            }
 
-//            if(idleMode != _lastInitialIdleMode)
-//            {
-//                if(idleMode == true)
-//                {
-//                    _quizBoxReadyCallback();
-//                }
-//                _lastInitialIdleMode = true;
-//            }
+            _gameStartedCallback = gameStartedCallback;
+            _gameLightOnCallback = gameLightOnCallback;
+            _gameFirstBuzzInCallback = gameFirstBuzzInCallback;
+            _gameDoneCallback = gameDoneCallback;
+        }
 
-//            if (fiveSecondTimerStarted != _lastFiveSecondTimerStarted)
-//            {
-//                if (fiveSecondTimerStarted == true)
-//                {
-//                    _fiveSecondTimerStartedCallback();
-//                }
-//                _lastFiveSecondTimerStarted = fiveSecondTimerStarted;
-//            }
+        /// <summary>
+        /// Reset state machine to reset state of quiz box
+        /// </summary>
+        public void Reset()
+        {
+            _lastGameState = QuizBoxGameState.Off;
 
-//            if (lockoutTimerStarted != _lastLockoutTimerStarted)
-//            {
-//                if (lockoutTimerStarted == true)
-//                {
-//                    _lockoutTimerStartedCallback();
-//                }
-//                else
-//                {
-//                    _lockoutTimerExpiredCallback();
-//                }
-//                _lastLockoutTimerStarted = lockoutTimerStarted;
-//            }
-//        }
-//    }
-//}
+            _inGameMode = false;
+        }
+
+        /// <summary>
+        /// Process a new winner byte
+        /// </summary>
+        /// <param name="statusByte">Status byte</param>
+        public void Process(BoxStatus status)
+        {
+            var statusByte = status.Status;
+
+            if (statusByte == StatusByte.GAME_PRESTART)
+            {
+                if (_lastGameState != QuizBoxGameState.Waiting)
+                {
+                    _gameStartedCallback();
+                }
+
+                _inGameMode = true;
+                _lastGameState = QuizBoxGameState.Waiting;
+            }
+            else if (statusByte == StatusByte.GAME_RUNNING)
+            {
+                if (_lastGameState != QuizBoxGameState.LightOn)
+                {
+                    _gameLightOnCallback();
+                }
+
+                _lastGameState = QuizBoxGameState.LightOn;
+            }
+            else if (statusByte == StatusByte.PERSON_BUZZED_IN)
+            {
+                if (_inGameMode)
+                {
+                    if (_lastGameState != QuizBoxGameState.FirstBuzzIn)
+                    {
+                        _gameFirstBuzzInCallback();
+                    }
+
+                    _lastGameState = QuizBoxGameState.FirstBuzzIn;
+                }
+            }
+            else if (statusByte == StatusByte.GAME_DONE)
+            {
+                if (_lastGameState != QuizBoxGameState.Done)
+                {
+                    _gameDoneCallback(status.Red1Time, status.Red2Time, status.Red3Time, status.Red4Time,
+                        status.Green1Time, status.Green2Time, status.Green3Time, status.Green4Time);
+                }
+
+                _lastGameState = QuizBoxGameState.Done;
+            }
+            else if (statusByte == StatusByte.IDLE_MODE)
+            {
+                _inGameMode = false;
+            }
+        }
+    }
+}
