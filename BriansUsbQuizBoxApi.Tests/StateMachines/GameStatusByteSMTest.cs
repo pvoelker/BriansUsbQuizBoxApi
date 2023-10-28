@@ -118,5 +118,16 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             cg3.Should().Be(7.0m);
             cg4.Should().Be(8.0m);
         }
+
+        [Fact]
+        public void PersonBuzzedInWithoutGame()
+        {
+            var sm = new GameStatusByteSM(() => Assert.Fail("This should not be called"),
+                () => Assert.Fail("This should not be called"),
+                () => Assert.Fail("This should not be called"),
+                (r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
+
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+        }
     }
 }
