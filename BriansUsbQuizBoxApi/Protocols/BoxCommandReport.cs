@@ -5,7 +5,7 @@ namespace BriansUsbQuizBoxApi.Protocols
     /// <summary>
     /// Quiz box command output HID report
     /// </summary>
-    public class BoxCommand
+    public class BoxCommandReport
     {
         public CommandHeaderByte CommandHeader { get; set; }
 

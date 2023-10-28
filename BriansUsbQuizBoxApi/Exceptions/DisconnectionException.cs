@@ -1,17 +1,18 @@
 ﻿using System;
+using System.IO;
 
 namespace BriansUsbQuizBoxApi.Exceptions
 {
     /// <summary>
-    /// Exception that is thrown when a quiz box operation is attempted without connecting
+    /// Exception that is thrown when a disconnection is detect on a read/write
     /// </summary>
-    public class NotConnectedException : InvalidOperationException
+    public class DisconnectionException : IOException
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="message">Exception message</param>
-        public NotConnectedException(string message)
+        public DisconnectionException(string message)
             : base(message)
         {
         }
@@ -21,7 +22,7 @@ namespace BriansUsbQuizBoxApi.Exceptions
         /// </summary>
         /// <param name="message">Exception message</param>
         /// <param name="innerException">Inner exception</param>
-        public NotConnectedException(string message, Exception innerException)
+        public DisconnectionException(string message, Exception innerException)
             : base(message, innerException)
         {
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using BriansUsbQuizBoxApi.Helpers;
 
 namespace BriansUsbQuizBoxApi.Protocols
@@ -6,7 +7,7 @@ namespace BriansUsbQuizBoxApi.Protocols
     /// <summary>
     /// Quiz box status input HID report
     /// </summary>
-    public class BoxStatus
+    public class BoxStatusReport
     {
         public StatusByte Status { get; private set; }
 
@@ -28,7 +29,43 @@ namespace BriansUsbQuizBoxApi.Protocols
 
         public decimal Green4Time { get; private set; }
 
-        public static BoxStatus Parse(byte[] data)
+        /// <summary>
+        /// Default constuctor
+        /// </summary>
+        public BoxStatusReport()
+        {
+        }
+
+        /// <summary>
+        /// Constructor for testing purposes only
+        /// </summary>
+        /// <param name="status">Status byte</param>
+        /// <param name="winner">Winner byte</param>
+        /// <param name="red1Time">Time for red 1 paddle</param>
+        /// <param name="red2Time">Time for red 2 paddle</param>
+        /// <param name="red3Time">Time for red 3 paddle</param>
+        /// <param name="red4Time">Time for red 4 paddle</param>
+        /// <param name="green1Time">Time for green 1 paddle</param>
+        /// <param name="green2Time">Time for green 2 paddle</param>
+        /// <param name="green3Time">Time for green 3 paddle</param>
+        /// <param name="green4Time">Time for green 4 paddle</param>
+        public BoxStatusReport(StatusByte status, WinnerByte winner,
+            decimal red1Time, decimal red2Time, decimal red3Time, decimal red4Time,
+            decimal green1Time, decimal green2Time, decimal green3Time, decimal green4Time)
+        {
+            Status = status;
+            Winner = winner;
+            Red1Time = red1Time;
+            Red2Time = red2Time;
+            Red3Time = red3Time;
+            Red4Time = red4Time;
+            Green1Time = green1Time;
+            Green2Time = green2Time;
+            Green3Time = green3Time;
+            Green4Time = green4Time;
+        }
+
+        public static BoxStatusReport Parse(byte[] data)
         {
             if (data.Length != BuzzerConstants.REPORT_LENGTH)
             {
@@ -43,7 +80,7 @@ namespace BriansUsbQuizBoxApi.Protocols
                 throw new ArgumentOutOfRangeException(nameof(data), "Second byte expected to be 0x00");
             }
 
-            var retVal = new BoxStatus
+            var retVal = new BoxStatusReport
             {
                 Status = (StatusByte)data[2],
                 Winner = (WinnerByte)data[3],

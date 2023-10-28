@@ -9,7 +9,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
         [Fact]
         public void StatusRequest()
         {
-            var value = new BoxCommand { CommandHeader = CommandHeaderByte.STATUS_REQUEST };
+            var value = new BoxCommandReport { CommandHeader = CommandHeaderByte.STATUS_REQUEST };
 
             var array = value.BuildByteArray();
 
@@ -25,7 +25,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
         [Fact]
         public void Zero()
         {
-            var value = new BoxCommand { CommandHeader = 0 };
+            var value = new BoxCommandReport { CommandHeader = 0 };
 
             var ex = Record.Exception(() =>
             {

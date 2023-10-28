@@ -17,11 +17,11 @@ else
 {
     Console.WriteLine("Writing clear command...");
 
-    api.WriteCommand(new BoxCommand { CommandHeader = CommandHeaderByte.CLEAR });
+    api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.CLEAR });
 
     Console.WriteLine("Read status...");
 
-    api.WriteCommand(new BoxCommand { CommandHeader = CommandHeaderByte.STATUS_REQUEST });
+    api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.STATUS_REQUEST });
 
     Thread.Sleep(100);
 

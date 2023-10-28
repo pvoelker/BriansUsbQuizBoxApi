@@ -15,7 +15,7 @@ namespace BriansUsbQuizBoxApi.StateMachines
     public enum QuizBoxGameState { Off, Waiting, LightOn, FirstBuzzIn, Done }
 
     /// <summary>
-    /// Status Byte state machine
+    /// Status Byte state machine for reaction time game
     /// </summary>
     public class GameStatusByteSM
     {
@@ -76,7 +76,7 @@ namespace BriansUsbQuizBoxApi.StateMachines
         /// Process a new winner byte
         /// </summary>
         /// <param name="statusByte">Status byte</param>
-        public void Process(BoxStatus status)
+        public void Process(BoxStatusReport status)
         {
             var statusByte = status.Status;
 
@@ -101,6 +101,7 @@ namespace BriansUsbQuizBoxApi.StateMachines
             }
             else if (statusByte == StatusByte.PERSON_BUZZED_IN)
             {
+                // The 'person buzzed in' status byte is also used outside of the reaction time game
                 if (_inGameMode)
                 {
                     if (_lastGameState != QuizBoxGameState.FirstBuzzIn)

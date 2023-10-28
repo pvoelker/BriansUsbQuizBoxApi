@@ -12,7 +12,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[2] = 0x00;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.IDLE_MODE);
             value.Winner.Should().Be(WinnerByte.NO_VALID_WINNER);
@@ -32,7 +32,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[2] = 0x01;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.GAME_PRESTART);
             value.Winner.Should().Be(WinnerByte.NO_VALID_WINNER);
@@ -52,7 +52,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[2] = 0x02;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.GAME_RUNNING);
             value.Winner.Should().Be(WinnerByte.NO_VALID_WINNER);
@@ -72,7 +72,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[2] = 0x04;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.PERSON_BUZZED_IN);
             value.Winner.Should().Be(WinnerByte.NO_VALID_WINNER);
@@ -92,7 +92,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[2] = 0x08;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.GAME_DONE);
             value.Winner.Should().Be(WinnerByte.NO_VALID_WINNER);
@@ -112,7 +112,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[2] = 0x10;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.RUNNING_5_SEC_TIMER);
             value.Winner.Should().Be(WinnerByte.NO_VALID_WINNER);
@@ -132,7 +132,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[2] = 0x20;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.EXTENDED_TIMER_RUNNING);
             value.Winner.Should().Be(WinnerByte.NO_VALID_WINNER);
@@ -152,7 +152,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[2] = 0x40;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.STARTUP_SEQUENCING);
             value.Winner.Should().Be(WinnerByte.NO_VALID_WINNER);
@@ -172,7 +172,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[3] = 0x01;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.IDLE_MODE);
             value.Winner.Should().Be(WinnerByte.FIVE_SEC_TIMER_EXPIRED);
@@ -192,7 +192,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[3] = 0x03;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.IDLE_MODE);
             value.Winner.Should().Be(WinnerByte.RED_4);
@@ -212,7 +212,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[3] = 0x04;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.IDLE_MODE);
             value.Winner.Should().Be(WinnerByte.RED_3);
@@ -232,7 +232,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[3] = 0x05;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.IDLE_MODE);
             value.Winner.Should().Be(WinnerByte.RED_2);
@@ -252,7 +252,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[3] = 0x06;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.IDLE_MODE);
             value.Winner.Should().Be(WinnerByte.RED_1);
@@ -272,7 +272,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[3] = 0x07;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.IDLE_MODE);
             value.Winner.Should().Be(WinnerByte.GREEN_1);
@@ -292,7 +292,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[3] = 0x08;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.IDLE_MODE);
             value.Winner.Should().Be(WinnerByte.GREEN_2);
@@ -312,7 +312,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[3] = 0x09;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.IDLE_MODE);
             value.Winner.Should().Be(WinnerByte.GREEN_3);
@@ -332,7 +332,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             var array = new byte[65];
             array[3] = 0x0A;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.IDLE_MODE);
             value.Winner.Should().Be(WinnerByte.GREEN_4);
@@ -359,7 +359,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             array[17] = 0x01;
             array[19] = 0x01;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.IDLE_MODE);
             value.Winner.Should().Be(WinnerByte.NO_VALID_WINNER);
@@ -388,7 +388,7 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
             array[17] = 0x01;
             array[19] = 0x01;
 
-            var value = BoxStatus.Parse(array);
+            var value = BoxStatusReport.Parse(array);
 
             value.Status.Should().Be(StatusByte.GAME_RUNNING);
             value.Winner.Should().Be(WinnerByte.RED_4);

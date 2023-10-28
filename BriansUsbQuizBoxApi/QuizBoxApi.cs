@@ -120,7 +120,7 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand {  CommandHeader = CommandHeaderByte.CLEAR });
+                _api.WriteCommand(new BoxCommandReport {  CommandHeader = CommandHeaderByte.CLEAR });
 
                 _winnerByteSM.Reset();
                 _statusByteSM.Reset();
@@ -136,7 +136,7 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand { CommandHeader = CommandHeaderByte.START_5_SEC_TIMER });
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_5_SEC_TIMER });
             }
             else
             {
@@ -171,7 +171,7 @@ namespace BriansUsbQuizBoxApi
 
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand { CommandHeader = command });
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = command });
             }
             else
             {
@@ -183,7 +183,7 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand { CommandHeader = CommandHeaderByte.START_INFINITE_TIMER });
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_INFINITE_TIMER });
             }
             else
             {
@@ -195,7 +195,7 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand { CommandHeader = CommandHeaderByte.END_INFINITE_TIMER_BUZZ });
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.END_INFINITE_TIMER_BUZZ });
             }
             else
             {
@@ -204,14 +204,14 @@ namespace BriansUsbQuizBoxApi
         }
 
         /// <summary>
-        /// 
+        /// Attempts to start the reaction time game.  The 'GameStarted' event will fire if the game was started
         /// </summary>
         /// <exception cref="NotConnectedException"></exception>
         public void StartReactionTimingGame()
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand { CommandHeader = CommandHeaderByte.START_REACTION_TIMING_GAME });
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_REACTION_TIMING_GAME });
             }
             else
             {
@@ -223,7 +223,7 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand { CommandHeader = CommandHeaderByte.STATUS_REQUEST });
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.STATUS_REQUEST });
             }
         }
 
@@ -249,7 +249,7 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        private void ProcessRead(BoxStatus status)
+        private void ProcessRead(BoxStatusReport status)
         {
             _winnerByteSM.Process(status.Winner);
 
