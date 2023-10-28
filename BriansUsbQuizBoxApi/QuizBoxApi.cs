@@ -22,28 +22,69 @@ namespace BriansUsbQuizBoxApi
 
         #region Events
 
+        /// <summary>
+        /// Event fired when quiz box is ready
+        /// </summary>
         public event EventHandler? QuizBoxReady;
 
+        /// <summary>
+        /// Event fired when someone buzzes in
+        /// </summary>
         public event EventHandler<BuzzInEventArgs>? BuzzIn;
 
+        /// <summary>
+        /// Event fired when the five second timer is started
+        /// </summary>
+        /// <remarks>This event is not meant for exact timings</remarks>
         public event EventHandler? FiveSecondTimerStarted;
 
+        /// <summary>
+        /// Event fired when the five second timer is expired. Paddles are locked out
+        /// </summary>
+        /// <remarks>This event is not meant for exact timings</remarks>
         public event EventHandler? FiveSecondTimerExpired;
 
+        /// <summary>
+        /// Event fired when a paddle lockout timer is started
+        /// </summary>
+        /// <remarks>This event is not meant for exact timings</remarks>
         public event EventHandler? LockoutTimerStarted;
 
+        /// <summary>
+        /// Event fired when a paddle lockout timer is expired
+        /// </summary>
+        /// <remarks>This event is not meant for exact timings</remarks>
         public event EventHandler? LockoutTimerExpired;
 
+        /// <summary>
+        /// Event fired when a reaction time game is started. Players need to watch for the yellow light to come on the quiz box
+        /// </summary>
+        /// <remarks>This event is not meant for exact timings</remarks>
         public event EventHandler? GameStarted;
 
+        /// <summary>
+        /// Event fired when the yellow quiz box light comes on.  Players need to press their paddles as quickly as possible
+        /// </summary>
+        /// <remarks>This event is not meant for exact timings</remarks>
         public event EventHandler? GameLightOn;
 
+        /// <summary>
+        /// Event fired when the first player of the reaction time game buzzes in
+        /// </summary>
+        /// <remarks>This event is not meant for exact timings</remarks>
         public event EventHandler? GameFirstBuzzIn;
 
-        public event EventHandler<GameDoneEventArgs> GameDone;
+        /// <summary>
+        /// Event fire when the reaction time game has completed.  Results are included in the event arguments
+        /// </summary>
+        /// <remarks>This event is not meant for exact timings</remarks>
+        public event EventHandler<GameDoneEventArgs>? GameDone;
 
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public QuizBoxApi()
         {
             _winnerByteSM = new WinnerByteSM(
@@ -116,6 +157,10 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
+        /// <summary>
+        /// Send the reset command to the quiz box.  All timers and game modes are cancelled
+        /// </summary>
+        /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void Reset()
         {
             if (_api != null)
@@ -132,6 +177,10 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
+        /// <summary>
+        /// Send the command to start the five second timer to the quiz box.  Paddles will be locked out after the timer expires
+        /// </summary>
+        /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void Start5SecondBuzzInTimer()
         {
             if (_api != null)
@@ -144,6 +193,12 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
+        /// <summary>
+        /// Send the command to start the paddle lockout timer
+        /// </summary>
+        /// <param name="timer">The length of the lockout timer</param>
+        /// <exception cref="ArgumentOutOfRangeException">An invalid timer length has been given</exception>
+        /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void StartPaddleLockoutTimer(LockoutTimerEnum timer)
         {
             CommandHeaderByte command = 0;
@@ -179,6 +234,10 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
+        /// <summary>
+        /// Lockout quiz box paddles (indefinite paddle lockout timer)
+        /// </summary>
+        /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void StartPaddleLockout()
         {
             if (_api != null)
@@ -191,6 +250,10 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
+        /// <summary>
+        /// Stop the lockout on quiz box paddles
+        /// </summary>
+        /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void StopPaddleLockout()
         {
             if (_api != null)
@@ -224,6 +287,10 @@ namespace BriansUsbQuizBoxApi
             if (_api != null)
             {
                 _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.STATUS_REQUEST });
+            }
+            else
+            {
+                throw new NotConnectedException("Must connect before commands");
             }
         }
 
