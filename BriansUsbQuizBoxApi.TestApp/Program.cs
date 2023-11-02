@@ -1,9 +1,8 @@
-﻿// See https://aka.ms/new-console-template for more information
-using BriansUsbQuizBoxApi;
+﻿using BriansUsbQuizBoxApi;
 
-Console.WriteLine("Hello, World!");
+Console.WriteLine("--- Brian's USB Quiz Box Test App ---");
 
-var api = new QuizBoxApi();
+var api = new QuizBoxApi(new QuizBoxCoreApi());
 
 api.QuizBoxReady += Api_QuizBoxReady;
 api.BuzzIn += Api_BuzzIn;
@@ -15,6 +14,17 @@ api.GameStarted += Api_GameStarted;
 api.GameLightOn += Api_GameLightOn;
 api.GameFirstBuzzIn += Api_GameFirstBuzzIn;
 api.GameDone += Api_GameDone;
+api.ReadThreadDisconnection += Api_ReadThreadDisconnection;
+
+void Api_ReadThreadDisconnection(object? sender, DisconnectionEventArgs e)
+{
+    var bk = Console.BackgroundColor;
+    Console.BackgroundColor = ConsoleColor.DarkRed;
+
+    Console.WriteLine("ERROR: Disconnection occurred in background read thread! Program will need to be restarted...");
+
+    Console.BackgroundColor = bk;
+}
 
 void Api_GameStarted(object? sender, EventArgs e)
 {
@@ -29,7 +39,7 @@ void Api_GameLightOn(object? sender, EventArgs e)
 {
     Console.ForegroundColor = ConsoleColor.Magenta;
 
-    Console.WriteLine("Game light on!");
+    Console.WriteLine("Yellow light on!");
 
     Console.ForegroundColor = ConsoleColor.White;
 }
@@ -105,33 +115,42 @@ void Api_FiveSecondTimerExpired(object? sender, EventArgs e)
 
     Console.ForegroundColor = ConsoleColor.White;
 }
+
 void Api_LockoutTimerStarted(object? sender, EventArgs e)
 {
     Console.ForegroundColor = ConsoleColor.Yellow;
 
-    Console.WriteLine("Lockout timer started");
+    Console.WriteLine("Paddle lockout timer started");
 
     Console.ForegroundColor = ConsoleColor.White;
 }
+
 void Api_LockoutTimerExpired(object? sender, EventArgs e)
 {
     Console.ForegroundColor = ConsoleColor.Yellow;
 
-    Console.WriteLine("Lockout timer expired");
+    Console.WriteLine("Paddle lockout timer expired");
 
     Console.ForegroundColor = ConsoleColor.White;
 }
 
 if (api.Connect() == false)
 {
-    Console.WriteLine("Unable to connect to a quiz box");
+    var bk = Console.BackgroundColor;
+    Console.BackgroundColor = ConsoleColor.DarkRed;
+
+    Console.WriteLine("ERROR: Unable to connect to a quiz box");
+
+    Console.BackgroundColor = bk;
+
+    Console.WriteLine("Press [ENTER] to exit program...");
 }
 else
 {
     api.Reset();
-}
 
-Console.WriteLine("Press 'G' to start reaction timing game. Press [ENTER] to stop...");
+    Console.WriteLine("Press 'G' to start reaction timing game. Press [ENTER] to exit program...");
+}
 
 var key = Console.ReadKey();
 while(key.Key != ConsoleKey.Enter)

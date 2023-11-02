@@ -12,34 +12,26 @@ namespace BriansUsbQuizBoxApi
     /// <summary>
     /// Core communication interface for quiz boxes
     /// </summary>
-    public class QuizBoxCoreApi : IDisposable
+    public class QuizBoxCoreApi : IQuizBoxCoreApi
     {
         private bool _disposedValue;
 
         private HidStream? _stream = null;
 
-        /// <summary>
-        /// True if connected to a quiz box, otherwise false
-        /// </summary>
+        /// <inheritdoc/>
         public bool IsConnected
         {
             get { return _stream != null; }
         }
 
-        /// <summary>
-        /// Attempt to connect to a quiz box
-        /// </summary>
-        /// <returns>True if connection successful, otherwise false</returns>
+        /// <inheritdoc/>
         /// <exception cref="MultipleDevicesException">More than one quiz box is detected</exception>
         /// <exception cref="InvalidOperationException">Already connected to a quiz box</exception>
         public bool Connect()
         {
             if (_stream == null)
             {
-                var list = DeviceList.Local;
-                //list.Changed += (sender, e) => Console.WriteLine("Device list changed.");
-
-                var devices = list.GetHidDevices();
+                var devices = DeviceList.Local.GetHidDevices();
 
                 HidDevice? box = null;
                 try
@@ -75,10 +67,7 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        /// <summary>
-        /// Write a command to the quiz box
-        /// </summary>
-        /// <param name="command"></param>
+        /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Null was passed in for box command</exception>
         /// <exception cref="NotConnectedException">Not connected to a quiz box</exception>
         /// <exception cref="DisconnectionException">Quiz box has been disconnected</exception>
@@ -110,10 +99,7 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        /// <summary>
-        /// Synchronous quiz box status read
-        /// </summary>
-        /// <returns>Quiz box status, otherwise null</returns>
+        /// <inheritdoc/>
         /// <exception cref="NotConnectedException">Not connected to a quiz box</exception>
         /// <exception cref="DisconnectionException">Quiz box has been disconnected</exception>
         public BoxStatusReport? ReadStatus()
@@ -149,10 +135,7 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        /// <summary>
-        /// Asynchronous quiz box status read
-        /// </summary>
-        /// <returns>Quiz box status, otherwise null</returns>
+        /// <inheritdoc/>
         /// <exception cref="NotConnectedException">Not connected to a quiz box</exception>
         /// <exception cref="DisconnectionException">Quiz box has been disconnected</exception>
         public async Task<BoxStatusReport?> ReadStatusAsync()
@@ -188,9 +171,7 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        /// <summary>
-        /// Disconnect from a connected quiz box
-        /// </summary>
+        /// <inheritdoc/>
         public void Disconnect()
         {
             if (_stream != null)
@@ -213,9 +194,7 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        /// <summary>
-        /// Dispose API object, including disconnecting from any connected quiz boxes
-        /// </summary>
+        /// <inheritdoc/>
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method

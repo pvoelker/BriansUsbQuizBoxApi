@@ -23,6 +23,22 @@ namespace BriansUsbQuizBoxApi.Tests.Protocols
         }
 
         [Fact]
+        public void Start30SecondTimer()
+        {
+            var value = new BoxCommandReport { CommandHeader = CommandHeaderByte.START_30_SEC_TIMER };
+
+            var array = value.BuildByteArray();
+
+            array.Length.Should().Be(65);
+
+            array[0].Should().Be(0x00);
+
+            array[1].Should().Be(0x88);
+
+            array.Skip(2).ToArray().Should().OnlyContain((x) => x == 0x00);
+        }
+
+        [Fact]
         public void Zero()
         {
             var value = new BoxCommandReport { CommandHeader = 0 };

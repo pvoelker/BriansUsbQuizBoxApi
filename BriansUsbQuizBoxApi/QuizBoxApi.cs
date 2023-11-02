@@ -2,12 +2,11 @@
 using BriansUsbQuizBoxApi.Protocols;
 using BriansUsbQuizBoxApi.StateMachines;
 using System;
-using System.Diagnostics;
 using System.Threading;
 
 namespace BriansUsbQuizBoxApi
 {
-    public class QuizBoxApi : IDisposable
+    public class QuizBoxApi : IQuizBoxApi
     {
         private bool _disposedValue;
 
@@ -18,75 +17,52 @@ namespace BriansUsbQuizBoxApi
         private EventWaitHandle? _done = null;
         private EventWaitHandle? _doneComplete = null;
 
-        private QuizBoxCoreApi _api = new QuizBoxCoreApi();
+        private IQuizBoxCoreApi _api;
 
         #region Events
 
-        /// <summary>
-        /// Event fired when quiz box is ready
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler? QuizBoxReady;
 
-        /// <summary>
-        /// Event fired when someone buzzes in
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<BuzzInEventArgs>? BuzzIn;
 
-        /// <summary>
-        /// Event fired when the five second timer is started
-        /// </summary>
-        /// <remarks>This event is not meant for exact timings</remarks>
+        /// <inheritdoc/>
         public event EventHandler? FiveSecondTimerStarted;
 
-        /// <summary>
-        /// Event fired when the five second timer is expired. Paddles are locked out
-        /// </summary>
-        /// <remarks>This event is not meant for exact timings</remarks>
+        /// <inheritdoc/>
         public event EventHandler? FiveSecondTimerExpired;
 
-        /// <summary>
-        /// Event fired when a paddle lockout timer is started
-        /// </summary>
-        /// <remarks>This event is not meant for exact timings</remarks>
+        /// <inheritdoc/>
         public event EventHandler? LockoutTimerStarted;
 
-        /// <summary>
-        /// Event fired when a paddle lockout timer is expired
-        /// </summary>
-        /// <remarks>This event is not meant for exact timings</remarks>
+        /// <inheritdoc/>
         public event EventHandler? LockoutTimerExpired;
 
-        /// <summary>
-        /// Event fired when a reaction time game is started. Players need to watch for the yellow light to come on the quiz box
-        /// </summary>
-        /// <remarks>This event is not meant for exact timings</remarks>
+        /// <inheritdoc/>
         public event EventHandler? GameStarted;
 
-        /// <summary>
-        /// Event fired when the yellow quiz box light comes on.  Players need to press their paddles as quickly as possible
-        /// </summary>
-        /// <remarks>This event is not meant for exact timings</remarks>
+        /// <inheritdoc/>
         public event EventHandler? GameLightOn;
 
-        /// <summary>
-        /// Event fired when the first player of the reaction time game buzzes in
-        /// </summary>
-        /// <remarks>This event is not meant for exact timings</remarks>
+        /// <inheritdoc/>
         public event EventHandler? GameFirstBuzzIn;
 
-        /// <summary>
-        /// Event fire when the reaction time game has completed.  Results are included in the event arguments
-        /// </summary>
-        /// <remarks>This event is not meant for exact timings</remarks>
+        /// <inheritdoc/>
         public event EventHandler<GameDoneEventArgs>? GameDone;
+
+        /// <inheritdoc/>
+        public event EventHandler<DisconnectionEventArgs>? ReadThreadDisconnection;
 
         #endregion
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public QuizBoxApi()
+        public QuizBoxApi(IQuizBoxCoreApi api)
         {
+            _api = api;
+
             _winnerByteSM = new WinnerByteSM(
                 (paddleColor, paddleNumber) => BuzzIn?.Invoke(this, new BuzzInEventArgs(paddleColor, paddleNumber)),
                 () => FiveSecondTimerExpired?.Invoke(this, null)
@@ -105,18 +81,13 @@ namespace BriansUsbQuizBoxApi
             );
         }
 
-        /// <summary>
-        /// True if connected to a quiz box, otherwise false
-        /// </summary>
+        /// <inheritdoc/>
         public bool IsConnected
         {
             get { return _api.IsConnected; }
         }
 
-        /// <summary>
-        /// Attempt to connect to a quiz box
-        /// </summary>
-        /// <returns>True if connection successful, otherwise false</returns>
+        /// <inheritdoc/>
         /// <exception cref="MultipleDevicesException">More than one quiz box is detected</exception>
         /// <exception cref="InvalidOperationException">Already connected to a quiz box</exception>
         public bool Connect()
@@ -157,9 +128,7 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        /// <summary>
-        /// Send the reset command to the quiz box.  All timers and game modes are cancelled
-        /// </summary>
+        /// <inheritdoc/>
         /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void Reset()
         {
@@ -177,9 +146,7 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        /// <summary>
-        /// Send the command to start the five second timer to the quiz box.  Paddles will be locked out after the timer expires
-        /// </summary>
+        /// <inheritdoc/>
         /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void Start5SecondBuzzInTimer()
         {
@@ -193,10 +160,7 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        /// <summary>
-        /// Send the command to start the paddle lockout timer
-        /// </summary>
-        /// <param name="timer">The length of the lockout timer</param>
+        /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">An invalid timer length has been given</exception>
         /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void StartPaddleLockoutTimer(LockoutTimerEnum timer)
@@ -234,9 +198,7 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        /// <summary>
-        /// Lockout quiz box paddles (indefinite paddle lockout timer)
-        /// </summary>
+        /// <inheritdoc/>
         /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void StartPaddleLockout()
         {
@@ -250,9 +212,7 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        /// <summary>
-        /// Stop the lockout on quiz box paddles
-        /// </summary>
+        /// <inheritdoc/>
         /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void StopPaddleLockout()
         {
@@ -266,9 +226,7 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        /// <summary>
-        /// Attempts to start the reaction time game.  The 'GameStarted' event will fire if the game was started
-        /// </summary>
+        /// <inheritdoc/>
         /// <exception cref="NotConnectedException"></exception>
         public void StartReactionTimingGame()
         {
@@ -279,6 +237,15 @@ namespace BriansUsbQuizBoxApi
             else
             {
                 throw new NotConnectedException("Must connect before commands");
+            }
+        }
+
+        /// <inheritdoc/>
+        public void Disconnect()
+        {
+            if (_api != null)
+            {
+                _api.Disconnect();
             }
         }
 
@@ -300,7 +267,22 @@ namespace BriansUsbQuizBoxApi
 
             while (_done != null && _done.WaitOne(25) == false)
             {
-                var status = _api.ReadStatus();
+                BoxStatusReport? status = null;
+                try
+                {
+                    status = _api.ReadStatus();
+                }
+                catch(DisconnectionException ex)
+                {
+                    if (ReadThreadDisconnection != null)
+                    {
+                        ReadThreadDisconnection.Invoke(this, new DisconnectionEventArgs(ex));
+                    }
+                }
+                catch
+                {
+                    throw;
+                }                
 
                 if (status != null)
                 {
