@@ -12,9 +12,13 @@
     <PackageTags></PackageTags>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageVersion>1.0.1-alpha</PackageVersion>
+    <Version>1.0.0-alpha</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
+    <PackageId>brians-usb-quiz-box-api</PackageId>
+    <Authors>HerrVlkr</Authors>
+    <Company>Paul Voelker</Company>
+    <Product>Brian's USB Quiz Box API</Product>
   </PropertyGroup>
 
   <ItemGroup>

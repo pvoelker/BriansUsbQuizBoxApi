@@ -6,6 +6,8 @@ An API for interfacing with a USB Quiz Box by Brian's Boxes
 
 ## How to Use
 
+Create an instance of 'QuizBoxApi'. Register with events and then call 'Connect'.
+
 ```cs
 using BriansUsbQuizBoxApi;
 
