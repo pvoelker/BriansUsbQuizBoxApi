@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BriansUsbQuizBoxApi.Protocol
+namespace BriansUsbQuizBoxApi.Protocols
 {
     /// <summary>
     /// Status byte values for quiz box HID reports
@@ -25,7 +25,7 @@ namespace BriansUsbQuizBoxApi.Protocol
         /// <summary>
         /// Someone has buzzed in and a timer is running to determine if other players are going to buzz in.
         /// </summary>
-        GAME_PERSON_BUZZED_IN = 0x04,
+        PERSON_BUZZED_IN = 0x04,
 
         /// <summary>
         /// Either the reaction time game has finished its timer OR the player buzz in timer has finished.

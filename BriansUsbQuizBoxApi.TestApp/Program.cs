@@ -1,15 +1,4 @@
-# Brian's USB Quiz Box API
-
-##  About
-
-An API for interfacing with a USB Quiz Box by Brian's Boxes
-
-## How to Use
-
-Create an instance of 'QuizBoxApi'. Register with events and then call 'Connect'.
-
-```cs
-using BriansUsbQuizBoxApi;
+﻿using BriansUsbQuizBoxApi;
 
 Console.WriteLine("--- Brian's USB Quiz Box Test App ---");
 
@@ -29,26 +18,45 @@ api.ReadThreadDisconnection += Api_ReadThreadDisconnection;
 
 void Api_ReadThreadDisconnection(object? sender, DisconnectionEventArgs e)
 {
-    Console.WriteLine("ERROR: Disconnection occurred in background read thread, program will need to be restarted...");
+    var bk = Console.BackgroundColor;
+    Console.BackgroundColor = ConsoleColor.DarkRed;
+
+    Console.WriteLine("ERROR: Disconnection occurred in background read thread! Program will need to be restarted...");
+
+    Console.BackgroundColor = bk;
 }
 
 void Api_GameStarted(object? sender, EventArgs e)
 {
-    Console.WriteLine("Game mode started.  Wait for yellow light to come on and press a paddle as quickly as possible");
+    Console.ForegroundColor = ConsoleColor.Magenta;
+
+    Console.WriteLine("Game mode started.  Wait for yellow light to come on and press a paddle!");
+
+    Console.ForegroundColor = ConsoleColor.White;
 }
 
 void Api_GameLightOn(object? sender, EventArgs e)
 {
-    Console.WriteLine("Yellow light on");
+    Console.ForegroundColor = ConsoleColor.Magenta;
+
+    Console.WriteLine("Yellow light on!");
+
+    Console.ForegroundColor = ConsoleColor.White;
 }
 
 void Api_GameFirstBuzzIn(object? sender, EventArgs e)
 {
+    Console.ForegroundColor = ConsoleColor.Magenta;
+
     Console.WriteLine("Game first buzz in!");
+
+    Console.ForegroundColor = ConsoleColor.White;
 }
 
 void Api_GameDone(object? sender, GameDoneEventArgs e)
 {
+    Console.ForegroundColor = ConsoleColor.Magenta;
+
     Console.WriteLine("Game done!");
     Console.WriteLine($"Red 1 Time = {e.Red1Time}ms");
     Console.WriteLine($"Red 2 Time = {e.Red2Time}ms");
@@ -58,43 +66,82 @@ void Api_GameDone(object? sender, GameDoneEventArgs e)
     Console.WriteLine($"Green 2 Time = {e.Green2Time}ms");
     Console.WriteLine($"Green 3 Time = {e.Green3Time}ms");
     Console.WriteLine($"Green 4 Time = {e.Green4Time}ms");
+
+    Console.ForegroundColor = ConsoleColor.White;
+
     Console.WriteLine();
     Console.WriteLine("Press Reset to continue...");
 }
 
 void Api_QuizBoxReady(object? sender, EventArgs e)
 {
+    Console.ForegroundColor = ConsoleColor.Cyan;
+
     Console.WriteLine("Quiz box is ready");
+
+    Console.ForegroundColor = ConsoleColor.White;
 }
 
 void Api_BuzzIn(object? sender, BuzzInEventArgs e)
 {
+    if (e.PaddleColor == PaddleColorEnum.Green)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+    }
+    else if (e.PaddleColor == PaddleColorEnum.Red)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+    }
+
     Console.WriteLine($"Buzz in: {e.PaddleColor} - {e.PaddleNumber}");
+
+    Console.ForegroundColor = ConsoleColor.White;
 }
 
 void Api_FiveSecondTimerStarted(object? sender, EventArgs e)
 {
+    Console.ForegroundColor = ConsoleColor.Yellow;
+
     Console.WriteLine("Five second timer started");
+
+    Console.ForegroundColor = ConsoleColor.White;
 }
 
 void Api_FiveSecondTimerExpired(object? sender, EventArgs e)
 {
+    Console.ForegroundColor = ConsoleColor.Yellow;
+
     Console.WriteLine("Five second timer expired");
+
+    Console.ForegroundColor = ConsoleColor.White;
 }
 
 void Api_LockoutTimerStarted(object? sender, EventArgs e)
 {
+    Console.ForegroundColor = ConsoleColor.Yellow;
+
     Console.WriteLine("Paddle lockout timer started");
+
+    Console.ForegroundColor = ConsoleColor.White;
 }
 
 void Api_LockoutTimerExpired(object? sender, EventArgs e)
 {
+    Console.ForegroundColor = ConsoleColor.Yellow;
+
     Console.WriteLine("Paddle lockout timer expired");
+
+    Console.ForegroundColor = ConsoleColor.White;
 }
 
 if (api.Connect() == false)
 {
+    var bk = Console.BackgroundColor;
+    Console.BackgroundColor = ConsoleColor.DarkRed;
+
     Console.WriteLine("ERROR: Unable to connect to a quiz box");
+
+    Console.BackgroundColor = bk;
 
     Console.WriteLine("Press [ENTER] to exit program...");
 }
@@ -116,12 +163,3 @@ while(key.Key != ConsoleKey.Enter)
 
     key = Console.ReadKey();
 }
-```
-
-## Notes
-
-- Do **not** block on events from QuizBoxApi.  This will prevent the background read thread from running
-
-## Credits
-
-- Brian McKevett <bmckevett@yahoo.com> for providing technical documentation about the quiz boxes

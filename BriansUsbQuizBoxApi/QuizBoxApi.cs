@@ -1,41 +1,68 @@
 ﻿using BriansUsbQuizBoxApi.Exceptions;
-using BriansUsbQuizBoxApi.Protocol;
+using BriansUsbQuizBoxApi.Protocols;
 using BriansUsbQuizBoxApi.StateMachines;
 using System;
 using System.Threading;
 
 namespace BriansUsbQuizBoxApi
 {
-    public class QuizBoxApi : IDisposable
+    public class QuizBoxApi : IQuizBoxApi
     {
         private bool _disposedValue;
 
         private WinnerByteSM _winnerByteSM;
         private StatusByteSM _statusByteSM;
+        private GameStatusByteSM _gameStatusByteSM;
 
         private EventWaitHandle? _done = null;
         private EventWaitHandle? _doneComplete = null;
 
-        private QuizBoxCoreApi _api = new QuizBoxCoreApi();
+        private IQuizBoxCoreApi _api;
 
         #region Events
 
+        /// <inheritdoc/>
         public event EventHandler? QuizBoxReady;
 
+        /// <inheritdoc/>
         public event EventHandler<BuzzInEventArgs>? BuzzIn;
 
+        /// <inheritdoc/>
         public event EventHandler? FiveSecondTimerStarted;
 
+        /// <inheritdoc/>
         public event EventHandler? FiveSecondTimerExpired;
 
+        /// <inheritdoc/>
         public event EventHandler? LockoutTimerStarted;
 
+        /// <inheritdoc/>
         public event EventHandler? LockoutTimerExpired;
+
+        /// <inheritdoc/>
+        public event EventHandler? GameStarted;
+
+        /// <inheritdoc/>
+        public event EventHandler? GameLightOn;
+
+        /// <inheritdoc/>
+        public event EventHandler? GameFirstBuzzIn;
+
+        /// <inheritdoc/>
+        public event EventHandler<GameDoneEventArgs>? GameDone;
+
+        /// <inheritdoc/>
+        public event EventHandler<DisconnectionEventArgs>? ReadThreadDisconnection;
 
         #endregion
 
-        public QuizBoxApi()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public QuizBoxApi(IQuizBoxCoreApi api)
         {
+            _api = api;
+
             _winnerByteSM = new WinnerByteSM(
                 (paddleColor, paddleNumber) => BuzzIn?.Invoke(this, new BuzzInEventArgs(paddleColor, paddleNumber)),
                 () => FiveSecondTimerExpired?.Invoke(this, null)
@@ -46,20 +73,21 @@ namespace BriansUsbQuizBoxApi
                 () => LockoutTimerStarted?.Invoke(this, null),
                 () => LockoutTimerExpired?.Invoke(this, null)
             );
+            _gameStatusByteSM = new GameStatusByteSM(
+                () => GameStarted?.Invoke(this, null),
+                () => GameLightOn?.Invoke(this, null),
+                () => GameFirstBuzzIn?.Invoke(this, null),
+                (r1, r2, r3, r4, g1, g2, g3, g4) => GameDone?.Invoke(this, new GameDoneEventArgs(r1, r2, r3, r4, g1, g2, g3, g4))
+            );
         }
 
-        /// <summary>
-        /// True if connected to a quiz box, otherwise false
-        /// </summary>
+        /// <inheritdoc/>
         public bool IsConnected
         {
             get { return _api.IsConnected; }
         }
 
-        /// <summary>
-        /// Attempt to connect to a quiz box
-        /// </summary>
-        /// <returns>True if connection successful, otherwise false</returns>
+        /// <inheritdoc/>
         /// <exception cref="MultipleDevicesException">More than one quiz box is detected</exception>
         /// <exception cref="InvalidOperationException">Already connected to a quiz box</exception>
         public bool Connect()
@@ -100,14 +128,17 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void Reset()
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand {  CommandHeader = CommandHeaderByte.CLEAR });
+                _api.WriteCommand(new BoxCommandReport {  CommandHeader = CommandHeaderByte.CLEAR });
 
                 _winnerByteSM.Reset();
                 _statusByteSM.Reset();
+                _gameStatusByteSM.Reset();
             }
             else
             {
@@ -115,11 +146,13 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void Start5SecondBuzzInTimer()
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand { CommandHeader = CommandHeaderByte.START_5_SEC_TIMER });
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_5_SEC_TIMER });
             }
             else
             {
@@ -127,6 +160,9 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentOutOfRangeException">An invalid timer length has been given</exception>
+        /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void StartPaddleLockoutTimer(LockoutTimerEnum timer)
         {
             CommandHeaderByte command = 0;
@@ -154,7 +190,7 @@ namespace BriansUsbQuizBoxApi
 
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand { CommandHeader = command });
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = command });
             }
             else
             {
@@ -162,11 +198,13 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void StartPaddleLockout()
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand { CommandHeader = CommandHeaderByte.START_INFINITE_TIMER });
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_INFINITE_TIMER });
             }
             else
             {
@@ -174,11 +212,13 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         public void StopPaddleLockout()
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand { CommandHeader = CommandHeaderByte.END_INFINITE_TIMER_BUZZ });
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.END_INFINITE_TIMER_BUZZ });
             }
             else
             {
@@ -186,19 +226,26 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <inheritdoc/>
         /// <exception cref="NotConnectedException"></exception>
         public void StartReactionTimingGame()
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand { CommandHeader = CommandHeaderByte.START_REACTION_TIMING_GAME });
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_REACTION_TIMING_GAME });
             }
             else
             {
                 throw new NotConnectedException("Must connect before commands");
+            }
+        }
+
+        /// <inheritdoc/>
+        public void Disconnect()
+        {
+            if (_api != null)
+            {
+                _api.Disconnect();
             }
         }
 
@@ -206,7 +253,11 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommand { CommandHeader = CommandHeaderByte.STATUS_REQUEST });
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.STATUS_REQUEST });
+            }
+            else
+            {
+                throw new NotConnectedException("Must connect before commands");
             }
         }
 
@@ -216,7 +267,22 @@ namespace BriansUsbQuizBoxApi
 
             while (_done != null && _done.WaitOne(25) == false)
             {
-                var status = _api.ReadStatus();
+                BoxStatusReport? status = null;
+                try
+                {
+                    status = _api.ReadStatus();
+                }
+                catch(DisconnectionException ex)
+                {
+                    if (ReadThreadDisconnection != null)
+                    {
+                        ReadThreadDisconnection.Invoke(this, new DisconnectionEventArgs(ex));
+                    }
+                }
+                catch
+                {
+                    throw;
+                }                
 
                 if (status != null)
                 {
@@ -232,11 +298,13 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        private void ProcessRead(BoxStatus status)
+        private void ProcessRead(BoxStatusReport status)
         {
             _winnerByteSM.Process(status.Winner);
 
             _statusByteSM.Process(status.Status);
+
+            _gameStatusByteSM.Process(status);
         }
 
         protected virtual void Dispose(bool disposing)

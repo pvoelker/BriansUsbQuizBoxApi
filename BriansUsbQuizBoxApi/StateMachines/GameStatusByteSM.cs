@@ -1,65 +1,65 @@
-﻿using BriansUsbQuizBoxApi.Protocol;
+﻿using BriansUsbQuizBoxApi.Protocols;
 using System;
 
 namespace BriansUsbQuizBoxApi.StateMachines
 {
-    public delegate void QuizBoxReadyCallback();
+    public delegate void GameStartedCallback();
 
-    public delegate void FiveSecondTimerStartedCallback();
+    public delegate void GameLightOnCallback();
 
-    public delegate void LockoutTimerStartedCallback();
+    public delegate void GameFirstBuzzInCallback();
 
-    public delegate void LockoutTimerExpiredCallback();
-    
+    public delegate void GameDoneCallback(decimal Red1Time, decimal Red2Time, decimal Red3Time, decimal Red4Time,
+        decimal Green1Time, decimal Green2Time, decimal Green3Time, decimal Green4Time);
+
+    public enum QuizBoxGameState { Off, Waiting, LightOn, FirstBuzzIn, Done }
+
     /// <summary>
-    /// Status Byte state machine
+    /// Status Byte state machine for reaction time game
     /// </summary>
-    internal class StatusByteSM
+    public class GameStatusByteSM
     {
-        private QuizBoxReadyCallback _quizBoxReadyCallback;
-        private FiveSecondTimerStartedCallback _fiveSecondTimerStartedCallback;
-        private LockoutTimerStartedCallback _lockoutTimerStartedCallback;
-        private LockoutTimerExpiredCallback _lockoutTimerExpiredCallback;
+        private GameStartedCallback _gameStartedCallback;
+        private GameLightOnCallback _gameLightOnCallback;
+        private GameFirstBuzzInCallback _gameFirstBuzzInCallback;
+        private GameDoneCallback _gameDoneCallback;
 
-        private bool _lastInitialIdleMode = false; // Tracks initial idle mode state
-        private bool _lastFiveSecondTimerStarted = false;
-        private bool _lastLockoutTimerStarted = false;
+        private QuizBoxGameState _lastGameState = QuizBoxGameState.Off;
+
+        private bool _inGameMode = false;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="quizBoxReadyCallback">Callback for quiz box ready event</param>
-        /// <param name="fiveSecondTimerStartedCallback">Callback for five second timer started event</param>
-        /// <param name="lockoutTimerStartedCallback">Callback for lockout timer started event</param>
-        /// <param name="lockoutTimerExpiredCallback">Callback for lockout timer stopped event</param>
+        /// <param name="gameLightOnCallback">Callback for the light turning on</param>
         /// <exception cref="ArgumentNullException">One or more arguments passed in where null</exception>
-        public StatusByteSM(
-            QuizBoxReadyCallback quizBoxReadyCallback,
-            FiveSecondTimerStartedCallback fiveSecondTimerStartedCallback,
-            LockoutTimerStartedCallback lockoutTimerStartedCallback,
-            LockoutTimerExpiredCallback lockoutTimerExpiredCallback)
+        public GameStatusByteSM(
+            GameStartedCallback gameStartedCallback,
+            GameLightOnCallback gameLightOnCallback,
+            GameFirstBuzzInCallback gameFirstBuzzInCallback,
+            GameDoneCallback gameDoneCallback)
         {
-            if (quizBoxReadyCallback == null)
+            if (gameStartedCallback == null)
             {
-                throw new ArgumentNullException(nameof(quizBoxReadyCallback));
+                throw new ArgumentNullException(nameof(gameStartedCallback));
             }
-            if (fiveSecondTimerStartedCallback == null)
+            if (gameLightOnCallback == null)
             {
-                throw new ArgumentNullException(nameof(fiveSecondTimerStartedCallback));
+                throw new ArgumentNullException(nameof(gameLightOnCallback));
             }
-            if (lockoutTimerStartedCallback == null)
+            if (gameFirstBuzzInCallback == null)
             {
-                throw new ArgumentNullException(nameof(lockoutTimerStartedCallback));
+                throw new ArgumentNullException(nameof(gameFirstBuzzInCallback));
             }
-            if (lockoutTimerExpiredCallback == null)
+            if (gameDoneCallback == null)
             {
-                throw new ArgumentNullException(nameof(lockoutTimerExpiredCallback));
+                throw new ArgumentNullException(nameof(gameDoneCallback));
             }
 
-            _quizBoxReadyCallback = quizBoxReadyCallback;
-            _fiveSecondTimerStartedCallback = fiveSecondTimerStartedCallback;
-            _lockoutTimerStartedCallback = lockoutTimerStartedCallback;
-            _lockoutTimerExpiredCallback = lockoutTimerExpiredCallback;
+            _gameStartedCallback = gameStartedCallback;
+            _gameLightOnCallback = gameLightOnCallback;
+            _gameFirstBuzzInCallback = gameFirstBuzzInCallback;
+            _gameDoneCallback = gameDoneCallback;
         }
 
         /// <summary>
@@ -67,50 +67,64 @@ namespace BriansUsbQuizBoxApi.StateMachines
         /// </summary>
         public void Reset()
         {
-            // Don't reset - _lastIdleModeOneShot
-            _lastFiveSecondTimerStarted = false;
-            _lastLockoutTimerStarted = false;
+            _lastGameState = QuizBoxGameState.Off;
+
+            _inGameMode = false;
         }
 
         /// <summary>
         /// Process a new winner byte
         /// </summary>
         /// <param name="statusByte">Status byte</param>
-        public void Process(StatusByte statusByte)
+        public void Process(BoxStatusReport status)
         {
-            var idleMode = statusByte == StatusByte.IDLE_MODE;
-            var fiveSecondTimerStarted = statusByte == StatusByte.RUNNING_5_SEC_TIMER;
-            var lockoutTimerStarted = statusByte == StatusByte.EXTENDED_TIMER_RUNNING;
+            var statusByte = status.Status;
 
-            if(idleMode != _lastInitialIdleMode)
+            if (statusByte == StatusByte.GAME_PRESTART)
             {
-                if(idleMode == true)
+                if (_lastGameState != QuizBoxGameState.Waiting)
                 {
-                    _quizBoxReadyCallback();
+                    _gameStartedCallback();
                 }
-                _lastInitialIdleMode = true;
+
+                _inGameMode = true;
+                _lastGameState = QuizBoxGameState.Waiting;
             }
-
-            if (fiveSecondTimerStarted != _lastFiveSecondTimerStarted)
+            else if (statusByte == StatusByte.GAME_RUNNING)
             {
-                if (fiveSecondTimerStarted == true)
+                if (_lastGameState != QuizBoxGameState.LightOn)
                 {
-                    _fiveSecondTimerStartedCallback();
+                    _gameLightOnCallback();
                 }
-                _lastFiveSecondTimerStarted = fiveSecondTimerStarted;
+
+                _lastGameState = QuizBoxGameState.LightOn;
             }
-
-            if (lockoutTimerStarted != _lastLockoutTimerStarted)
+            else if (statusByte == StatusByte.PERSON_BUZZED_IN)
             {
-                if (lockoutTimerStarted == true)
+                // The 'person buzzed in' status byte is also used outside of the reaction time game
+                if (_inGameMode)
                 {
-                    _lockoutTimerStartedCallback();
+                    if (_lastGameState != QuizBoxGameState.FirstBuzzIn)
+                    {
+                        _gameFirstBuzzInCallback();
+                    }
+
+                    _lastGameState = QuizBoxGameState.FirstBuzzIn;
                 }
-                else
+            }
+            else if (statusByte == StatusByte.GAME_DONE)
+            {
+                if (_lastGameState != QuizBoxGameState.Done)
                 {
-                    _lockoutTimerExpiredCallback();
+                    _gameDoneCallback(status.Red1Time, status.Red2Time, status.Red3Time, status.Red4Time,
+                        status.Green1Time, status.Green2Time, status.Green3Time, status.Green4Time);
                 }
-                _lastLockoutTimerStarted = lockoutTimerStarted;
+
+                _lastGameState = QuizBoxGameState.Done;
+            }
+            else if (statusByte == StatusByte.IDLE_MODE)
+            {
+                _inGameMode = false;
             }
         }
     }

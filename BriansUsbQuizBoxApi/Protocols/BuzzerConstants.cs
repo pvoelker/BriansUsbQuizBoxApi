@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BriansUsbQuizBoxApi.Protocol
+namespace BriansUsbQuizBoxApi.Protocols
 {
     /// <summary>
     /// Miscellaneous constants for quiz box HID reports

@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace BriansUsbQuizBoxApi.Protocol
+namespace BriansUsbQuizBoxApi.Protocols
 {
     /// <summary>
     /// Quiz box command output HID report
     /// </summary>
-    public class BoxCommand
+    public class BoxCommandReport
     {
         public CommandHeaderByte CommandHeader { get; set; }
 
@@ -13,7 +13,7 @@ namespace BriansUsbQuizBoxApi.Protocol
         {
             if (CommandHeader == 0)
             {
-                throw new InvalidOperationException($"{nameof(CommandHeader)} cannot be zero");
+                throw new ArgumentOutOfRangeException($"{nameof(CommandHeader)} cannot be zero");
             }
 
             var retVal = new byte[BuzzerConstants.REPORT_LENGTH];

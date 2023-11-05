@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BriansUsbQuizBoxApi.Protocol
+namespace BriansUsbQuizBoxApi.Protocols
 {
     /// <summary>
     /// Winner byte values for quiz box HID reports

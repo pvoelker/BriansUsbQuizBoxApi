@@ -3,7 +3,30 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Brian's USB Quiz Box API</Title>
+    <Copyright>Copyright © 2023 Paul Voelker</Copyright>
+    <Description>An API for interfacing with a Brian's USB Quiz Box by Brian's Boxes of McKevett Enterprises</Description>
+    <RepositoryUrl>https://github.com/pvoelker/BriansUsbQuizBoxApi</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags></PackageTags>
+    <IncludeSymbols>True</IncludeSymbols>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Version>1.0.0-alpha</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <PackageId>brians-usb-quiz-box-api</PackageId>
+    <Authors>HerrVlkr</Authors>
+    <Company>Paul Voelker</Company>
+    <Product>Brian's USB Quiz Box API</Product>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="HidSharp" Version="2.1.0" />
