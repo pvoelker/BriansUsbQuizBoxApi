@@ -71,6 +71,12 @@ namespace BriansUsbQuizBoxApi
         event EventHandler<GameDoneEventArgs>? GameDone;
 
         /// <summary>
+        /// Event fired when the quiz box sends buzz in statistics after an initial buzz in or 5 second timer expiration
+        /// </summary>
+        /// <remarks>This event is not meant for exact timings</remarks>
+        event EventHandler<BuzzInStatsEventArgs>? BuzzInStats;
+
+        /// <summary>
         /// Event fired when a disconnection occurs in the background read thread
         /// </summary>
         event EventHandler<DisconnectionEventArgs>? ReadThreadDisconnection;

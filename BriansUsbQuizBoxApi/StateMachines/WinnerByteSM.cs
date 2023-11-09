@@ -1,4 +1,5 @@
-﻿using BriansUsbQuizBoxApi.Protocols;
+﻿using BriansUsbQuizBoxApi.Helpers;
+using BriansUsbQuizBoxApi.Protocols;
 using System;
 
 namespace BriansUsbQuizBoxApi.StateMachines
@@ -58,64 +59,29 @@ namespace BriansUsbQuizBoxApi.StateMachines
         /// <param name="winnerByte">Winner byte</param>
         public void Process(WinnerByte winnerByte)
         {
-            var paddleNumber = 0;
-            var paddleColor = PaddleColorEnum.None;
-            switch (winnerByte)
+            if (PaddleHelpers.TryParseWinnerByte(winnerByte, out var paddleNumber, out var paddleColor))
             {
-                case WinnerByte.RED_1:
-                    paddleNumber = 1;
-                    paddleColor = PaddleColorEnum.Red;
-                    break;
-                case WinnerByte.RED_2:
-                    paddleNumber = 2;
-                    paddleColor = PaddleColorEnum.Red;
-                    break;
-                case WinnerByte.RED_3:
-                    paddleNumber = 3;
-                    paddleColor = PaddleColorEnum.Red;
-                    break;
-                case WinnerByte.RED_4:
-                    paddleNumber = 4;
-                    paddleColor = PaddleColorEnum.Red;
-                    break;
-                case WinnerByte.GREEN_1:
-                    paddleNumber = 1;
-                    paddleColor = PaddleColorEnum.Green;
-                    break;
-                case WinnerByte.GREEN_2:
-                    paddleNumber = 2;
-                    paddleColor = PaddleColorEnum.Green;
-                    break;
-                case WinnerByte.GREEN_3:
-                    paddleNumber = 3;
-                    paddleColor = PaddleColorEnum.Green;
-                    break;
-                case WinnerByte.GREEN_4:
-                    paddleNumber = 4;
-                    paddleColor = PaddleColorEnum.Green;
-                    break;
-            }
+                var fiveSecondTimerExpired = winnerByte == WinnerByte.FIVE_SEC_TIMER_EXPIRED;
 
-            var fiveSecondTimerExpired = winnerByte == WinnerByte.FIVE_SEC_TIMER_EXPIRED;
-
-            if (paddleNumber != _lastPaddleNumber || paddleColor != _lastPaddleColor)
-            {
-                if (paddleColor != PaddleColorEnum.None)
+                if (paddleNumber != _lastPaddleNumber || paddleColor != _lastPaddleColor)
                 {
-                    _buzzInCallback(paddleColor, paddleNumber);
+                    if (paddleColor != PaddleColorEnum.None)
+                    {
+                        _buzzInCallback(paddleColor, paddleNumber);
+                    }
+
+                    _lastPaddleNumber = paddleNumber;
+                    _lastPaddleColor = paddleColor;
                 }
 
-                _lastPaddleNumber = paddleNumber;
-                _lastPaddleColor = paddleColor;
-            }
-
-            if (fiveSecondTimerExpired != _lastFiveSecondTimerExpired)
-            {
-                if (fiveSecondTimerExpired == true)
+                if (fiveSecondTimerExpired != _lastFiveSecondTimerExpired)
                 {
-                    _fiveSecondTimerExpiredCallback();
+                    if (fiveSecondTimerExpired == true)
+                    {
+                        _fiveSecondTimerExpiredCallback();
+                    }
+                    _lastFiveSecondTimerExpired = fiveSecondTimerExpired;
                 }
-                _lastFiveSecondTimerExpired = fiveSecondTimerExpired;
             }
         }
     }

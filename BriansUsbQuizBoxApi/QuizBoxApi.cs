@@ -2,6 +2,7 @@
 using BriansUsbQuizBoxApi.Protocols;
 using BriansUsbQuizBoxApi.StateMachines;
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 
 namespace BriansUsbQuizBoxApi
@@ -10,12 +11,16 @@ namespace BriansUsbQuizBoxApi
     {
         private bool _disposedValue;
 
+        static readonly private BoxCommandReport _statusRequest = new BoxCommandReport { CommandHeader = CommandHeaderByte.STATUS_REQUEST };       
+
         private WinnerByteSM _winnerByteSM;
         private StatusByteSM _statusByteSM;
         private GameStatusByteSM _gameStatusByteSM;
 
         private EventWaitHandle? _done = null;
         private EventWaitHandle? _doneComplete = null;
+
+        private ConcurrentQueue<BoxCommandReport> _commands = new ConcurrentQueue<BoxCommandReport>();
 
         private IQuizBoxCoreApi _api;
 
@@ -50,7 +55,10 @@ namespace BriansUsbQuizBoxApi
 
         /// <inheritdoc/>
         public event EventHandler<GameDoneEventArgs>? GameDone;
-
+        
+        /// <inheritdoc/>
+        public event EventHandler<BuzzInStatsEventArgs>? BuzzInStats;
+        
         /// <inheritdoc/>
         public event EventHandler<DisconnectionEventArgs>? ReadThreadDisconnection;
 
@@ -77,7 +85,8 @@ namespace BriansUsbQuizBoxApi
                 () => GameStarted?.Invoke(this, null),
                 () => GameLightOn?.Invoke(this, null),
                 () => GameFirstBuzzIn?.Invoke(this, null),
-                (r1, r2, r3, r4, g1, g2, g3, g4) => GameDone?.Invoke(this, new GameDoneEventArgs(r1, r2, r3, r4, g1, g2, g3, g4))
+                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => GameDone?.Invoke(this, new GameDoneEventArgs(pc, pn, r1, r2, r3, r4, g1, g2, g3, g4)),
+                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => BuzzInStats?.Invoke(this, new BuzzInStatsEventArgs(pc, pn, r1, r2, r3, r4, g1, g2, g3, g4))
             );
         }
 
@@ -101,8 +110,8 @@ namespace BriansUsbQuizBoxApi
 
                     try
                     {
-                        Thread thread = new Thread(new ThreadStart(ReadData));
-                        thread.Name = "Quiz Box Read Thread";
+                        var thread = new Thread(new ThreadStart(ReadData));
+                        thread.Name = "Quiz Box IO Thread";
                         thread.Start();
                     }
                     catch
@@ -134,8 +143,7 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommandReport {  CommandHeader = CommandHeaderByte.CLEAR });
-
+                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.CLEAR });
                 _winnerByteSM.Reset();
                 _statusByteSM.Reset();
                 _gameStatusByteSM.Reset();
@@ -152,7 +160,7 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_5_SEC_TIMER });
+                _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_5_SEC_TIMER });
             }
             else
             {
@@ -190,7 +198,7 @@ namespace BriansUsbQuizBoxApi
 
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommandReport { CommandHeader = command });
+                _commands.Enqueue(new BoxCommandReport { CommandHeader = command });
             }
             else
             {
@@ -204,7 +212,7 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_INFINITE_TIMER });
+                _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_INFINITE_TIMER });
             }
             else
             {
@@ -218,7 +226,7 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.END_INFINITE_TIMER_BUZZ });
+                _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.END_INFINITE_TIMER_BUZZ });
             }
             else
             {
@@ -232,7 +240,7 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_REACTION_TIMING_GAME });
+                _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_REACTION_TIMING_GAME });
             }
             else
             {
@@ -249,23 +257,11 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-        private void RequestStatus()
-        {
-            if (_api != null)
-            {
-                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.STATUS_REQUEST });
-            }
-            else
-            {
-                throw new NotConnectedException("Must connect before commands");
-            }
-        }
-
         private void ReadData()
         {
-            RequestStatus();
+            _api.WriteCommand(_statusRequest);
 
-            while (_done != null && _done.WaitOne(25) == false)
+            while (_done != null && _done.WaitOne(10) == false)
             {
                 BoxStatusReport? status = null;
                 try
@@ -289,7 +285,7 @@ namespace BriansUsbQuizBoxApi
                     ProcessRead(status);
                 }
 
-                RequestStatus();
+                WriteData();
             }
 
             if (_doneComplete != null)
@@ -297,6 +293,26 @@ namespace BriansUsbQuizBoxApi
                 _doneComplete.Set();
             }
         }
+
+        private void WriteData()
+        {
+            if (_commands.TryDequeue(out var command))
+            {
+                _api.WriteCommand(command);
+
+                if (command.CommandHeader == CommandHeaderByte.CLEAR)
+                {
+                    _winnerByteSM.Reset();
+                    _statusByteSM.Reset();
+                    _gameStatusByteSM.Reset();
+                }
+            }
+            else
+            {
+                _api.WriteCommand(_statusRequest);
+            }
+        }
+
 
         private void ProcessRead(BoxStatusReport status)
         {

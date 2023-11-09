@@ -9,6 +9,16 @@ namespace BriansUsbQuizBoxApi
     public class GameDoneEventArgs : EventArgs
     {
         /// <summary>
+        /// Winner paddle color that was pressed
+        /// </summary>
+        public PaddleColorEnum WinnerPaddleColor { get; private set; }
+
+        /// <summary>
+        /// Winner paddle number that was pressed
+        /// </summary>
+        public int WinnerPaddleNumber { get; private set; }
+
+        /// <summary>
         /// Game time for red 1 paddle
         /// </summary>
         public decimal Red1Time { get; private set; }
@@ -59,9 +69,12 @@ namespace BriansUsbQuizBoxApi
         /// <param name="green2Time">Time for green 2 paddle</param>
         /// <param name="green3Time">Time for green 3 paddle</param>
         /// <param name="green4Time">Time for green 4 paddle</param>
-        public GameDoneEventArgs(decimal red1Time, decimal red2Time, decimal red3Time, decimal red4Time,
+        public GameDoneEventArgs(PaddleColorEnum winnerPaddleColor, int winnerPaddleNumber,
+            decimal red1Time, decimal red2Time, decimal red3Time, decimal red4Time,
             decimal green1Time, decimal green2Time, decimal green3Time, decimal green4Time)
         {
+            WinnerPaddleColor = winnerPaddleColor;
+            WinnerPaddleNumber = winnerPaddleNumber;
             Red1Time = red1Time;
             Red2Time = red2Time;
             Red3Time = red3Time;
