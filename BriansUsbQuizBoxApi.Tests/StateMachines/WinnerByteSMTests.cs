@@ -15,7 +15,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 
             var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
 
-            sm.Process(WinnerByte.RED_1);
+            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_1);
 
             color.Should().Be(PaddleColorEnum.Red);
             number.Should().Be(1);
@@ -29,7 +29,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 
             var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
 
-            sm.Process(WinnerByte.RED_2);
+            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_2);
 
             color.Should().Be(PaddleColorEnum.Red);
             number.Should().Be(2);
@@ -43,7 +43,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 
             var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
 
-            sm.Process(WinnerByte.RED_3);
+            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_3);
 
             color.Should().Be(PaddleColorEnum.Red);
             number.Should().Be(3);
@@ -57,7 +57,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 
             var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
 
-            sm.Process(WinnerByte.RED_4);
+            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_4);
 
             color.Should().Be(PaddleColorEnum.Red);
             number.Should().Be(4);
@@ -71,7 +71,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 
             var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
 
-            sm.Process(WinnerByte.GREEN_1);
+            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_1);
 
             color.Should().Be(PaddleColorEnum.Green);
             number.Should().Be(1);
@@ -85,7 +85,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 
             var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
 
-            sm.Process(WinnerByte.GREEN_2);
+            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_2);
 
             color.Should().Be(PaddleColorEnum.Green);
             number.Should().Be(2);
@@ -99,7 +99,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 
             var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
 
-            sm.Process(WinnerByte.GREEN_3);
+            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_3);
 
             color.Should().Be(PaddleColorEnum.Green);
             number.Should().Be(3);
@@ -113,7 +113,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 
             var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
 
-            sm.Process(WinnerByte.GREEN_4);
+            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_4);
 
             color.Should().Be(PaddleColorEnum.Green);
             number.Should().Be(4);
@@ -126,7 +126,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 
             var sm = new WinnerByteSM((x, y) => Assert.Fail("This should not be called"), () => { timerExpired = true; });
 
-            sm.Process(WinnerByte.FIVE_SEC_TIMER_EXPIRED);
+            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.FIVE_SEC_TIMER_EXPIRED);
 
             timerExpired.Should().BeTrue();
         }
@@ -137,7 +137,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             var sm = new WinnerByteSM((x, y) => Assert.Fail("This should not be called"),
                 () => Assert.Fail("This should not be called"));
 
-            sm.Process(WinnerByte.NO_VALID_WINNER);
+            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.NO_VALID_WINNER);
 
             // No callbacks should be called
         }

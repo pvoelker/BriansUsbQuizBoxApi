@@ -11,5 +11,10 @@ namespace BriansUsbQuizBoxApi.Protocols
         /// Quiz box input and output report length
         /// </summary>
         public const int REPORT_LENGTH = 65;
+
+        /// <summary>
+        /// Quiz box game length in milliseconds
+        /// </summary>
+        public const decimal GAME_LENGTH = 1000;
     }
 }

@@ -3,7 +3,7 @@
 namespace BriansUsbQuizBoxApi
 {
     /// <summary>
-    /// Event arguments for when buzz in statistics are sent by the quiz box.  Typically after a 5 second timer or an initial buzz in
+    /// Event arguments for when buzz in statistics are sent by the quiz box.  Typically after a 5 second timer or one second after an initial buzz in (paddle press)
     /// </summary>
     public class BuzzInStatsEventArgs : EventArgs
     {

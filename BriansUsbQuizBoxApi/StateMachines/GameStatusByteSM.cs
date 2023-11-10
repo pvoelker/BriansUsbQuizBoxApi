@@ -83,7 +83,6 @@ namespace BriansUsbQuizBoxApi.StateMachines
         public void Reset()
         {
             _lastGameState = QuizBoxGameState.Off;
-
             _inGameMode = false;
         }
 
@@ -136,8 +135,14 @@ namespace BriansUsbQuizBoxApi.StateMachines
                         if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddleNumber, out var paddleColor))
                         {
                             _gameDoneCallback(paddleNumber, paddleColor,
-                                status.Red1Time, status.Red2Time, status.Red3Time, status.Red4Time,
-                                status.Green1Time, status.Green2Time, status.Green3Time, status.Green4Time);
+                                BuzzerConstants.GAME_LENGTH - status.Red1Time,
+                                BuzzerConstants.GAME_LENGTH - status.Red2Time,
+                                BuzzerConstants.GAME_LENGTH - status.Red3Time,
+                                BuzzerConstants.GAME_LENGTH - status.Red4Time,
+                                BuzzerConstants.GAME_LENGTH - status.Green1Time,
+                                BuzzerConstants.GAME_LENGTH - status.Green2Time,
+                                BuzzerConstants.GAME_LENGTH - status.Green3Time,
+                                BuzzerConstants.GAME_LENGTH - status.Green4Time);
                         }
                     }
 

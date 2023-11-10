@@ -166,8 +166,6 @@ if (api.Connect() == false)
 }
 else
 {
-    api.Reset();
-
     Console.WriteLine("Press 'G' to start reaction timing game. Press [ENTER] to exit program...");
 }
 

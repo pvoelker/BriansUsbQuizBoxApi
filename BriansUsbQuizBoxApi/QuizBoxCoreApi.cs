@@ -47,7 +47,8 @@ namespace BriansUsbQuizBoxApi
                 {
                     if (box.TryOpen(out _stream))
                     {
-                        _stream.ReadTimeout = Timeout.Infinite;
+                        // Don't wait on reads
+                        _stream.ReadTimeout = 0;
                     }
                     else
                     {
@@ -110,10 +111,14 @@ namespace BriansUsbQuizBoxApi
 
                 var inputReportBuffer = new byte[BuzzerConstants.REPORT_LENGTH];
 
-                int byteCount;
+                int byteCount = 0;
                 try
                 {
                     byteCount = _stream.Read(inputReportBuffer, 0, BuzzerConstants.REPORT_LENGTH);
+                }
+                catch(TimeoutException)
+                {
+                    // Keep moving on
                 }
                 catch(IOException ex)
                 {

@@ -11,7 +11,9 @@ namespace BriansUsbQuizBoxApi
     {
         private bool _disposedValue;
 
-        static readonly private BoxCommandReport _statusRequest = new BoxCommandReport { CommandHeader = CommandHeaderByte.STATUS_REQUEST };       
+        static readonly private BoxCommandReport _statusRequest = new BoxCommandReport { CommandHeader = CommandHeaderByte.STATUS_REQUEST };
+
+        private bool _idleMode = false;
 
         private WinnerByteSM _winnerByteSM;
         private StatusByteSM _statusByteSM;
@@ -23,6 +25,8 @@ namespace BriansUsbQuizBoxApi
         private ConcurrentQueue<BoxCommandReport> _commands = new ConcurrentQueue<BoxCommandReport>();
 
         private IQuizBoxCoreApi _api;
+
+        private int? _threadId;
 
         #region Events
 
@@ -113,9 +117,13 @@ namespace BriansUsbQuizBoxApi
                         var thread = new Thread(new ThreadStart(ReadData));
                         thread.Name = "Quiz Box IO Thread";
                         thread.Start();
+
+                        _threadId = thread.ManagedThreadId;
                     }
                     catch
                     {
+                        _threadId = null;
+
                         _done.Dispose();
                         _done = null;
                         _doneComplete.Dispose();
@@ -143,10 +151,9 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
-                _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.CLEAR });
-                _winnerByteSM.Reset();
-                _statusByteSM.Reset();
-                _gameStatusByteSM.Reset();
+                CheckCommandThreadAndThrow();
+
+                _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.CLEAR });
             }
             else
             {
@@ -160,6 +167,8 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
+                CheckCommandThreadAndThrow();
+
                 _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_5_SEC_TIMER });
             }
             else
@@ -198,6 +207,8 @@ namespace BriansUsbQuizBoxApi
 
             if (_api != null)
             {
+                CheckCommandThreadAndThrow();
+
                 _commands.Enqueue(new BoxCommandReport { CommandHeader = command });
             }
             else
@@ -212,6 +223,8 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
+                CheckCommandThreadAndThrow();
+
                 _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_INFINITE_TIMER });
             }
             else
@@ -226,6 +239,8 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
+                CheckCommandThreadAndThrow();
+
                 _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.END_INFINITE_TIMER_BUZZ });
             }
             else
@@ -240,6 +255,8 @@ namespace BriansUsbQuizBoxApi
         {
             if (_api != null)
             {
+                CheckCommandThreadAndThrow();
+
                 _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_REACTION_TIMING_GAME });
             }
             else
@@ -257,12 +274,31 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
+        public void CheckCommandThreadAndThrow()
+        {
+            if(_threadId != null)
+            {
+                if(Thread.CurrentThread.ManagedThreadId == _threadId)
+                {
+                    throw new InvalidOperationException("Cannot execute commands from the Quiz Box IO Thread");
+                }
+            }
+        }
+
         private void ReadData()
         {
+            // Force a reset of the quiz box
+            _api.WriteCommand(new BoxCommandReport { CommandHeader = CommandHeaderByte.CLEAR });
+
+            Thread.Sleep(10);
+
+            // Initial status request to get reads working
             _api.WriteCommand(_statusRequest);
 
             while (_done != null && _done.WaitOne(10) == false)
             {
+                WriteData();
+
                 BoxStatusReport? status = null;
                 try
                 {
@@ -284,8 +320,6 @@ namespace BriansUsbQuizBoxApi
                 {
                     ProcessRead(status);
                 }
-
-                WriteData();
             }
 
             if (_doneComplete != null)
@@ -299,13 +333,6 @@ namespace BriansUsbQuizBoxApi
             if (_commands.TryDequeue(out var command))
             {
                 _api.WriteCommand(command);
-
-                if (command.CommandHeader == CommandHeaderByte.CLEAR)
-                {
-                    _winnerByteSM.Reset();
-                    _statusByteSM.Reset();
-                    _gameStatusByteSM.Reset();
-                }
             }
             else
             {
@@ -313,10 +340,25 @@ namespace BriansUsbQuizBoxApi
             }
         }
 
-
         private void ProcessRead(BoxStatusReport status)
         {
-            _winnerByteSM.Process(status.Winner);
+            if(status.Status == StatusByte.IDLE_MODE)
+            {
+                if (_idleMode == false)
+                {
+                    _winnerByteSM.Reset();
+                    _statusByteSM.Reset();
+                    _gameStatusByteSM.Reset();
+
+                    _idleMode = true;
+                }
+            }
+            else
+            {
+                _idleMode = false;
+            }
+
+            _winnerByteSM.Process(status.Status, status.Winner);
 
             _statusByteSM.Process(status.Status);
 
@@ -329,6 +371,8 @@ namespace BriansUsbQuizBoxApi
             {
                 if (disposing)
                 {
+                    _threadId = null;
+
                     if (_done != null)
                     {
                         _done.Set();
