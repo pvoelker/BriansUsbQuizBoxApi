@@ -92,7 +92,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
         public void GameDone()
         {
             var callbackCalled = false;
-            int pn = 0; ;
+            PaddleNumberEnum pn = PaddleNumberEnum.None;
             PaddleColorEnum pc = PaddleColorEnum.None;
             decimal cr1 = 0m, cr2 = 0m, cr3 = 0m, cr4 = 0m, cg1 = 0m, cg2 = 0m, cg3 = 0m, cg4 = 0m;
 
@@ -119,7 +119,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.GREEN_4, 1.0m, 2.0m, 3.0m, 4.0m, 5.0m, 6.0m, 7.0m, 0.0m));
 
             callbackCalled.Should().BeTrue();
-            pn.Should().Be(4);
+            pn.Should().Be(PaddleNumberEnum.Paddle4);
             pc.Should().Be(PaddleColorEnum.Green);
             cr1.Should().Be(999.0m);
             cr2.Should().Be(998.0m);
@@ -135,7 +135,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
         public void GameDoneWithoutGame()
         {
             var callbackCalled = false;
-            int pn = 0; ;
+            PaddleNumberEnum pn = PaddleNumberEnum.None;
             PaddleColorEnum pc = PaddleColorEnum.None;
             decimal? cr1 = null, cr2 = null, cr3 = null, cr4 = null, cg1 = null, cg2 = null, cg3 = null, cg4 = null;
 
@@ -160,7 +160,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.RED_4, 0, 1.0m, 0, 0, 0, 1.2m, 0, 999.9m));
 
             callbackCalled.Should().BeTrue();
-            pn.Should().Be(4);
+            pn.Should().Be(PaddleNumberEnum.Paddle4);
             pc.Should().Be(PaddleColorEnum.Red);
             cr1.Should().BeNull();
             cr2.Should().Be(1.0m);
@@ -176,7 +176,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
         public void GameDoneWithoutGameAndNoBuzzIns()
         {
             var callbackCalled = false;
-            int pn = 0; ;
+            PaddleNumberEnum pn = PaddleNumberEnum.None;
             PaddleColorEnum pc = PaddleColorEnum.None;
             decimal? cr1 = null, cr2 = null, cr3 = null, cr4 = null, cg1 = null, cg2 = null, cg3 = null, cg4 = null;
 
@@ -201,7 +201,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
 
             callbackCalled.Should().BeTrue();
-            pn.Should().Be(0);
+            pn.Should().Be(PaddleNumberEnum.None);
             pc.Should().Be(PaddleColorEnum.None);
             cr1.Should().BeNull();
             cr2.Should().BeNull();

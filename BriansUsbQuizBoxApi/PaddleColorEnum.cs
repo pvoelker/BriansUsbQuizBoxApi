@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BriansUsbQuizBoxApi
 {
     /// <summary>
-    /// Buzzer colors
+    /// Buzzer (paddle) colors
     /// </summary>
     public enum PaddleColorEnum
     {

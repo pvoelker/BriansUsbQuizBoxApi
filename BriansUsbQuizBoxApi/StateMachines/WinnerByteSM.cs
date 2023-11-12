@@ -4,7 +4,7 @@ using System;
 
 namespace BriansUsbQuizBoxApi.StateMachines
 {
-    public delegate void BuzzInCallback(PaddleColorEnum paddleColor, int paddleNumber);
+    public delegate void BuzzInCallback(PaddleColorEnum paddleColor, PaddleNumberEnum paddleNumber);
 
     public delegate void FiveSecondTimerExpiredCallback();
 
@@ -16,7 +16,7 @@ namespace BriansUsbQuizBoxApi.StateMachines
         private BuzzInCallback _buzzInCallback;
         private FiveSecondTimerExpiredCallback _fiveSecondTimerExpiredCallback;
 
-        private int _lastPaddleNumber = 0;
+        private PaddleNumberEnum _lastPaddleNumber = PaddleNumberEnum.None;
         private PaddleColorEnum _lastPaddleColor = PaddleColorEnum.None;
         private bool _lastFiveSecondTimerExpired = false;
 

@@ -10,11 +10,11 @@ namespace BriansUsbQuizBoxApi.StateMachines
 
     public delegate void GameFirstBuzzInCallback();
 
-    public delegate void GameDoneCallback(int winnerPaddleNumber, PaddleColorEnum winnerPaddleColor,
+    public delegate void GameDoneCallback(PaddleNumberEnum winnerPaddleNumber, PaddleColorEnum winnerPaddleColor,
         decimal Red1Time, decimal Red2Time, decimal Red3Time, decimal Red4Time,
         decimal Green1Time, decimal Green2Time, decimal Green3Time, decimal Green4Time);
 
-    public delegate void BuzzInStatsCallback(int winnerPaddleNumber, PaddleColorEnum winnerPaddleColor,
+    public delegate void BuzzInStatsCallback(PaddleNumberEnum winnerPaddleNumber, PaddleColorEnum winnerPaddleColor,
         decimal? red1TimeDelta, decimal? red2TimeDelta, decimal? red3TimeDelta, decimal? red4TimeDelta,
         decimal? green1TimeDelta, decimal? green2TimeDelta, decimal? green3TimeDelta, decimal? green4TimeDelta);
 

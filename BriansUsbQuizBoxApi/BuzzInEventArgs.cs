@@ -15,14 +15,14 @@ namespace BriansUsbQuizBoxApi
         /// <summary>
         /// Paddle number that was pressed
         /// </summary>
-        public int PaddleNumber {  get; private set; }
+        public PaddleNumberEnum PaddleNumber {  get; private set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="paddleColor">Paddle color that was pressed</param>
         /// <param name="paddleNumber">Paddle number that was pressed</param>
-        public BuzzInEventArgs(PaddleColorEnum paddleColor, int paddleNumber)
+        public BuzzInEventArgs(PaddleColorEnum paddleColor, PaddleNumberEnum paddleNumber)
         {
             PaddleColor = paddleColor;
             PaddleNumber = paddleNumber;

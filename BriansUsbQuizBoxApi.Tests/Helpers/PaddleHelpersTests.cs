@@ -11,7 +11,7 @@ namespace BriansUsbQuizBoxApi.Tests.Helpers
         {
             PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.RED_1, out var paddleNumber, out var paddleColor);
 
-            paddleNumber.Should().Be(1);
+            paddleNumber.Should().Be(PaddleNumberEnum.Paddle1);
             paddleColor.Should().Be(PaddleColorEnum.Red);
         }
 
@@ -20,7 +20,7 @@ namespace BriansUsbQuizBoxApi.Tests.Helpers
         {
             PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.RED_2, out var paddleNumber, out var paddleColor);
 
-            paddleNumber.Should().Be(2);
+            paddleNumber.Should().Be(PaddleNumberEnum.Paddle2);
             paddleColor.Should().Be(PaddleColorEnum.Red);
         }
 
@@ -29,7 +29,7 @@ namespace BriansUsbQuizBoxApi.Tests.Helpers
         {
             PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.RED_3, out var paddleNumber, out var paddleColor);
 
-            paddleNumber.Should().Be(3);
+            paddleNumber.Should().Be(PaddleNumberEnum.Paddle3);
             paddleColor.Should().Be(PaddleColorEnum.Red);
         }
 
@@ -38,7 +38,7 @@ namespace BriansUsbQuizBoxApi.Tests.Helpers
         {
             PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.RED_4, out var paddleNumber, out var paddleColor);
 
-            paddleNumber.Should().Be(4);
+            paddleNumber.Should().Be(PaddleNumberEnum.Paddle4);
             paddleColor.Should().Be(PaddleColorEnum.Red);
         }
 
@@ -47,7 +47,7 @@ namespace BriansUsbQuizBoxApi.Tests.Helpers
         {
             PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.GREEN_1, out var paddleNumber, out var paddleColor);
 
-            paddleNumber.Should().Be(1);
+            paddleNumber.Should().Be(PaddleNumberEnum.Paddle1);
             paddleColor.Should().Be(PaddleColorEnum.Green);
         }
 
@@ -56,7 +56,7 @@ namespace BriansUsbQuizBoxApi.Tests.Helpers
         {
             PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.GREEN_2, out var paddleNumber, out var paddleColor);
 
-            paddleNumber.Should().Be(2);
+            paddleNumber.Should().Be(PaddleNumberEnum.Paddle2);
             paddleColor.Should().Be(PaddleColorEnum.Green);
         }
 
@@ -65,7 +65,7 @@ namespace BriansUsbQuizBoxApi.Tests.Helpers
         {
             PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.GREEN_3, out var paddleNumber, out var paddleColor);
 
-            paddleNumber.Should().Be(3);
+            paddleNumber.Should().Be(PaddleNumberEnum.Paddle3);
             paddleColor.Should().Be(PaddleColorEnum.Green);
         }
 
@@ -74,7 +74,7 @@ namespace BriansUsbQuizBoxApi.Tests.Helpers
         {
             PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.GREEN_4, out var paddleNumber, out var paddleColor);
 
-            paddleNumber.Should().Be(4);
+            paddleNumber.Should().Be(PaddleNumberEnum.Paddle4);
             paddleColor.Should().Be(PaddleColorEnum.Green);
         }
 
@@ -83,7 +83,7 @@ namespace BriansUsbQuizBoxApi.Tests.Helpers
         {
             PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.FIVE_SEC_TIMER_EXPIRED, out var paddleNumber, out var paddleColor);
 
-            paddleNumber.Should().Be(0);
+            paddleNumber.Should().Be(PaddleNumberEnum.None);
             paddleColor.Should().Be(PaddleColorEnum.None);
         }
 
@@ -92,7 +92,7 @@ namespace BriansUsbQuizBoxApi.Tests.Helpers
         {
             PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.NO_VALID_WINNER, out var paddleNumber, out var paddleColor);
 
-            paddleNumber.Should().Be(0);
+            paddleNumber.Should().Be(PaddleNumberEnum.None);
             paddleColor.Should().Be(PaddleColorEnum.None);
         }
     }
