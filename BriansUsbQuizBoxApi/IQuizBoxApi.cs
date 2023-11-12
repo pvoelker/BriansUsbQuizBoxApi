@@ -2,6 +2,9 @@
 
 namespace BriansUsbQuizBoxApi
 {
+    /// <summary>
+    /// Event based interface for Brian's Quiz Box
+    /// </summary>
     public interface IQuizBoxApi : IDisposable
     {
         #region Events

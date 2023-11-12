@@ -4,13 +4,12 @@ using HidSharp;
 using System;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace BriansUsbQuizBoxApi
 {
     /// <summary>
-    /// Core communication interface for quiz boxes
+    /// Core implementation for Brian's Quiz Box
     /// </summary>
     public class QuizBoxCoreApi : IQuizBoxCoreApi
     {
@@ -115,10 +114,6 @@ namespace BriansUsbQuizBoxApi
                 try
                 {
                     byteCount = _stream.Read(inputReportBuffer, 0, BuzzerConstants.REPORT_LENGTH);
-                }
-                catch(TimeoutException)
-                {
-                    // Keep moving on
                 }
                 catch(IOException ex)
                 {

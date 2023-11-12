@@ -7,6 +7,9 @@ using System.Threading;
 
 namespace BriansUsbQuizBoxApi
 {
+    /// <summary>
+    /// Event based implementation for Brian's Quiz Box
+    /// </summary>
     public class QuizBoxApi : IQuizBoxApi
     {
         private bool _disposedValue;
@@ -115,7 +118,7 @@ namespace BriansUsbQuizBoxApi
                     try
                     {
                         var thread = new Thread(new ThreadStart(ReadData));
-                        thread.Name = "Quiz Box IO Thread";
+                        thread.Name = "Quiz Box I/O Thread";
                         thread.Start();
 
                         _threadId = thread.ManagedThreadId;
@@ -147,6 +150,7 @@ namespace BriansUsbQuizBoxApi
 
         /// <inheritdoc/>
         /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
+        /// <exception cref="InvalidOperationException">Call was made from Quiz Box I/O thread</exception>
         public void Reset()
         {
             if (_api != null)
@@ -163,6 +167,7 @@ namespace BriansUsbQuizBoxApi
 
         /// <inheritdoc/>
         /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
+        /// <exception cref="InvalidOperationException">Call was made from Quiz Box I/O thread</exception>
         public void Start5SecondBuzzInTimer()
         {
             if (_api != null)
@@ -180,6 +185,7 @@ namespace BriansUsbQuizBoxApi
         /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">An invalid timer length has been given</exception>
         /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
+        /// <exception cref="InvalidOperationException">Call was made from Quiz Box I/O thread</exception>
         public void StartPaddleLockoutTimer(LockoutTimerEnum timer)
         {
             CommandHeaderByte command = 0;
@@ -219,6 +225,7 @@ namespace BriansUsbQuizBoxApi
 
         /// <inheritdoc/>
         /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
+        /// <exception cref="InvalidOperationException">Call was made from Quiz Box I/O thread</exception>
         public void StartPaddleLockout()
         {
             if (_api != null)
@@ -235,6 +242,7 @@ namespace BriansUsbQuizBoxApi
 
         /// <inheritdoc/>
         /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
+        /// <exception cref="InvalidOperationException">Call was made from Quiz Box I/O thread</exception>
         public void StopPaddleLockout()
         {
             if (_api != null)
@@ -251,6 +259,7 @@ namespace BriansUsbQuizBoxApi
 
         /// <inheritdoc/>
         /// <exception cref="NotConnectedException"></exception>
+        /// <exception cref="InvalidOperationException">Call was made from Quiz Box I/O thread</exception>
         public void StartReactionTimingGame()
         {
             if (_api != null)
@@ -271,10 +280,12 @@ namespace BriansUsbQuizBoxApi
             if (_api != null)
             {
                 _api.Disconnect();
+
+                _threadId = null;
             }
         }
 
-        public void CheckCommandThreadAndThrow()
+        private void CheckCommandThreadAndThrow()
         {
             if(_threadId != null)
             {
@@ -304,7 +315,11 @@ namespace BriansUsbQuizBoxApi
                 {
                     status = _api.ReadStatus();
                 }
-                catch(DisconnectionException ex)
+                catch (TimeoutException)
+                {
+                    // Keep moving on
+                }
+                catch (DisconnectionException ex)
                 {
                     if (ReadThreadDisconnection != null)
                     {

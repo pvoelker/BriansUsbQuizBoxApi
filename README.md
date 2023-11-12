@@ -131,10 +131,12 @@ while(key.Key != ConsoleKey.Enter)
 }
 ```
 
+Complete example located at: https://github.com/pvoelker/BriansUsbQuizBoxApi/tree/main/BriansUsbQuizBoxApi.TestApp
+
 ## Notes
 
 - Do **not** block on events from QuizBoxApi.  This will prevent the background read thread from running
-- Do **not** make call command methods (like 'Reset') from events on QuizBoxApi. An exception will be thrown if this is attempted
+- Do **not** make call command methods (like 'Reset') from events on QuizBoxApi. An exception will be thrown if this is attempted. Using Task.Run is a way to get around this limitation
 
 ## Credits
 
