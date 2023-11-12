@@ -517,7 +517,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.FiveSecondTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.LockoutTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
-                api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
+                api.GameStarted += (s, e) => { /* Don't care */ };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameFirstBuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { eventFiredCount++; };
@@ -528,6 +528,10 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.Connect();
 
                 api.IsConnected.Should().BeTrue();
+
+                Thread.Sleep(20);
+
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
 
                 Thread.Sleep(20);
 

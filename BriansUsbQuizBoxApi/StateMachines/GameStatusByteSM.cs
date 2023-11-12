@@ -1,4 +1,5 @@
-﻿using BriansUsbQuizBoxApi.Protocols;
+﻿using BriansUsbQuizBoxApi.Helpers;
+using BriansUsbQuizBoxApi.Protocols;
 using System;
 
 namespace BriansUsbQuizBoxApi.StateMachines
@@ -9,8 +10,13 @@ namespace BriansUsbQuizBoxApi.StateMachines
 
     public delegate void GameFirstBuzzInCallback();
 
-    public delegate void GameDoneCallback(decimal Red1Time, decimal Red2Time, decimal Red3Time, decimal Red4Time,
+    public delegate void GameDoneCallback(PaddleNumberEnum winnerPaddleNumber, PaddleColorEnum winnerPaddleColor,
+        decimal Red1Time, decimal Red2Time, decimal Red3Time, decimal Red4Time,
         decimal Green1Time, decimal Green2Time, decimal Green3Time, decimal Green4Time);
+
+    public delegate void BuzzInStatsCallback(PaddleNumberEnum winnerPaddleNumber, PaddleColorEnum winnerPaddleColor,
+        decimal? red1TimeDelta, decimal? red2TimeDelta, decimal? red3TimeDelta, decimal? red4TimeDelta,
+        decimal? green1TimeDelta, decimal? green2TimeDelta, decimal? green3TimeDelta, decimal? green4TimeDelta);
 
     public enum QuizBoxGameState { Off, Waiting, LightOn, FirstBuzzIn, Done }
 
@@ -23,10 +29,13 @@ namespace BriansUsbQuizBoxApi.StateMachines
         private GameLightOnCallback _gameLightOnCallback;
         private GameFirstBuzzInCallback _gameFirstBuzzInCallback;
         private GameDoneCallback _gameDoneCallback;
+        private BuzzInStatsCallback _buzzInStatsCallback;
 
         private QuizBoxGameState _lastGameState = QuizBoxGameState.Off;
 
         private bool _inGameMode = false;
+
+        private bool _buzzInState = false;
 
         /// <summary>
         /// Constructor
@@ -37,7 +46,8 @@ namespace BriansUsbQuizBoxApi.StateMachines
             GameStartedCallback gameStartedCallback,
             GameLightOnCallback gameLightOnCallback,
             GameFirstBuzzInCallback gameFirstBuzzInCallback,
-            GameDoneCallback gameDoneCallback)
+            GameDoneCallback gameDoneCallback,
+            BuzzInStatsCallback buzzInStatsCallback)
         {
             if (gameStartedCallback == null)
             {
@@ -55,12 +65,17 @@ namespace BriansUsbQuizBoxApi.StateMachines
             {
                 throw new ArgumentNullException(nameof(gameDoneCallback));
             }
+            if (buzzInStatsCallback == null)
+            {
+                throw new ArgumentNullException(nameof(buzzInStatsCallback));
+            }
 
             _gameStartedCallback = gameStartedCallback;
             _gameLightOnCallback = gameLightOnCallback;
             _gameFirstBuzzInCallback = gameFirstBuzzInCallback;
             _gameDoneCallback = gameDoneCallback;
-        }
+            _buzzInStatsCallback = buzzInStatsCallback;
+         }
 
         /// <summary>
         /// Reset state machine to reset state of quiz box
@@ -68,7 +83,6 @@ namespace BriansUsbQuizBoxApi.StateMachines
         public void Reset()
         {
             _lastGameState = QuizBoxGameState.Off;
-
             _inGameMode = false;
         }
 
@@ -114,17 +128,52 @@ namespace BriansUsbQuizBoxApi.StateMachines
             }
             else if (statusByte == StatusByte.GAME_DONE)
             {
-                if (_lastGameState != QuizBoxGameState.Done)
+                if (_inGameMode)
                 {
-                    _gameDoneCallback(status.Red1Time, status.Red2Time, status.Red3Time, status.Red4Time,
-                        status.Green1Time, status.Green2Time, status.Green3Time, status.Green4Time);
-                }
+                    if (_lastGameState != QuizBoxGameState.Done)
+                    {
+                        if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddleNumber, out var paddleColor))
+                        {
+                            _gameDoneCallback(paddleNumber, paddleColor,
+                                BuzzerConstants.GAME_LENGTH - status.Red1Time,
+                                BuzzerConstants.GAME_LENGTH - status.Red2Time,
+                                BuzzerConstants.GAME_LENGTH - status.Red3Time,
+                                BuzzerConstants.GAME_LENGTH - status.Red4Time,
+                                BuzzerConstants.GAME_LENGTH - status.Green1Time,
+                                BuzzerConstants.GAME_LENGTH - status.Green2Time,
+                                BuzzerConstants.GAME_LENGTH - status.Green3Time,
+                                BuzzerConstants.GAME_LENGTH - status.Green4Time);
+                        }
+                    }
 
-                _lastGameState = QuizBoxGameState.Done;
+                    _lastGameState = QuizBoxGameState.Done;
+                }
+                else
+                {
+                    if (_buzzInState == false)
+                    {
+                        if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddleNumber, out var paddleColor))
+                        {
+                            _buzzInStatsCallback(paddleNumber, paddleColor,
+                                (status.Red1Time > 0 || status.Winner == WinnerByte.RED_1) ? status.Red1Time : (decimal?)null,
+                                (status.Red2Time > 0 || status.Winner == WinnerByte.RED_2) ? status.Red2Time : (decimal?)null,
+                                (status.Red3Time > 0 || status.Winner == WinnerByte.RED_3) ? status.Red3Time : (decimal?)null,
+                                (status.Red4Time > 0 || status.Winner == WinnerByte.RED_4) ? status.Red4Time : (decimal?)null,
+                                (status.Green1Time > 0 || status.Winner == WinnerByte.GREEN_1) ? status.Green1Time : (decimal?)null,
+                                (status.Green2Time > 0 || status.Winner == WinnerByte.GREEN_2) ? status.Green2Time : (decimal?)null,
+                                (status.Green3Time > 0 || status.Winner == WinnerByte.GREEN_3) ? status.Green3Time : (decimal?)null,
+                                (status.Green4Time > 0 || status.Winner == WinnerByte.GREEN_4) ? status.Green4Time : (decimal?)null
+                            );
+                        }
+
+                        _buzzInState = true;
+                    }
+                }
             }
             else if (statusByte == StatusByte.IDLE_MODE)
             {
                 _inGameMode = false;
+                _buzzInState = false;
             }
         }
     }

@@ -25,21 +25,23 @@ api.GameStarted += Api_GameStarted;
 api.GameLightOn += Api_GameLightOn;
 api.GameFirstBuzzIn += Api_GameFirstBuzzIn;
 api.GameDone += Api_GameDone;
+api.BuzzInStats += Api_BuzzInStats;
+
 api.ReadThreadDisconnection += Api_ReadThreadDisconnection;
 
 void Api_ReadThreadDisconnection(object? sender, DisconnectionEventArgs e)
 {
-    Console.WriteLine("ERROR: Disconnection occurred in background read thread, program will need to be restarted...");
+    Console.WriteLine("ERROR: Disconnection occurred in background read thread! Program will need to be restarted...");
 }
 
 void Api_GameStarted(object? sender, EventArgs e)
 {
-    Console.WriteLine("Game mode started.  Wait for yellow light to come on and press a paddle as quickly as possible");
+    Console.WriteLine("Game mode started.  Wait for yellow light to come on and press a paddle!");
 }
 
 void Api_GameLightOn(object? sender, EventArgs e)
 {
-    Console.WriteLine("Yellow light on");
+    Console.WriteLine("Yellow light on!");
 }
 
 void Api_GameFirstBuzzIn(object? sender, EventArgs e)
@@ -60,6 +62,19 @@ void Api_GameDone(object? sender, GameDoneEventArgs e)
     Console.WriteLine($"Green 4 Time = {e.Green4Time}ms");
     Console.WriteLine();
     Console.WriteLine("Press Reset to continue...");
+}
+
+void Api_BuzzInStats(object? sender, BuzzInStatsEventArgs e)
+{
+    Console.WriteLine("Buzz in statistics:");
+    Console.WriteLine($"Red 1 Time = {(e.Red1TimeDelta.HasValue ? e.Red1TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Red 2 Time = {(e.Red2TimeDelta.HasValue ? e.Red2TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Red 3 Time = {(e.Red3TimeDelta.HasValue ? e.Red3TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Red 4 Time = {(e.Red4TimeDelta.HasValue ? e.Red4TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Green 1 Time = {(e.Green1TimeDelta.HasValue ? e.Green1TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Green 2 Time = {(e.Green2TimeDelta.HasValue ? e.Green2TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Green 3 Time = {(e.Green3TimeDelta.HasValue ? e.Green3TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Green 4 Time = {(e.Green4TimeDelta.HasValue ? e.Green4TimeDelta + "ms" : "-no buzz in-")}");
 }
 
 void Api_QuizBoxReady(object? sender, EventArgs e)
@@ -100,8 +115,6 @@ if (api.Connect() == false)
 }
 else
 {
-    api.Reset();
-
     Console.WriteLine("Press 'G' to start reaction timing game. Press [ENTER] to exit program...");
 }
 
@@ -118,9 +131,12 @@ while(key.Key != ConsoleKey.Enter)
 }
 ```
 
+Complete example located at: https://github.com/pvoelker/BriansUsbQuizBoxApi/tree/main/BriansUsbQuizBoxApi.TestApp
+
 ## Notes
 
 - Do **not** block on events from QuizBoxApi.  This will prevent the background read thread from running
+- Do **not** make call command methods (like 'Reset') from events on QuizBoxApi. An exception will be thrown if this is attempted. Using Task.Run is a way to get around this limitation
 
 ## Credits
 

@@ -15,13 +15,18 @@
     <Version>1.0.0-alpha</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <PackageId>brians-usb-quiz-box-api</PackageId>
+    <PackageId>BriansUsbQuizBoxApi</PackageId>
     <Authors>HerrVlkr</Authors>
     <Company>Paul Voelker</Company>
     <Product>Brian's USB Quiz Box API</Product>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

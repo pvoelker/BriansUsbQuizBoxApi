@@ -1,15 +1,11 @@
-﻿using BriansUsbQuizBoxApi.Exceptions;
-using BriansUsbQuizBoxApi.Protocols;
-using HidSharp;
+﻿using BriansUsbQuizBoxApi.Protocols;
 using System;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BriansUsbQuizBoxApi
 {
     /// <summary>
-    /// Core communication interface for quiz boxes
+    /// Core interface for Brian's Quiz Box
     /// </summary>
     public interface IQuizBoxCoreApi : IDisposable
     {

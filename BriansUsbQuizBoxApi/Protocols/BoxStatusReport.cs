@@ -30,7 +30,7 @@ namespace BriansUsbQuizBoxApi.Protocols
         public decimal Green4Time { get; private set; }
 
         /// <summary>
-        /// Default constuctor
+        /// Default constructor
         /// </summary>
         public BoxStatusReport()
         {

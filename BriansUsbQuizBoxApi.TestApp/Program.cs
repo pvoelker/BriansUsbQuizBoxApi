@@ -14,6 +14,8 @@ api.GameStarted += Api_GameStarted;
 api.GameLightOn += Api_GameLightOn;
 api.GameFirstBuzzIn += Api_GameFirstBuzzIn;
 api.GameDone += Api_GameDone;
+api.BuzzInStats += Api_BuzzInStats;
+
 api.ReadThreadDisconnection += Api_ReadThreadDisconnection;
 
 void Api_ReadThreadDisconnection(object? sender, DisconnectionEventArgs e)
@@ -71,6 +73,23 @@ void Api_GameDone(object? sender, GameDoneEventArgs e)
 
     Console.WriteLine();
     Console.WriteLine("Press Reset to continue...");
+}
+
+void Api_BuzzInStats(object? sender, BuzzInStatsEventArgs e)
+{
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+
+    Console.WriteLine("Buzz in statistics:");
+    Console.WriteLine($"Red 1 Time = {(e.Red1TimeDelta.HasValue ? e.Red1TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Red 2 Time = {(e.Red2TimeDelta.HasValue ? e.Red2TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Red 3 Time = {(e.Red3TimeDelta.HasValue ? e.Red3TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Red 4 Time = {(e.Red4TimeDelta.HasValue ? e.Red4TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Green 1 Time = {(e.Green1TimeDelta.HasValue ? e.Green1TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Green 2 Time = {(e.Green2TimeDelta.HasValue ? e.Green2TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Green 3 Time = {(e.Green3TimeDelta.HasValue ? e.Green3TimeDelta + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Green 4 Time = {(e.Green4TimeDelta.HasValue ? e.Green4TimeDelta + "ms" : "-no buzz in-")}");
+
+    Console.ForegroundColor = ConsoleColor.White;
 }
 
 void Api_QuizBoxReady(object? sender, EventArgs e)
@@ -147,8 +166,6 @@ if (api.Connect() == false)
 }
 else
 {
-    api.Reset();
-
     Console.WriteLine("Press 'G' to start reaction timing game. Press [ENTER] to exit program...");
 }
 

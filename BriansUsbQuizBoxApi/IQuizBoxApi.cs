@@ -1,13 +1,10 @@
-﻿using BriansUsbQuizBoxApi.Exceptions;
-using BriansUsbQuizBoxApi.Protocols;
-using BriansUsbQuizBoxApi.StateMachines;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System;
 
 namespace BriansUsbQuizBoxApi
 {
+    /// <summary>
+    /// Event based interface for Brian's Quiz Box
+    /// </summary>
     public interface IQuizBoxApi : IDisposable
     {
         #region Events
@@ -69,6 +66,12 @@ namespace BriansUsbQuizBoxApi
         /// </summary>
         /// <remarks>This event is not meant for exact timings</remarks>
         event EventHandler<GameDoneEventArgs>? GameDone;
+
+        /// <summary>
+        /// Event fired when the quiz box sends buzz in statistics after an initial buzz in or 5 second timer expiration
+        /// </summary>
+        /// <remarks>This event is not meant for exact timings</remarks>
+        event EventHandler<BuzzInStatsEventArgs>? BuzzInStats;
 
         /// <summary>
         /// Event fired when a disconnection occurs in the background read thread
