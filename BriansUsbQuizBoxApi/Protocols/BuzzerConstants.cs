@@ -13,8 +13,8 @@ namespace BriansUsbQuizBoxApi.Protocols
         public const int REPORT_LENGTH = 65;
 
         /// <summary>
-        /// Quiz box game length in milliseconds
+        /// Quiz box timer countdown length in milliseconds.  This is used for the reaction time game and tracking delta times from initial buzz ins (paddle presses)
         /// </summary>
-        public const decimal GAME_LENGTH = 1000;
+        public const decimal TIMER_COUNTDOWN_LENGTH = 1000m;
     }
 }

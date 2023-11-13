@@ -357,7 +357,13 @@ namespace BriansUsbQuizBoxApi
 
         private void ProcessRead(BoxStatusReport status)
         {
-            if(status.Status == StatusByte.IDLE_MODE)
+            _winnerByteSM.Process(status.Status, status.Winner);
+
+            _statusByteSM.Process(status.Status);
+
+            _gameStatusByteSM.Process(status);
+
+            if (status.Status == StatusByte.IDLE_MODE)
             {
                 if (_idleMode == false)
                 {
@@ -372,12 +378,6 @@ namespace BriansUsbQuizBoxApi
             {
                 _idleMode = false;
             }
-
-            _winnerByteSM.Process(status.Status, status.Winner);
-
-            _statusByteSM.Process(status.Status);
-
-            _gameStatusByteSM.Process(status);
         }
 
         protected virtual void Dispose(bool disposing)
