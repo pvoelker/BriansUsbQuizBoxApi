@@ -11,8 +11,8 @@ namespace BriansUsbQuizBoxApi.StateMachines
     public delegate void GameFirstBuzzInCallback();
 
     public delegate void GameDoneCallback(PaddleNumberEnum winnerPaddleNumber, PaddleColorEnum winnerPaddleColor,
-        decimal Red1Time, decimal Red2Time, decimal Red3Time, decimal Red4Time,
-        decimal Green1Time, decimal Green2Time, decimal Green3Time, decimal Green4Time);
+        decimal? Red1Time, decimal? Red2Time, decimal? Red3Time, decimal? Red4Time,
+        decimal? Green1Time, decimal? Green2Time, decimal? Green3Time, decimal? Green4Time);
 
     public delegate void BuzzInStatsCallback(PaddleNumberEnum winnerPaddleNumber, PaddleColorEnum winnerPaddleColor,
         decimal? red1TimeDelta, decimal? red2TimeDelta, decimal? red3TimeDelta, decimal? red4TimeDelta,
@@ -135,15 +135,16 @@ namespace BriansUsbQuizBoxApi.StateMachines
                         if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddleNumber, out var paddleColor))
                         {
                             _gameDoneCallback(paddleNumber, paddleColor,
-                                BuzzerConstants.GAME_LENGTH - status.Red1Time,
-                                BuzzerConstants.GAME_LENGTH - status.Red2Time,
-                                BuzzerConstants.GAME_LENGTH - status.Red3Time,
-                                BuzzerConstants.GAME_LENGTH - status.Red4Time,
-                                BuzzerConstants.GAME_LENGTH - status.Green1Time,
-                                BuzzerConstants.GAME_LENGTH - status.Green2Time,
-                                BuzzerConstants.GAME_LENGTH - status.Green3Time,
-                                BuzzerConstants.GAME_LENGTH - status.Green4Time);
-                        }
+                                status.Red1Time,
+                                status.Red2Time,
+                                status.Red3Time,
+                                status.Red4Time,
+                                status.Green1Time,
+                                status.Green2Time,
+                                status.Green3Time,
+                                status.Green4Time
+                            );
+                        }   
                     }
 
                     _lastGameState = QuizBoxGameState.Done;
@@ -155,14 +156,14 @@ namespace BriansUsbQuizBoxApi.StateMachines
                         if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddleNumber, out var paddleColor))
                         {
                             _buzzInStatsCallback(paddleNumber, paddleColor,
-                                (status.Red1Time > 0 || status.Winner == WinnerByte.RED_1) ? status.Red1Time : (decimal?)null,
-                                (status.Red2Time > 0 || status.Winner == WinnerByte.RED_2) ? status.Red2Time : (decimal?)null,
-                                (status.Red3Time > 0 || status.Winner == WinnerByte.RED_3) ? status.Red3Time : (decimal?)null,
-                                (status.Red4Time > 0 || status.Winner == WinnerByte.RED_4) ? status.Red4Time : (decimal?)null,
-                                (status.Green1Time > 0 || status.Winner == WinnerByte.GREEN_1) ? status.Green1Time : (decimal?)null,
-                                (status.Green2Time > 0 || status.Winner == WinnerByte.GREEN_2) ? status.Green2Time : (decimal?)null,
-                                (status.Green3Time > 0 || status.Winner == WinnerByte.GREEN_3) ? status.Green3Time : (decimal?)null,
-                                (status.Green4Time > 0 || status.Winner == WinnerByte.GREEN_4) ? status.Green4Time : (decimal?)null
+                                (status.Winner == WinnerByte.RED_1) ? 0 : status.Red1Time,
+                                (status.Winner == WinnerByte.RED_2) ? 0 : status.Red2Time,
+                                (status.Winner == WinnerByte.RED_3) ? 0 : status.Red3Time,
+                                (status.Winner == WinnerByte.RED_4) ? 0 : status.Red4Time,
+                                (status.Winner == WinnerByte.GREEN_1) ? 0 : status.Green1Time,
+                                (status.Winner == WinnerByte.GREEN_2) ? 0 : status.Green2Time,
+                                (status.Winner == WinnerByte.GREEN_3) ? 0 : status.Green3Time,
+                                (status.Winner == WinnerByte.GREEN_4) ? 0 : status.Green4Time
                             );
                         }
 

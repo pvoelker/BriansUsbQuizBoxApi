@@ -94,7 +94,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             var callbackCalled = false;
             PaddleNumberEnum pn = PaddleNumberEnum.None;
             PaddleColorEnum pc = PaddleColorEnum.None;
-            decimal cr1 = 0m, cr2 = 0m, cr3 = 0m, cr4 = 0m, cg1 = 0m, cg2 = 0m, cg3 = 0m, cg4 = 0m;
+            decimal? cr1 = 0m, cr2 = 0m, cr3 = 0m, cr4 = 0m, cg1 = 0m, cg2 = 0m, cg3 = 0m, cg4 = 0m;
 
             var sm = new GameStatusByteSM(() => { /* Don't care */ },
                 () => { /* Don't care */ },
@@ -116,19 +116,19 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
             sm.Process(new BoxStatusReport(StatusByte.GAME_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
             sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.GREEN_4, 1.0m, 2.0m, 3.0m, 4.0m, 5.0m, 6.0m, 7.0m, 0.0m));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.GREEN_4, 1.0m, 2.0m, 3.0m, 4.0m, 5.0m, 6.0m, 7.0m, null));
 
             callbackCalled.Should().BeTrue();
             pn.Should().Be(PaddleNumberEnum.Paddle4);
             pc.Should().Be(PaddleColorEnum.Green);
-            cr1.Should().Be(999.0m);
-            cr2.Should().Be(998.0m);
-            cr3.Should().Be(997.0m);
-            cr4.Should().Be(996.0m);
-            cg1.Should().Be(995.0m);
-            cg2.Should().Be(994.0m);
-            cg3.Should().Be(993.0m);
-            cg4.Should().Be(1000.0m);
+            cr1.Should().Be(1.0m);
+            cr2.Should().Be(2.0m);
+            cr3.Should().Be(3.0m);
+            cr4.Should().Be(4.0m);
+            cg1.Should().Be(5.0m);
+            cg2.Should().Be(6.0m);
+            cg3.Should().Be(7.0m);
+            cg4.Should().BeNull();
         }
 
         [Fact]
@@ -157,7 +157,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
                     cg4 = g4;
                 });
 
-            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.RED_4, 0, 1.0m, 0, 0, 0, 1.2m, 0, 999.9m));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.RED_4, null, 1.0m, null, 0, null, 1.2m, null, 999.9m));
 
             callbackCalled.Should().BeTrue();
             pn.Should().Be(PaddleNumberEnum.Paddle4);
@@ -198,7 +198,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
                     cg4 = g4;
                 });
 
-            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.NO_VALID_WINNER, null, null, null, null, null, null, null, null));
 
             callbackCalled.Should().BeTrue();
             pn.Should().Be(PaddleNumberEnum.None);

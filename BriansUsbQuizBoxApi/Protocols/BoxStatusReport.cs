@@ -13,21 +13,21 @@ namespace BriansUsbQuizBoxApi.Protocols
 
         public WinnerByte Winner { get; private set; }
 
-        public decimal Red1Time { get; private set; }
+        public decimal? Red1Time { get; private set; }
 
-        public decimal Red2Time { get; private set; }
+        public decimal? Red2Time { get; private set; }
 
-        public decimal Red3Time { get; private set; }
+        public decimal? Red3Time { get; private set; }
 
-        public decimal Red4Time { get; private set; }
+        public decimal? Red4Time { get; private set; }
 
-        public decimal Green1Time { get; private set; }
+        public decimal? Green1Time { get; private set; }
 
-        public decimal Green2Time { get; private set; }
+        public decimal? Green2Time { get; private set; }
 
-        public decimal Green3Time { get; private set; }
+        public decimal? Green3Time { get; private set; }
 
-        public decimal Green4Time { get; private set; }
+        public decimal? Green4Time { get; private set; }
 
         /// <summary>
         /// Default constructor
@@ -41,17 +41,17 @@ namespace BriansUsbQuizBoxApi.Protocols
         /// </summary>
         /// <param name="status">Status byte</param>
         /// <param name="winner">Winner byte</param>
-        /// <param name="red1Time">Time for red 1 paddle</param>
-        /// <param name="red2Time">Time for red 2 paddle</param>
-        /// <param name="red3Time">Time for red 3 paddle</param>
-        /// <param name="red4Time">Time for red 4 paddle</param>
-        /// <param name="green1Time">Time for green 1 paddle</param>
-        /// <param name="green2Time">Time for green 2 paddle</param>
-        /// <param name="green3Time">Time for green 3 paddle</param>
-        /// <param name="green4Time">Time for green 4 paddle</param>
+        /// <param name="red1Time">Time for red 1 paddle or null for no buzz in (paddle press)</param>
+        /// <param name="red2Time">Time for red 2 paddle or null for no buzz in (paddle press)</param>
+        /// <param name="red3Time">Time for red 3 paddle or null for no buzz in (paddle press)</param>
+        /// <param name="red4Time">Time for red 4 paddle or null for no buzz in (paddle press)</param>
+        /// <param name="green1Time">Time for green 1 paddle or null for no buzz in (paddle press)</param>
+        /// <param name="green2Time">Time for green 2 paddle or null for no buzz in (paddle press)</param>
+        /// <param name="green3Time">Time for green 3 paddle or null for no buzz in (paddle press)</param>
+        /// <param name="green4Time">Time for green 4 paddle or null for no buzz in (paddle press)</param>
         public BoxStatusReport(StatusByte status, WinnerByte winner,
-            decimal red1Time, decimal red2Time, decimal red3Time, decimal red4Time,
-            decimal green1Time, decimal green2Time, decimal green3Time, decimal green4Time)
+            decimal? red1Time, decimal? red2Time, decimal? red3Time, decimal? red4Time,
+            decimal? green1Time, decimal? green2Time, decimal? green3Time, decimal? green4Time)
         {
             Status = status;
             Winner = winner;

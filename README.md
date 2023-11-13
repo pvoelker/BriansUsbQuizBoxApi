@@ -52,14 +52,15 @@ void Api_GameFirstBuzzIn(object? sender, EventArgs e)
 void Api_GameDone(object? sender, GameDoneEventArgs e)
 {
     Console.WriteLine("Game done!");
-    Console.WriteLine($"Red 1 Time = {e.Red1Time}ms");
-    Console.WriteLine($"Red 2 Time = {e.Red2Time}ms");
-    Console.WriteLine($"Red 3 Time = {e.Red3Time}ms");
-    Console.WriteLine($"Red 4 Time = {e.Red4Time}ms");
-    Console.WriteLine($"Green 1 Time = {e.Green1Time}ms");
-    Console.WriteLine($"Green 2 Time = {e.Green2Time}ms");
-    Console.WriteLine($"Green 3 Time = {e.Green3Time}ms");
-    Console.WriteLine($"Green 4 Time = {e.Green4Time}ms");
+    Console.WriteLine($"Red 1 Time = {(e.Red1Time.HasValue ? e.Red1Time + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Red 2 Time = {(e.Red2Time.HasValue ? e.Red2Time + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Red 3 Time = {(e.Red3Time.HasValue ? e.Red3Time + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Red 4 Time = {(e.Red4Time.HasValue ? e.Red4Time + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Green 1 Time = {(e.Green1Time.HasValue ? e.Green1Time + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Green 2 Time = {(e.Green2Time.HasValue ? e.Green2Time + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Green 3 Time = {(e.Green3Time.HasValue ? e.Green3Time + "ms" : "-no buzz in-")}");
+    Console.WriteLine($"Green 4 Time = {(e.Green4Time.HasValue ? e.Green4Time + "ms" : "-no buzz in-")}");
+
     Console.WriteLine();
     Console.WriteLine("Press Reset to continue...");
 }
