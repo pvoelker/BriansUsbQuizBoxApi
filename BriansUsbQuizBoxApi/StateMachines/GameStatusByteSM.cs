@@ -8,13 +8,11 @@ namespace BriansUsbQuizBoxApi.StateMachines
 
     public delegate void GameLightOnCallback();
 
-    public delegate void GameFirstBuzzInCallback();
-
-    public delegate void GameDoneCallback(PaddleNumberEnum winnerPaddleNumber, PaddleColorEnum winnerPaddleColor,
+    public delegate void GameDoneCallback(Paddle? winner,
         decimal? Red1Time, decimal? Red2Time, decimal? Red3Time, decimal? Red4Time,
         decimal? Green1Time, decimal? Green2Time, decimal? Green3Time, decimal? Green4Time);
 
-    public delegate void BuzzInStatsCallback(PaddleNumberEnum winnerPaddleNumber, PaddleColorEnum winnerPaddleColor,
+    public delegate void BuzzInStatsCallback(Paddle? winner,
         decimal? red1TimeDelta, decimal? red2TimeDelta, decimal? red3TimeDelta, decimal? red4TimeDelta,
         decimal? green1TimeDelta, decimal? green2TimeDelta, decimal? green3TimeDelta, decimal? green4TimeDelta);
 
@@ -25,11 +23,10 @@ namespace BriansUsbQuizBoxApi.StateMachines
     /// </summary>
     public class GameStatusByteSM
     {
-        private GameStartedCallback _gameStartedCallback;
-        private GameLightOnCallback _gameLightOnCallback;
-        private GameFirstBuzzInCallback _gameFirstBuzzInCallback;
-        private GameDoneCallback _gameDoneCallback;
-        private BuzzInStatsCallback _buzzInStatsCallback;
+        private readonly GameStartedCallback _gameStartedCallback;
+        private readonly GameLightOnCallback _gameLightOnCallback;
+        private readonly GameDoneCallback _gameDoneCallback;
+        private readonly BuzzInStatsCallback _buzzInStatsCallback;
 
         private QuizBoxGameState _lastGameState = QuizBoxGameState.Off;
 
@@ -45,7 +42,6 @@ namespace BriansUsbQuizBoxApi.StateMachines
         public GameStatusByteSM(
             GameStartedCallback gameStartedCallback,
             GameLightOnCallback gameLightOnCallback,
-            GameFirstBuzzInCallback gameFirstBuzzInCallback,
             GameDoneCallback gameDoneCallback,
             BuzzInStatsCallback buzzInStatsCallback)
         {
@@ -56,10 +52,6 @@ namespace BriansUsbQuizBoxApi.StateMachines
             if (gameLightOnCallback == null)
             {
                 throw new ArgumentNullException(nameof(gameLightOnCallback));
-            }
-            if (gameFirstBuzzInCallback == null)
-            {
-                throw new ArgumentNullException(nameof(gameFirstBuzzInCallback));
             }
             if (gameDoneCallback == null)
             {
@@ -72,7 +64,6 @@ namespace BriansUsbQuizBoxApi.StateMachines
 
             _gameStartedCallback = gameStartedCallback;
             _gameLightOnCallback = gameLightOnCallback;
-            _gameFirstBuzzInCallback = gameFirstBuzzInCallback;
             _gameDoneCallback = gameDoneCallback;
             _buzzInStatsCallback = buzzInStatsCallback;
          }
@@ -113,28 +104,15 @@ namespace BriansUsbQuizBoxApi.StateMachines
 
                 _lastGameState = QuizBoxGameState.LightOn;
             }
-            else if (statusByte == StatusByte.PERSON_BUZZED_IN)
-            {
-                // The 'person buzzed in' status byte is also used outside of the reaction time game
-                if (_inGameMode)
-                {
-                    if (_lastGameState != QuizBoxGameState.FirstBuzzIn)
-                    {
-                        _gameFirstBuzzInCallback();
-                    }
-
-                    _lastGameState = QuizBoxGameState.FirstBuzzIn;
-                }
-            }
             else if (statusByte == StatusByte.GAME_DONE)
             {
                 if (_inGameMode)
                 {
                     if (_lastGameState != QuizBoxGameState.Done)
                     {
-                        if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddleNumber, out var paddleColor))
+                        if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddle))
                         {
-                            _gameDoneCallback(paddleNumber, paddleColor,
+                            _gameDoneCallback(paddle,
                                 status.Red1Time,
                                 status.Red2Time,
                                 status.Red3Time,
@@ -153,9 +131,9 @@ namespace BriansUsbQuizBoxApi.StateMachines
                 {
                     if (_buzzInState == false)
                     {
-                        if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddleNumber, out var paddleColor))
+                        if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddle))
                         {
-                            _buzzInStatsCallback(paddleNumber, paddleColor,
+                            _buzzInStatsCallback(paddle,
                                 (status.Winner == WinnerByte.RED_1) ? 0 : status.Red1Time,
                                 (status.Winner == WinnerByte.RED_2) ? 0 : status.Red2Time,
                                 (status.Winner == WinnerByte.RED_3) ? 0 : status.Red3Time,

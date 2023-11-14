@@ -8,9 +8,9 @@ namespace BriansUsbQuizBoxApi
     public enum PaddleNumberEnum
     {
         None = 0,
-        Paddle1 = 1,
-        Paddle2 = 2,
-        Paddle3 = 3,
-        Paddle4 = 4
+        One = 1,
+        Two = 2,
+        Three = 3,
+        Four = 4
     }
 }

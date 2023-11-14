@@ -16,10 +16,10 @@ namespace BriansUsbQuizBoxApi.StateMachines
     /// </summary>
     public class StatusByteSM
     {
-        private QuizBoxReadyCallback _quizBoxReadyCallback;
-        private FiveSecondTimerStartedCallback _fiveSecondTimerStartedCallback;
-        private LockoutTimerStartedCallback _lockoutTimerStartedCallback;
-        private LockoutTimerExpiredCallback _lockoutTimerExpiredCallback;
+        private readonly QuizBoxReadyCallback _quizBoxReadyCallback;
+        private readonly FiveSecondTimerStartedCallback _fiveSecondTimerStartedCallback;
+        private readonly LockoutTimerStartedCallback _lockoutTimerStartedCallback;
+        private readonly LockoutTimerExpiredCallback _lockoutTimerExpiredCallback;
 
         private bool _lastInitialIdleMode = false; // Tracks initial idle mode state
         private bool _lastFiveSecondTimerStarted = false;

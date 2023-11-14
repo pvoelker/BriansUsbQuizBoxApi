@@ -56,12 +56,6 @@ namespace BriansUsbQuizBoxApi
         event EventHandler? GameLightOn;
 
         /// <summary>
-        /// Event fired when the first player of the reaction time game buzzes in
-        /// </summary>
-        /// <remarks>This event is not meant for exact timings</remarks>
-        event EventHandler? GameFirstBuzzIn;
-
-        /// <summary>
         /// Event fired when the reaction time game has completed.  Results are included in the event arguments
         /// </summary>
         /// <remarks>This event is not meant for exact timings</remarks>

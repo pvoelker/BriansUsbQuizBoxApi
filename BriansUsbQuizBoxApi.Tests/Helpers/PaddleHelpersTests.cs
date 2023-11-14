@@ -9,91 +9,81 @@ namespace BriansUsbQuizBoxApi.Tests.Helpers
         [Fact]
         public void PaddleRed1()
         {
-            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.RED_1, out var paddleNumber, out var paddleColor);
+            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.RED_1, out var paddle);
 
-            paddleNumber.Should().Be(PaddleNumberEnum.Paddle1);
-            paddleColor.Should().Be(PaddleColorEnum.Red);
+            paddle.Should().Be(Paddle.RED_1);
         }
 
         [Fact]
         public void PaddleRed2()
         {
-            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.RED_2, out var paddleNumber, out var paddleColor);
+            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.RED_2, out var paddle);
 
-            paddleNumber.Should().Be(PaddleNumberEnum.Paddle2);
-            paddleColor.Should().Be(PaddleColorEnum.Red);
+            paddle.Should().Be(Paddle.RED_2);
         }
 
         [Fact]
         public void PaddleRed3()
         {
-            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.RED_3, out var paddleNumber, out var paddleColor);
+            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.RED_3, out var paddle);
 
-            paddleNumber.Should().Be(PaddleNumberEnum.Paddle3);
-            paddleColor.Should().Be(PaddleColorEnum.Red);
+            paddle.Should().Be(Paddle.RED_3);
         }
 
         [Fact]
         public void PaddleRed4()
         {
-            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.RED_4, out var paddleNumber, out var paddleColor);
+            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.RED_4, out var paddle);
 
-            paddleNumber.Should().Be(PaddleNumberEnum.Paddle4);
-            paddleColor.Should().Be(PaddleColorEnum.Red);
+            paddle.Should().Be(Paddle.RED_4);
         }
 
         [Fact]
         public void PaddleGreen1()
         {
-            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.GREEN_1, out var paddleNumber, out var paddleColor);
+            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.GREEN_1, out var paddle);
 
-            paddleNumber.Should().Be(PaddleNumberEnum.Paddle1);
-            paddleColor.Should().Be(PaddleColorEnum.Green);
+            paddle.Should().Be(Paddle.GREEN_1);
         }
 
         [Fact]
         public void PaddleGreen2()
         {
-            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.GREEN_2, out var paddleNumber, out var paddleColor);
+            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.GREEN_2, out var paddle);
 
-            paddleNumber.Should().Be(PaddleNumberEnum.Paddle2);
-            paddleColor.Should().Be(PaddleColorEnum.Green);
+            paddle.Should().Be(Paddle.GREEN_2);
         }
 
         [Fact]
         public void PaddleGreen3()
         {
-            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.GREEN_3, out var paddleNumber, out var paddleColor);
+            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.GREEN_3, out var paddle);
 
-            paddleNumber.Should().Be(PaddleNumberEnum.Paddle3);
-            paddleColor.Should().Be(PaddleColorEnum.Green);
+            paddle.Should().Be(Paddle.GREEN_3);
         }
 
         [Fact]
         public void PaddleGreen4()
         {
-            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.GREEN_4, out var paddleNumber, out var paddleColor);
+            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.GREEN_4, out var paddle);
 
-            paddleNumber.Should().Be(PaddleNumberEnum.Paddle4);
-            paddleColor.Should().Be(PaddleColorEnum.Green);
+            paddle.Should().Be(Paddle.GREEN_4);
         }
 
         [Fact]
         public void FiveSecondTimeout()
         {
-            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.FIVE_SEC_TIMER_EXPIRED, out var paddleNumber, out var paddleColor);
+            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.FIVE_SEC_TIMER_EXPIRED, out var paddle);
 
-            paddleNumber.Should().Be(PaddleNumberEnum.None);
-            paddleColor.Should().Be(PaddleColorEnum.None);
+            paddle.Should().BeNull();
         }
 
         [Fact]
         public void NoValidWinner()
         {
-            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.NO_VALID_WINNER, out var paddleNumber, out var paddleColor);
+            PaddleHelpers.TryParseWinnerByte(BriansUsbQuizBoxApi.Protocols.WinnerByte.NO_VALID_WINNER, out var paddle);
 
-            paddleNumber.Should().Be(PaddleNumberEnum.None);
-            paddleColor.Should().Be(PaddleColorEnum.None);
+            paddle.Should().BeNull();
         }
     }
 }

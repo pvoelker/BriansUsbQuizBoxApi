@@ -36,7 +36,6 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
-                api.GameFirstBuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
                 api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
 
@@ -80,7 +79,6 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
-                api.GameFirstBuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
                 api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
 
@@ -128,7 +126,6 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
-                api.GameFirstBuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
                 api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
 
@@ -176,7 +173,6 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
-                api.GameFirstBuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
                 api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
 
@@ -224,7 +220,6 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
-                api.GameFirstBuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
                 api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
 
@@ -272,7 +267,6 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerExpired += (s, e) => { eventFiredCount++; };
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
-                api.GameFirstBuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
                 api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
 
@@ -322,7 +316,6 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameStarted += (s, e) => { eventFiredCount++; };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
-                api.GameFirstBuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
                 api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
 
@@ -370,7 +363,6 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { eventFiredCount++; };
-                api.GameFirstBuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
                 api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
 
@@ -418,7 +410,6 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameStarted += (s, e) => { /* Don't care */ };
                 api.GameLightOn += (s, e) => { /* Don't care */ };
-                api.GameFirstBuzzIn += (s, e) => { eventFiredCount++; };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
                 api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
 
@@ -470,7 +461,6 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameStarted += (s, e) => { /* Don't care */ };
                 api.GameLightOn += (s, e) => { /* Don't care */ };
-                api.GameFirstBuzzIn += (s, e) => { eventFiredCount++; };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
                 api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
 
@@ -519,7 +509,6 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameStarted += (s, e) => { /* Don't care */ };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
-                api.GameFirstBuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { eventFiredCount++; };
                 api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
 
@@ -577,7 +566,6 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
-                api.GameFirstBuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
                 api.ReadThreadDisconnection += (s, e) => { eventFiredCount++; };
 

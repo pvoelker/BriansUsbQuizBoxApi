@@ -10,113 +10,105 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
         [Fact]
         public void PaddleRed1Pressed()
         {
-            PaddleColorEnum color = PaddleColorEnum.None;
-            PaddleNumberEnum number = PaddleNumberEnum.None;
+            Paddle? paddle = null;
 
-            var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
+            var sm = new WinnerByteSM((p) => { paddle = p; },
+                () => Assert.Fail("This should not be called"));
 
             sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_1);
 
-            color.Should().Be(PaddleColorEnum.Red);
-            number.Should().Be(PaddleNumberEnum.Paddle1);
+            paddle.Should().Be(Paddle.RED_1);
         }
 
         [Fact]
         public void PaddleRed2Pressed()
         {
-            PaddleColorEnum color = PaddleColorEnum.None;
-            PaddleNumberEnum number = PaddleNumberEnum.None;
+            Paddle? paddle = null;
 
-            var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
+            var sm = new WinnerByteSM((p) => { paddle = p; },
+                () => Assert.Fail("This should not be called"));
 
             sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_2);
 
-            color.Should().Be(PaddleColorEnum.Red);
-            number.Should().Be(PaddleNumberEnum.Paddle2);
+            paddle.Should().Be(Paddle.RED_2);
         }
 
         [Fact]
         public void PaddleRed3Pressed()
         {
-            PaddleColorEnum color = PaddleColorEnum.None;
-            PaddleNumberEnum number = PaddleNumberEnum.None;
+            Paddle? paddle = null;
 
-            var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
+            var sm = new WinnerByteSM((p) => { paddle = p; },
+                () => Assert.Fail("This should not be called"));
 
             sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_3);
 
-            color.Should().Be(PaddleColorEnum.Red);
-            number.Should().Be(PaddleNumberEnum.Paddle3);
+            paddle.Should().Be(Paddle.RED_3);
         }
 
         [Fact]
         public void PaddleRed4Pressed()
         {
-            PaddleColorEnum color = PaddleColorEnum.None;
-            PaddleNumberEnum number = PaddleNumberEnum.None;
+            Paddle? paddle = null;
 
-            var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
+            var sm = new WinnerByteSM((p) => { paddle = p; },
+                () => Assert.Fail("This should not be called"));
 
             sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_4);
 
-            color.Should().Be(PaddleColorEnum.Red);
-            number.Should().Be(PaddleNumberEnum.Paddle4);
+            paddle.Should().Be(Paddle.RED_4);
         }
 
         [Fact]
         public void PaddleGreen1Pressed()
         {
-            PaddleColorEnum color = PaddleColorEnum.None;
-            PaddleNumberEnum number = PaddleNumberEnum.None;
+            Paddle? paddle = null;
 
-            var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
+            var sm = new WinnerByteSM((p) => { paddle = p; },
+                () => Assert.Fail("This should not be called"));
 
             sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_1);
 
-            color.Should().Be(PaddleColorEnum.Green);
-            number.Should().Be(PaddleNumberEnum.Paddle1);
+            paddle.Should().Be(Paddle.GREEN_1);
         }
 
         [Fact]
         public void PaddleGreen2Pressed()
         {
-            PaddleColorEnum color = PaddleColorEnum.None;
-            PaddleNumberEnum number = PaddleNumberEnum.None;
+            Paddle? paddle = null;
 
-            var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
+            var sm = new WinnerByteSM((p) => { paddle = p; },
+                () => Assert.Fail("This should not be called"));
 
             sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_2);
 
-            color.Should().Be(PaddleColorEnum.Green);
-            number.Should().Be(PaddleNumberEnum.Paddle2);
+            paddle.Should().Be(Paddle.GREEN_2);
         }
 
         [Fact]
         public void PaddleGreen3Pressed()
         {
-            PaddleColorEnum color = PaddleColorEnum.None;
-            PaddleNumberEnum number = PaddleNumberEnum.None;
+            Paddle? paddle = null;
 
-            var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
+            var sm = new WinnerByteSM((p) => { paddle = p; },
+                () => Assert.Fail("This should not be called"));
 
             sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_3);
 
-            color.Should().Be(PaddleColorEnum.Green);
-            number.Should().Be(PaddleNumberEnum.Paddle3);
+            paddle.Should().Be(Paddle.GREEN_3);
         }
 
         [Fact]
         public void PaddleGreen4Pressed()
         {
-            PaddleColorEnum color = PaddleColorEnum.None;
-            PaddleNumberEnum number = PaddleNumberEnum.None;
+            Paddle? paddle = null;
 
-            var sm = new WinnerByteSM((x, y) => { color = x; number = y; }, () => Assert.Fail("This should not be called"));
+            var sm = new WinnerByteSM((p) => { paddle = p; },
+                () => Assert.Fail("This should not be called"));
 
             sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_4);
 
-            color.Should().Be(PaddleColorEnum.Green);
-            number.Should().Be(PaddleNumberEnum.Paddle4);
+            paddle.Should().Be(Paddle.GREEN_4);
         }
 
         [Fact]
@@ -124,7 +116,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
         {
             bool timerExpired = false;
 
-            var sm = new WinnerByteSM((x, y) => Assert.Fail("This should not be called"), () => { timerExpired = true; });
+            var sm = new WinnerByteSM((p) => Assert.Fail("This should not be called"),
+                () => { timerExpired = true; });
 
             sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.FIVE_SEC_TIMER_EXPIRED);
 
@@ -134,7 +127,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
         [Fact]
         public void NoValidWinner()
         {
-            var sm = new WinnerByteSM((x, y) => Assert.Fail("This should not be called"),
+            var sm = new WinnerByteSM((p) => Assert.Fail("This should not be called"),
                 () => Assert.Fail("This should not be called"));
 
             sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.NO_VALID_WINNER);

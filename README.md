@@ -23,7 +23,6 @@ api.LockoutTimerStarted += Api_LockoutTimerStarted;
 api.LockoutTimerExpired += Api_LockoutTimerExpired;
 api.GameStarted += Api_GameStarted;
 api.GameLightOn += Api_GameLightOn;
-api.GameFirstBuzzIn += Api_GameFirstBuzzIn;
 api.GameDone += Api_GameDone;
 api.BuzzInStats += Api_BuzzInStats;
 
@@ -36,17 +35,12 @@ void Api_ReadThreadDisconnection(object? sender, DisconnectionEventArgs e)
 
 void Api_GameStarted(object? sender, EventArgs e)
 {
-    Console.WriteLine("Game mode started.  Wait for yellow light to come on and press a paddle!");
+    Console.WriteLine("Game mode started.  Wait for yellow light to turn on and press a paddle!");
 }
 
 void Api_GameLightOn(object? sender, EventArgs e)
 {
     Console.WriteLine("Yellow light on!");
-}
-
-void Api_GameFirstBuzzIn(object? sender, EventArgs e)
-{
-    Console.WriteLine("Game first buzz in!");
 }
 
 void Api_GameDone(object? sender, GameDoneEventArgs e)
@@ -85,7 +79,7 @@ void Api_QuizBoxReady(object? sender, EventArgs e)
 
 void Api_BuzzIn(object? sender, BuzzInEventArgs e)
 {
-    Console.WriteLine($"Buzz in: {e.PaddleColor} - {e.PaddleNumber}");
+    Console.WriteLine($"Buzz in on paddle: {e.Paddle}");
 }
 
 void Api_FiveSecondTimerStarted(object? sender, EventArgs e)

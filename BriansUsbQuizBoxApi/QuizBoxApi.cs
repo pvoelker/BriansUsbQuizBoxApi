@@ -58,9 +58,6 @@ namespace BriansUsbQuizBoxApi
         public event EventHandler? GameLightOn;
 
         /// <inheritdoc/>
-        public event EventHandler? GameFirstBuzzIn;
-
-        /// <inheritdoc/>
         public event EventHandler<GameDoneEventArgs>? GameDone;
         
         /// <inheritdoc/>
@@ -79,7 +76,7 @@ namespace BriansUsbQuizBoxApi
             _api = api;
 
             _winnerByteSM = new WinnerByteSM(
-                (paddleColor, paddleNumber) => BuzzIn?.Invoke(this, new BuzzInEventArgs(paddleColor, paddleNumber)),
+                (paddle) => BuzzIn?.Invoke(this, new BuzzInEventArgs(paddle)),
                 () => FiveSecondTimerExpired?.Invoke(this, null)
             );
             _statusByteSM = new StatusByteSM(
@@ -91,9 +88,8 @@ namespace BriansUsbQuizBoxApi
             _gameStatusByteSM = new GameStatusByteSM(
                 () => GameStarted?.Invoke(this, null),
                 () => GameLightOn?.Invoke(this, null),
-                () => GameFirstBuzzIn?.Invoke(this, null),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => GameDone?.Invoke(this, new GameDoneEventArgs(pc, pn, r1, r2, r3, r4, g1, g2, g3, g4)),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => BuzzInStats?.Invoke(this, new BuzzInStatsEventArgs(pc, pn, r1, r2, r3, r4, g1, g2, g3, g4))
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => GameDone?.Invoke(this, new GameDoneEventArgs(p, r1, r2, r3, r4, g1, g2, g3, g4)),
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => BuzzInStats?.Invoke(this, new BuzzInStatsEventArgs(p, r1, r2, r3, r4, g1, g2, g3, g4))
             );
         }
 

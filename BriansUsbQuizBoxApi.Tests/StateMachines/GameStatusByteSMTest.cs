@@ -12,9 +12,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
         {
             var sm = new GameStatusByteSM(() => Assert.Fail("This should not be called"),
                 () => Assert.Fail("This should not be called"),
-                () => Assert.Fail("This should not be called"),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
 
             sm.Process(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
         }
@@ -26,9 +25,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 
             var sm = new GameStatusByteSM(() => callbackCalled = true,
                 () => Assert.Fail("This should not be called"),
-                () => Assert.Fail("This should not be called"),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
 
             sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
 
@@ -42,30 +40,11 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 
             var sm = new GameStatusByteSM(() => { /* Don't care */ },
                 () => callbackCalled = true,
-                () => Assert.Fail("This should not be called"),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
 
             sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
             sm.Process(new BoxStatusReport(StatusByte.GAME_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-
-            callbackCalled.Should().BeTrue();
-        }
-
-        [Fact]
-        public void GameFirstPersonBuzzedIn()
-        {
-            var callbackCalled = false;
-
-            var sm = new GameStatusByteSM(() => { /* Don't care */ },
-                () => { /* Don't care */ },
-                () => callbackCalled = true,
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
-
-            sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-            sm.Process(new BoxStatusReport(StatusByte.GAME_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
 
             callbackCalled.Should().BeTrue();
         }
@@ -77,9 +56,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 
             var sm = new GameStatusByteSM(() => { /* Don't care */ },
                 () => { /* Don't care */ },
-                () => Assert.Fail("This should not be called"),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => callbackCalled = true,
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => callbackCalled = true,
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
 
             sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
             sm.Process(new BoxStatusReport(StatusByte.GAME_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
@@ -92,16 +70,13 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
         public void GameDone()
         {
             var callbackCalled = false;
-            PaddleNumberEnum pn = PaddleNumberEnum.None;
-            PaddleColorEnum pc = PaddleColorEnum.None;
+            Paddle? pd = null;
             decimal? cr1 = 0m, cr2 = 0m, cr3 = 0m, cr4 = 0m, cg1 = 0m, cg2 = 0m, cg3 = 0m, cg4 = 0m;
 
             var sm = new GameStatusByteSM(() => { /* Don't care */ },
                 () => { /* Don't care */ },
-                () => { /* Don't care */ },
-                (n, c, r1, r2, r3, r4, g1, g2, g3, g4) => { callbackCalled = true;
-                    pn = n;
-                    pc = c;
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => { callbackCalled = true;
+                    pd = p;
                     cr1 = r1;
                     cr2 = r2;
                     cr3 = r3;
@@ -111,7 +86,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
                     cg3 = g3;
                     cg4 = g4;
                 },
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
 
             sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
             sm.Process(new BoxStatusReport(StatusByte.GAME_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
@@ -119,8 +94,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.GREEN_4, 1.0m, 2.0m, 3.0m, 4.0m, 5.0m, 6.0m, 7.0m, null));
 
             callbackCalled.Should().BeTrue();
-            pn.Should().Be(PaddleNumberEnum.Paddle4);
-            pc.Should().Be(PaddleColorEnum.Green);
+            pd.Should().Be(Paddle.GREEN_4);
             cr1.Should().Be(1.0m);
             cr2.Should().Be(2.0m);
             cr3.Should().Be(3.0m);
@@ -135,18 +109,15 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
         public void GameDoneWithoutGame()
         {
             var callbackCalled = false;
-            PaddleNumberEnum pn = PaddleNumberEnum.None;
-            PaddleColorEnum pc = PaddleColorEnum.None;
+            Paddle? pd = null;
             decimal? cr1 = null, cr2 = null, cr3 = null, cr4 = null, cg1 = null, cg2 = null, cg3 = null, cg4 = null;
 
             var sm = new GameStatusByteSM(() => Assert.Fail("This should not be called"),
                 () => Assert.Fail("This should not be called"),
-                () => Assert.Fail("This should not be called"),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
-                (n, c, r1, r2, r3, r4, g1, g2, g3, g4) => {
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => {
                     callbackCalled = true;
-                    pn = n;
-                    pc = c;
+                    pd = p;
                     cr1 = r1;
                     cr2 = r2;
                     cr3 = r3;
@@ -160,8 +131,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.RED_4, null, 1.0m, null, 0, null, 1.2m, null, 999.9m));
 
             callbackCalled.Should().BeTrue();
-            pn.Should().Be(PaddleNumberEnum.Paddle4);
-            pc.Should().Be(PaddleColorEnum.Red);
+            pd.Should().Be(Paddle.RED_4);
             cr1.Should().BeNull();
             cr2.Should().Be(1.0m);
             cr3.Should().BeNull();
@@ -176,18 +146,15 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
         public void GameDoneWithoutGameAndNoBuzzIns()
         {
             var callbackCalled = false;
-            PaddleNumberEnum pn = PaddleNumberEnum.None;
-            PaddleColorEnum pc = PaddleColorEnum.None;
+            Paddle? pd = null;
             decimal? cr1 = null, cr2 = null, cr3 = null, cr4 = null, cg1 = null, cg2 = null, cg3 = null, cg4 = null;
 
             var sm = new GameStatusByteSM(() => Assert.Fail("This should not be called"),
                 () => Assert.Fail("This should not be called"),
-                () => Assert.Fail("This should not be called"),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
-                (n, c, r1, r2, r3, r4, g1, g2, g3, g4) => {
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => {
                     callbackCalled = true;
-                    pn = n;
-                    pc = c;
+                    pd = p;
                     cr1 = r1;
                     cr2 = r2;
                     cr3 = r3;
@@ -201,8 +168,7 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.NO_VALID_WINNER, null, null, null, null, null, null, null, null));
 
             callbackCalled.Should().BeTrue();
-            pn.Should().Be(PaddleNumberEnum.None);
-            pc.Should().Be(PaddleColorEnum.None);
+            pd.Should().BeNull();
             cr1.Should().BeNull();
             cr2.Should().BeNull();
             cr3.Should().BeNull();
@@ -218,9 +184,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
         {
             var sm = new GameStatusByteSM(() => Assert.Fail("This should not be called"),
                 () => Assert.Fail("This should not be called"),
-                () => Assert.Fail("This should not be called"),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
-                (pn, pc, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
+                (p, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
 
             sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_4, 0, 0, 0, 0, 0, 0, 0, 0));
         }

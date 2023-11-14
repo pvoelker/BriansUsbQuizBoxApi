@@ -4,7 +4,7 @@ using System;
 
 namespace BriansUsbQuizBoxApi.StateMachines
 {
-    public delegate void BuzzInCallback(PaddleColorEnum paddleColor, PaddleNumberEnum paddleNumber);
+    public delegate void BuzzInCallback(Paddle paddle);
 
     public delegate void FiveSecondTimerExpiredCallback();
 
@@ -13,11 +13,10 @@ namespace BriansUsbQuizBoxApi.StateMachines
     /// </summary>
     public class WinnerByteSM
     {
-        private BuzzInCallback _buzzInCallback;
-        private FiveSecondTimerExpiredCallback _fiveSecondTimerExpiredCallback;
+        private readonly BuzzInCallback _buzzInCallback;
+        private readonly FiveSecondTimerExpiredCallback _fiveSecondTimerExpiredCallback;
 
-        private PaddleNumberEnum _lastPaddleNumber = PaddleNumberEnum.None;
-        private PaddleColorEnum _lastPaddleColor = PaddleColorEnum.None;
+        private Paddle? _lastPaddle = null;
         private bool _lastFiveSecondTimerExpired = false;
 
         /// <summary>
@@ -48,8 +47,7 @@ namespace BriansUsbQuizBoxApi.StateMachines
         /// </summary>
         public void Reset()
         {
-            _lastPaddleNumber = 0;
-            _lastPaddleColor = PaddleColorEnum.None;
+            _lastPaddle = null;
             _lastFiveSecondTimerExpired = false;
         }
 
@@ -64,19 +62,18 @@ namespace BriansUsbQuizBoxApi.StateMachines
                 Reset();
             }
 
-            if (PaddleHelpers.TryParseWinnerByte(winnerByte, out var paddleNumber, out var paddleColor))
+            if (PaddleHelpers.TryParseWinnerByte(winnerByte, out var paddle))
             {
                 var fiveSecondTimerExpired = winnerByte == WinnerByte.FIVE_SEC_TIMER_EXPIRED;
 
-                if (paddleNumber != _lastPaddleNumber || paddleColor != _lastPaddleColor)
+                if (paddle != _lastPaddle)
                 {
-                    if (paddleColor != PaddleColorEnum.None)
+                    if (paddle != null)
                     {
-                        _buzzInCallback(paddleColor, paddleNumber);
+                        _buzzInCallback(paddle);
                     }
 
-                    _lastPaddleNumber = paddleNumber;
-                    _lastPaddleColor = paddleColor;
+                    _lastPaddle = paddle;
                 }
 
                 if (fiveSecondTimerExpired != _lastFiveSecondTimerExpired)
