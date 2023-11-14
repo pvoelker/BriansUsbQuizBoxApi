@@ -8,24 +8,17 @@ namespace BriansUsbQuizBoxApi
     public class BuzzInEventArgs : EventArgs
     {
         /// <summary>
-        /// Paddle color that was pressed
+        /// Paddle that was pressed
         /// </summary>
-        public PaddleColorEnum PaddleColor { get; private set; }        
-
-        /// <summary>
-        /// Paddle number that was pressed
-        /// </summary>
-        public PaddleNumberEnum PaddleNumber {  get; private set; }
+        public Paddle Paddle { get; private set; }        
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="paddleColor">Paddle color that was pressed</param>
-        /// <param name="paddleNumber">Paddle number that was pressed</param>
-        public BuzzInEventArgs(PaddleColorEnum paddleColor, PaddleNumberEnum paddleNumber)
+        /// <param name="paddle">Paddle that was pressed</param>
+        public BuzzInEventArgs(Paddle paddle)
         {
-            PaddleColor = paddleColor;
-            PaddleNumber = paddleNumber;
+            Paddle = paddle;
         }
     }
 }

@@ -8,14 +8,9 @@ namespace BriansUsbQuizBoxApi
     public class BuzzInStatsEventArgs : EventArgs
     {
         /// <summary>
-        /// Winner paddle color that was pressed. 'None' if no winner
+        /// Winner paddle that was pressed. Null is no winner
         /// </summary>
-        public PaddleColorEnum WinnerPaddleColor { get; private set; }
-
-        /// <summary>
-        /// Winner paddle number that was pressed. 'None' if no winner
-        /// </summary>
-        public PaddleNumberEnum WinnerPaddleNumber { get; private set; }
+        public Paddle? Winner { get; private set; }
 
         /// <summary>
         /// Milliseconds from first buzz in (paddle press) for red 1 paddle. Null if no buzz in for red 1 paddle
@@ -60,8 +55,7 @@ namespace BriansUsbQuizBoxApi
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="winnerPaddleColor">Winner paddle color that was pressed. 'None' if no winner</param>
-        /// <param name="winnerPaddleNumber">Winner paddle number that was pressed. 'None' if no winner</param>
+        /// <param name="winner">Winner paddle that was pressed. Null if no winner</param>
         /// <param name="red1TimeDelta">Milliseconds from first buzz in (paddle press) for red 1 paddle. Null if no buzz in for red 1 paddle</param>
         /// <param name="red2TimeDelta">Milliseconds from first buzz in (paddle press) for red 2 paddle. Null if no buzz in for red 1 paddle</param>
         /// <param name="red3TimeDelta">Milliseconds from first buzz in (paddle press) for red 3 paddle. Null if no buzz in for red 1 paddle</param>
@@ -70,12 +64,11 @@ namespace BriansUsbQuizBoxApi
         /// <param name="green2TimeDelta">Milliseconds from first buzz in (paddle press) for green 2 paddle. Null if no buzz in for red 1 paddle</param>
         /// <param name="green3TimeDelta">Milliseconds from first buzz in (paddle press) for green 3 paddle. Null if no buzz in for red 1 paddle</param>
         /// <param name="green4TimeDelta">Milliseconds from first buzz in (paddle press) for green 4 paddle. Null if no buzz in for red 1 paddle</param>
-        public BuzzInStatsEventArgs(PaddleColorEnum winnerPaddleColor, PaddleNumberEnum winnerPaddleNumber,
+        public BuzzInStatsEventArgs(Paddle? winner,
             decimal? red1TimeDelta, decimal? red2TimeDelta, decimal? red3TimeDelta, decimal? red4TimeDelta,
             decimal? green1TimeDelta, decimal? green2TimeDelta, decimal? green3TimeDelta, decimal? green4TimeDelta)
         {
-            WinnerPaddleColor = winnerPaddleColor;
-            WinnerPaddleNumber = winnerPaddleNumber;
+            Winner = winner;
             Red1TimeDelta = red1TimeDelta;
             Red2TimeDelta = red2TimeDelta;
             Red3TimeDelta = red3TimeDelta;

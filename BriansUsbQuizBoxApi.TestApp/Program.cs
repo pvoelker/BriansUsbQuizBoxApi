@@ -12,7 +12,6 @@ api.LockoutTimerStarted += Api_LockoutTimerStarted;
 api.LockoutTimerExpired += Api_LockoutTimerExpired;
 api.GameStarted += Api_GameStarted;
 api.GameLightOn += Api_GameLightOn;
-api.GameFirstBuzzIn += Api_GameFirstBuzzIn;
 api.GameDone += Api_GameDone;
 api.BuzzInStats += Api_BuzzInStats;
 
@@ -32,7 +31,7 @@ void Api_GameStarted(object? sender, EventArgs e)
 {
     Console.ForegroundColor = ConsoleColor.Magenta;
 
-    Console.WriteLine("Game mode started.  Wait for yellow light to come on and press a paddle!");
+    Console.WriteLine("Game mode started.  Wait for yellow light to turn on and press a paddle!");
 
     Console.ForegroundColor = ConsoleColor.White;
 }
@@ -42,15 +41,6 @@ void Api_GameLightOn(object? sender, EventArgs e)
     Console.ForegroundColor = ConsoleColor.Magenta;
 
     Console.WriteLine("Yellow light on!");
-
-    Console.ForegroundColor = ConsoleColor.White;
-}
-
-void Api_GameFirstBuzzIn(object? sender, EventArgs e)
-{
-    Console.ForegroundColor = ConsoleColor.Magenta;
-
-    Console.WriteLine("Game first buzz in!");
 
     Console.ForegroundColor = ConsoleColor.White;
 }
@@ -103,16 +93,16 @@ void Api_QuizBoxReady(object? sender, EventArgs e)
 
 void Api_BuzzIn(object? sender, BuzzInEventArgs e)
 {
-    if (e.PaddleColor == PaddleColorEnum.Green)
+    if (e.Paddle.Color == PaddleColorEnum.Green)
     {
         Console.ForegroundColor = ConsoleColor.Green;
     }
-    else if (e.PaddleColor == PaddleColorEnum.Red)
+    else if (e.Paddle.Color == PaddleColorEnum.Red)
     {
         Console.ForegroundColor = ConsoleColor.Red;
     }
 
-    Console.WriteLine($"Buzz in: {e.PaddleColor} - {e.PaddleNumber}");
+    Console.WriteLine($"Buzz in on paddle: {e.Paddle}");
 
     Console.ForegroundColor = ConsoleColor.White;
 }

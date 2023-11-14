@@ -15,52 +15,39 @@ namespace BriansUsbQuizBoxApi.Helpers
         /// <param name="paddleNumber">The paddle number for the winner byte</param>
         /// <param name="paddleColor">The paddle color for the winner byte</param>
         /// <returns>True if the winner byte was successfully parsed</returns>
-        static public bool TryParseWinnerByte(WinnerByte winnerByte, out PaddleNumberEnum paddleNumber, out PaddleColorEnum paddleColor)
+        static public bool TryParseWinnerByte(WinnerByte winnerByte, out Paddle? paddle)
         {
-            paddleNumber = PaddleNumberEnum.None;
-            paddleColor = PaddleColorEnum.None;
+            paddle = null;
 
             switch (winnerByte)
             {
                 case WinnerByte.FIVE_SEC_TIMER_EXPIRED:
-                    paddleNumber = PaddleNumberEnum.None;
-                    paddleColor = PaddleColorEnum.None;
                     return true;
                 case WinnerByte.NO_VALID_WINNER:
-                    paddleNumber = PaddleNumberEnum.None;
-                    paddleColor = PaddleColorEnum.None;
                     return true;
                 case WinnerByte.RED_1:
-                    paddleNumber = PaddleNumberEnum.Paddle1;
-                    paddleColor = PaddleColorEnum.Red;
+                    paddle = Paddle.RED_1;
                     return true;
                 case WinnerByte.RED_2:
-                    paddleNumber = PaddleNumberEnum.Paddle2;
-                    paddleColor = PaddleColorEnum.Red;
+                    paddle = Paddle.RED_2;
                     return true;
                 case WinnerByte.RED_3:
-                    paddleNumber = PaddleNumberEnum.Paddle3;
-                    paddleColor = PaddleColorEnum.Red;
+                    paddle = Paddle.RED_3;
                     return true;
                 case WinnerByte.RED_4:
-                    paddleNumber = PaddleNumberEnum.Paddle4;
-                    paddleColor = PaddleColorEnum.Red;
+                    paddle = Paddle.RED_4;
                     return true;
                 case WinnerByte.GREEN_1:
-                    paddleNumber = PaddleNumberEnum.Paddle1;
-                    paddleColor = PaddleColorEnum.Green;
+                    paddle = Paddle.GREEN_1;
                     return true;
                 case WinnerByte.GREEN_2:
-                    paddleNumber = PaddleNumberEnum.Paddle2;
-                    paddleColor = PaddleColorEnum.Green;
+                    paddle = Paddle.GREEN_2;
                     return true;
                 case WinnerByte.GREEN_3:
-                    paddleNumber = PaddleNumberEnum.Paddle3;
-                    paddleColor = PaddleColorEnum.Green;
+                    paddle = Paddle.GREEN_3;
                     return true;
                 case WinnerByte.GREEN_4:
-                    paddleNumber = PaddleNumberEnum.Paddle4;
-                    paddleColor = PaddleColorEnum.Green;
+                    paddle = Paddle.GREEN_4;
                     return true;
             }
 

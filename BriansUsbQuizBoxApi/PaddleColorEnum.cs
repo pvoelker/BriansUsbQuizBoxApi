@@ -3,7 +3,7 @@
 namespace BriansUsbQuizBoxApi
 {
     /// <summary>
-    /// Buzzer (paddle) colors
+    /// Buzzer (paddle) color
     /// </summary>
     public enum PaddleColorEnum
     {
