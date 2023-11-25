@@ -57,11 +57,6 @@ namespace BriansUsbQuizBoxApi.StateMachines
         /// <param name="winnerByte">Winner byte</param>
         public void Process(StatusByte statusByte, WinnerByte winnerByte)
         {
-            if (statusByte == StatusByte.IDLE_MODE)
-            {
-                Reset();
-            }
-
             if (PaddleHelpers.TryParseWinnerByte(winnerByte, out var paddle))
             {
                 var fiveSecondTimerExpired = winnerByte == WinnerByte.FIVE_SEC_TIMER_EXPIRED;
