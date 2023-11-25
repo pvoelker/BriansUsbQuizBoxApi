@@ -2,7 +2,7 @@
 
 Console.WriteLine("--- Brian's USB Quiz Box Test App ---");
 
-var api = new QuizBoxApi(new QuizBoxCoreApi());
+using var api = new QuizBoxApi(new QuizBoxCoreApi());
 
 api.QuizBoxReady += Api_QuizBoxReady;
 api.BuzzIn += Api_BuzzIn;
@@ -156,7 +156,11 @@ if (api.Connect() == false)
 }
 else
 {
-    Console.WriteLine("Press 'G' to start reaction timing game. Press [ENTER] to exit program...");
+    Console.WriteLine("Press 'G' to start reaction timing game.");
+    Console.WriteLine("Press 'T' to start 5 second buzz in timer.");
+    Console.WriteLine("Press 'S' to start indefinite paddle lockout timer.");
+    Console.WriteLine("Press 'E' to end indefinite paddle lockout timer.");
+    Console.WriteLine("Press [ENTER] to exit program...");
 }
 
 var key = Console.ReadKey();
@@ -166,6 +170,21 @@ while(key.Key != ConsoleKey.Enter)
     {
         Console.WriteLine("Starting reaction time game...");
         api.StartReactionTimingGame();
+    }
+    else if (key.Key == ConsoleKey.T)
+    {
+        Console.WriteLine("Starting 5 second buzz in timer...");
+        api.Start5SecondBuzzInTimer();
+    }
+    else if (key.Key == ConsoleKey.S)
+    {
+        Console.WriteLine("Starting indefinite paddle lockout timer...");
+        api.StartPaddleLockout();
+    }
+    else if (key.Key == ConsoleKey.E)
+    {
+        Console.WriteLine("Ending indefinite paddle lockout timer...");
+        api.StopPaddleLockout();
     }
 
     key = Console.ReadKey();

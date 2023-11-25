@@ -13,7 +13,7 @@ using BriansUsbQuizBoxApi;
 
 Console.WriteLine("--- Brian's USB Quiz Box Test App ---");
 
-var api = new QuizBoxApi(new QuizBoxCoreApi());
+using var api = new QuizBoxApi(new QuizBoxCoreApi());
 
 api.QuizBoxReady += Api_QuizBoxReady;
 api.BuzzIn += Api_BuzzIn;
