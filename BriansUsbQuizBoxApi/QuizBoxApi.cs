@@ -315,9 +315,10 @@ namespace BriansUsbQuizBoxApi
 
             while (_done != null && _done.WaitOne(10) == false)
             {
+                bool commandWritten = false;
                 try
                 {
-                    WriteData();
+                    commandWritten = WriteData();
                 }
                 catch (DisconnectionException ex)
                 {
@@ -354,7 +355,7 @@ namespace BriansUsbQuizBoxApi
 
                 if (status != null)
                 {
-                    ProcessRead(status);
+                    ProcessRead(status, commandWritten);
                 }
             }
 
@@ -366,7 +367,7 @@ namespace BriansUsbQuizBoxApi
             _api.Disconnect();
         }
 
-        private void WriteData()
+        private bool WriteData()
         {
             if (_commands.TryPeek(out var command))
             {
@@ -379,14 +380,18 @@ namespace BriansUsbQuizBoxApi
                     // Request status if needed
                     _api.WriteCommand(_statusRequest);
                 }
+
+                return true;
             }
             else
             {
                 _api.WriteCommand(_statusRequest);
+
+                return false;
             }
         }
 
-        private void ProcessRead(BoxStatusReport status)
+        private void ProcessRead(BoxStatusReport status, bool checkCommandWrite)
         {
             _winnerByteSM.Process(status.Status, status.Winner);
 
@@ -394,18 +399,21 @@ namespace BriansUsbQuizBoxApi
 
             _gameStatusByteSM.Process(status);
 
-            if (_commands.TryPeek(out var command))
+            if (checkCommandWrite)
             {
-                var expectedFunc = GetExpectedStatusLogic(command.CommandHeader);
+                if (_commands.TryPeek(out var command))
+                {
+                    var expectedFunc = GetExpectedStatusLogic(command.CommandHeader);
 
-                if(expectedFunc.Invoke(status.Status) == true)
-                {
-                    // We see the state we are expecting, pull the command off the queue
-                    _commands.TryDequeue(out var _);
-                }
-                else
-                {
-                    // Keep retrying the command until we get the expected state
+                    if (expectedFunc.Invoke(status.Status) == true)
+                    {
+                        // We see the state we are expecting, pull the command off the queue
+                        _commands.TryDequeue(out var _);
+                    }
+                    else
+                    {
+                        // Keep retrying the command until we get the expected state
+                    }
                 }
             }
 
