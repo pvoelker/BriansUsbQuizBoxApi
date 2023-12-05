@@ -304,7 +304,7 @@ namespace BriansUsbQuizBoxApi
             {
                 if(Thread.CurrentThread.ManagedThreadId == _threadId)
                 {
-                    throw new InvalidOperationException("Cannot execute commands from the Quiz Box IO Thread");
+                    throw new InvalidOperationException("Cannot execute commands from the Quiz Box I/O Thread");
                 }
             }
         }
@@ -323,6 +323,8 @@ namespace BriansUsbQuizBoxApi
                 }
                 catch (DisconnectionException ex)
                 {
+                    HardDisconnect();
+
                     if (ReadThreadDisconnection != null)
                     {
                         ReadThreadDisconnection.Invoke(this, new DisconnectionEventArgs(ex));
@@ -333,30 +335,35 @@ namespace BriansUsbQuizBoxApi
                     throw;
                 }
 
-                BoxStatusReport? status = null;
-                try
+                if (_done != null)
                 {
-                    status = _api.ReadStatus();
-                }
-                catch (TimeoutException)
-                {
-                    // Keep moving on
-                }
-                catch (DisconnectionException ex)
-                {
-                    if (ReadThreadDisconnection != null)
+                    BoxStatusReport? status = null;
+                    try
                     {
-                        ReadThreadDisconnection.Invoke(this, new DisconnectionEventArgs(ex));
+                        status = _api.ReadStatus();
                     }
-                }
-                catch
-                {
-                    throw;
-                }                
+                    catch (TimeoutException)
+                    {
+                        // Keep moving on
+                    }
+                    catch (DisconnectionException ex)
+                    {
+                        HardDisconnect();
 
-                if (status != null)
-                {
-                    ProcessRead(status, commandWritten);
+                        if (ReadThreadDisconnection != null)
+                        {
+                            ReadThreadDisconnection.Invoke(this, new DisconnectionEventArgs(ex));
+                        }
+                    }
+                    catch
+                    {
+                        throw;
+                    }
+
+                    if (status != null)
+                    {
+                        ProcessRead(status, commandWritten);
+                    }
                 }
             }
 
@@ -366,6 +373,23 @@ namespace BriansUsbQuizBoxApi
             }
 
             _api.Disconnect();
+        }
+
+        private void HardDisconnect()
+        {
+            if (_done != null)
+            {
+                _done.Dispose();
+                _done = null;
+            }
+
+            if (_doneComplete != null)
+            {
+                _doneComplete.Dispose();
+                _doneComplete = null;
+            }
+
+            _threadId = null;
         }
 
         private bool WriteData()
