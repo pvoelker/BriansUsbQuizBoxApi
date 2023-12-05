@@ -1,4 +1,5 @@
 ﻿using BriansUsbQuizBoxApi.Exceptions;
+using BriansUsbQuizBoxApi.Helpers;
 using BriansUsbQuizBoxApi.Protocols;
 using BriansUsbQuizBoxApi.StateMachines;
 using System;
@@ -373,7 +374,7 @@ namespace BriansUsbQuizBoxApi
             {
                 _api.WriteCommand(command);
 
-                if(IsStatusReturned(command.CommandHeader) == false)
+                if(command.CommandHeader.IsStatusReturned() == false)
                 {
                     Thread.Sleep(10);
 
@@ -403,7 +404,7 @@ namespace BriansUsbQuizBoxApi
             {
                 if (_commands.TryPeek(out var command))
                 {
-                    var expectedFunc = GetExpectedStatusLogic(command.CommandHeader);
+                    var expectedFunc = command.CommandHeader.GetExpectedStatusLogic();
 
                     if (expectedFunc.Invoke(status.Status) == true)
                     {
@@ -431,75 +432,6 @@ namespace BriansUsbQuizBoxApi
             else
             {
                 _idleMode = false;
-            }
-        }
-
-        protected bool IsStatusReturned(CommandHeaderByte command)
-        {
-            if (command == CommandHeaderByte.START_REACTION_TIMING_GAME)
-            {
-                return true;
-            }
-            else if (command == CommandHeaderByte.START_5_SEC_TIMER)
-            {
-                return true;
-            }
-            else if (command == CommandHeaderByte.STATUS_REQUEST)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        protected Func<StatusByte, bool> GetExpectedStatusLogic(CommandHeaderByte command)
-        {
-            if(command == CommandHeaderByte.CLEAR)
-            {
-                return (x) => x == StatusByte.IDLE_MODE;
-            }
-            else if(command == CommandHeaderByte.START_REACTION_TIMING_GAME)
-            {
-                return (x) => x == StatusByte.GAME_PRESTART;
-            }
-            else if(command == CommandHeaderByte.START_5_SEC_TIMER)
-            {
-                return (x) => x == StatusByte.RUNNING_5_SEC_TIMER;
-            }
-            else if(command == CommandHeaderByte.START_30_SEC_TIMER)
-            {
-                return (x) => x == StatusByte.EXTENDED_TIMER_RUNNING;
-            }
-            else if (command == CommandHeaderByte.START_1_MIN_TIMER)
-            {
-                return (x) => x == StatusByte.EXTENDED_TIMER_RUNNING;
-            }
-            else if (command == CommandHeaderByte.START_2_MIN_TIMER)
-            {
-                return (x) => x == StatusByte.EXTENDED_TIMER_RUNNING;
-            }
-            else if (command == CommandHeaderByte.START_3_MIN_TIMER)
-            {
-                return (x) => x == StatusByte.EXTENDED_TIMER_RUNNING;
-            }
-            else if (command == CommandHeaderByte.START_INFINITE_TIMER)
-            {
-                return (x) => x == StatusByte.EXTENDED_TIMER_RUNNING;
-            }
-            else if (command == CommandHeaderByte.END_INFINITE_TIMER_BUZZ)
-            {
-                // There is no way to track the state change for this
-                // After this command is sent, the state EXTENDED_TIMER_RUNNING sticks around for a bit
-                // Resending the command sends the API into an infinite paddle lockout loop
-                return (x) => true;
-            }
-            else if (command == CommandHeaderByte.STATUS_REQUEST)
-            {
-                return (x) => true; // Don't need to monitor state changes for status requests
-            }
-            else
-            {
-                throw new InvalidOperationException($"Command header byte '{command}' not handled");
             }
         }
 
