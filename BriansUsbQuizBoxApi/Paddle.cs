@@ -17,6 +17,11 @@ namespace BriansUsbQuizBoxApi
         static readonly public Paddle GREEN_3 = new Paddle(PaddleColorEnum.Green, PaddleNumberEnum.Three);
         static readonly public Paddle GREEN_4 = new Paddle(PaddleColorEnum.Green, PaddleNumberEnum.Four);
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="color">Paddle color</param>
+        /// <param name="number">Paddle number</param>
         public Paddle(PaddleColorEnum color, PaddleNumberEnum number)
         {
             _color = color;

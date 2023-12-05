@@ -9,11 +9,10 @@ namespace BriansUsbQuizBoxApi.Helpers
     static public class PaddleHelpers
     {
         /// <summary>
-        /// Convert a paddle winner byte to a paddle number and color.  Default values are returned for 5 second timer expiration and no valid winner
+        /// Convert a paddle winner byte to a paddle number and color
         /// </summary>
         /// <param name="winnerByte">The winner byte to parse</param>
-        /// <param name="paddleNumber">The paddle number for the winner byte</param>
-        /// <param name="paddleColor">The paddle color for the winner byte</param>
+        /// <param name="paddle">The paddle for the winner byte. Null for 5 second timer expiration and no valid winner</param>
         /// <returns>True if the winner byte was successfully parsed</returns>
         static public bool TryParseWinnerByte(WinnerByte winnerByte, out Paddle? paddle)
         {

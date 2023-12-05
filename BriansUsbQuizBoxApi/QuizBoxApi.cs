@@ -1,4 +1,5 @@
 ﻿using BriansUsbQuizBoxApi.Exceptions;
+using BriansUsbQuizBoxApi.Helpers;
 using BriansUsbQuizBoxApi.Protocols;
 using BriansUsbQuizBoxApi.StateMachines;
 using System;
@@ -303,7 +304,7 @@ namespace BriansUsbQuizBoxApi
             {
                 if(Thread.CurrentThread.ManagedThreadId == _threadId)
                 {
-                    throw new InvalidOperationException("Cannot execute commands from the Quiz Box IO Thread");
+                    throw new InvalidOperationException("Cannot execute commands from the Quiz Box I/O Thread");
                 }
             }
         }
@@ -322,6 +323,8 @@ namespace BriansUsbQuizBoxApi
                 }
                 catch (DisconnectionException ex)
                 {
+                    HardDisconnect();
+
                     if (ReadThreadDisconnection != null)
                     {
                         ReadThreadDisconnection.Invoke(this, new DisconnectionEventArgs(ex));
@@ -332,30 +335,35 @@ namespace BriansUsbQuizBoxApi
                     throw;
                 }
 
-                BoxStatusReport? status = null;
-                try
+                if (_done != null)
                 {
-                    status = _api.ReadStatus();
-                }
-                catch (TimeoutException)
-                {
-                    // Keep moving on
-                }
-                catch (DisconnectionException ex)
-                {
-                    if (ReadThreadDisconnection != null)
+                    BoxStatusReport? status = null;
+                    try
                     {
-                        ReadThreadDisconnection.Invoke(this, new DisconnectionEventArgs(ex));
+                        status = _api.ReadStatus();
                     }
-                }
-                catch
-                {
-                    throw;
-                }                
+                    catch (TimeoutException)
+                    {
+                        // Keep moving on
+                    }
+                    catch (DisconnectionException ex)
+                    {
+                        HardDisconnect();
 
-                if (status != null)
-                {
-                    ProcessRead(status, commandWritten);
+                        if (ReadThreadDisconnection != null)
+                        {
+                            ReadThreadDisconnection.Invoke(this, new DisconnectionEventArgs(ex));
+                        }
+                    }
+                    catch
+                    {
+                        throw;
+                    }
+
+                    if (status != null)
+                    {
+                        ProcessRead(status, commandWritten);
+                    }
                 }
             }
 
@@ -367,13 +375,30 @@ namespace BriansUsbQuizBoxApi
             _api.Disconnect();
         }
 
+        private void HardDisconnect()
+        {
+            if (_done != null)
+            {
+                _done.Dispose();
+                _done = null;
+            }
+
+            if (_doneComplete != null)
+            {
+                _doneComplete.Dispose();
+                _doneComplete = null;
+            }
+
+            _threadId = null;
+        }
+
         private bool WriteData()
         {
             if (_commands.TryPeek(out var command))
             {
                 _api.WriteCommand(command);
 
-                if(IsStatusReturned(command.CommandHeader) == false)
+                if(command.CommandHeader.IsStatusReturned() == false)
                 {
                     Thread.Sleep(10);
 
@@ -403,7 +428,7 @@ namespace BriansUsbQuizBoxApi
             {
                 if (_commands.TryPeek(out var command))
                 {
-                    var expectedFunc = GetExpectedStatusLogic(command.CommandHeader);
+                    var expectedFunc = command.CommandHeader.GetExpectedStatusLogic();
 
                     if (expectedFunc.Invoke(status.Status) == true)
                     {
@@ -431,75 +456,6 @@ namespace BriansUsbQuizBoxApi
             else
             {
                 _idleMode = false;
-            }
-        }
-
-        protected bool IsStatusReturned(CommandHeaderByte command)
-        {
-            if (command == CommandHeaderByte.START_REACTION_TIMING_GAME)
-            {
-                return true;
-            }
-            else if (command == CommandHeaderByte.START_5_SEC_TIMER)
-            {
-                return true;
-            }
-            else if (command == CommandHeaderByte.STATUS_REQUEST)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        protected Func<StatusByte, bool> GetExpectedStatusLogic(CommandHeaderByte command)
-        {
-            if(command == CommandHeaderByte.CLEAR)
-            {
-                return (x) => x == StatusByte.IDLE_MODE;
-            }
-            else if(command == CommandHeaderByte.START_REACTION_TIMING_GAME)
-            {
-                return (x) => x == StatusByte.GAME_PRESTART;
-            }
-            else if(command == CommandHeaderByte.START_5_SEC_TIMER)
-            {
-                return (x) => x == StatusByte.RUNNING_5_SEC_TIMER;
-            }
-            else if(command == CommandHeaderByte.START_30_SEC_TIMER)
-            {
-                return (x) => x == StatusByte.EXTENDED_TIMER_RUNNING;
-            }
-            else if (command == CommandHeaderByte.START_1_MIN_TIMER)
-            {
-                return (x) => x == StatusByte.EXTENDED_TIMER_RUNNING;
-            }
-            else if (command == CommandHeaderByte.START_2_MIN_TIMER)
-            {
-                return (x) => x == StatusByte.EXTENDED_TIMER_RUNNING;
-            }
-            else if (command == CommandHeaderByte.START_3_MIN_TIMER)
-            {
-                return (x) => x == StatusByte.EXTENDED_TIMER_RUNNING;
-            }
-            else if (command == CommandHeaderByte.START_INFINITE_TIMER)
-            {
-                return (x) => x == StatusByte.EXTENDED_TIMER_RUNNING;
-            }
-            else if (command == CommandHeaderByte.END_INFINITE_TIMER_BUZZ)
-            {
-                // There is no way to track the state change for this
-                // After this command is sent, the state EXTENDED_TIMER_RUNNING sticks around for a bit
-                // Resending the command sends the API into an infinite paddle lockout loop
-                return (x) => true;
-            }
-            else if (command == CommandHeaderByte.STATUS_REQUEST)
-            {
-                return (x) => true; // Don't need to monitor state changes for status requests
-            }
-            else
-            {
-                throw new InvalidOperationException($"Command header byte '{command}' not handled");
             }
         }
 

@@ -59,6 +59,7 @@ namespace BriansUsbQuizBoxApi.Helpers
                 var timerCountDown = intData * COUNTER_INCREMENT_VALUE;
 
                 // The countdown time can come back as 1000.62, which will make the response time -0.62.  So cap the minimum response time value at 0
+                // NOTE: This is because of the resolution of the internal timer/clock in the quiz box
                 return Math.Max(0, BuzzerConstants.TIMER_COUNTDOWN_LENGTH - timerCountDown);
             }
         }

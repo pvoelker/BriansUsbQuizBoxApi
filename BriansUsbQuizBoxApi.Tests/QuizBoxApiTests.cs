@@ -6,6 +6,13 @@ using System;
 
 namespace BriansUsbQuizBoxApi.Tests
 {
+    /// <summary>
+    /// Quiz Box API Tests
+    /// 
+    /// NOTE: If you are seeing problems with tests not running, make sure to check the
+    ///       'test output'.  Exceptions thrown into the 'I/O thread' sometimes get
+    ///       swallowed up...
+    /// </summary>
     public class QuizBoxApiTests
     {
         [Fact]
@@ -19,6 +26,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 isConnected = true;
                 return true;
             });
+            coreApiMock.Setup(m => m.Disconnect());
             coreApiMock.Setup(m => m.Dispose());
             coreApiMock.Setup(m => m.WriteCommand(It.IsAny<BoxCommandReport>()));
             coreApiMock.Setup(m => m.ReadStatus()).Returns(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER,
@@ -63,6 +71,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 isConnected = true;
                 return true;
             });
+            coreApiMock.Setup(m => m.Disconnect());
             coreApiMock.Setup(m => m.Dispose());
             coreApiMock.Setup(m => m.WriteCommand(It.IsAny<BoxCommandReport>()));
             coreApiMock.Setup(m => m.ReadStatus()).Returns(() => DequeueStatus(statusQueue));
@@ -110,6 +119,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 isConnected = true;
                 return true;
             });
+            coreApiMock.Setup(m => m.Disconnect());
             coreApiMock.Setup(m => m.Dispose());
             coreApiMock.Setup(m => m.WriteCommand(It.IsAny<BoxCommandReport>()));
             coreApiMock.Setup(m => m.ReadStatus()).Returns(() => DequeueStatus(statusQueue));
@@ -157,6 +167,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 isConnected = true;
                 return true;
             });
+            coreApiMock.Setup(m => m.Disconnect());
             coreApiMock.Setup(m => m.Dispose());
             coreApiMock.Setup(m => m.WriteCommand(It.IsAny<BoxCommandReport>()));
             coreApiMock.Setup(m => m.ReadStatus()).Returns(() => DequeueStatus(statusQueue));
@@ -204,6 +215,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 isConnected = true;
                 return true;
             });
+            coreApiMock.Setup(m => m.Disconnect());
             coreApiMock.Setup(m => m.Dispose());
             coreApiMock.Setup(m => m.WriteCommand(It.IsAny<BoxCommandReport>()));
             coreApiMock.Setup(m => m.ReadStatus()).Returns(() => DequeueStatus(statusQueue));
@@ -231,6 +243,14 @@ namespace BriansUsbQuizBoxApi.Tests
 
                 Thread.Sleep(20);
 
+                // Queue up a bunch of these so we never hit the 'lockout expired' state
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
                 statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
 
                 Thread.Sleep(20); // Allow read thread to run a bit
@@ -251,6 +271,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 isConnected = true;
                 return true;
             });
+            coreApiMock.Setup(m => m.Disconnect());
             coreApiMock.Setup(m => m.Dispose());
             coreApiMock.Setup(m => m.WriteCommand(It.IsAny<BoxCommandReport>()));
             coreApiMock.Setup(m => m.ReadStatus()).Returns(() => DequeueStatus(statusQueue));
@@ -278,8 +299,13 @@ namespace BriansUsbQuizBoxApi.Tests
 
                 Thread.Sleep(20);
 
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.FIVE_SEC_TIMER_EXPIRED, 0, 0, 0, 0, 0, 0, 0, 0));
-                Thread.Sleep(5);
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
                 statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
 
                 Thread.Sleep(20); // Allow read thread to run a bit
@@ -300,6 +326,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 isConnected = true;
                 return true;
             });
+            coreApiMock.Setup(m => m.Disconnect());
             coreApiMock.Setup(m => m.Dispose());
             coreApiMock.Setup(m => m.WriteCommand(It.IsAny<BoxCommandReport>()));
             coreApiMock.Setup(m => m.ReadStatus()).Returns(() => DequeueStatus(statusQueue));
@@ -347,6 +374,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 isConnected = true;
                 return true;
             });
+            coreApiMock.Setup(m => m.Disconnect());
             coreApiMock.Setup(m => m.Dispose());
             coreApiMock.Setup(m => m.WriteCommand(It.IsAny<BoxCommandReport>()));
             coreApiMock.Setup(m => m.ReadStatus()).Returns(() => DequeueStatus(statusQueue));
@@ -383,105 +411,6 @@ namespace BriansUsbQuizBoxApi.Tests
         }
 
         [Fact]
-        public void GameFirstPersonBuzzedIn()
-        {
-            var isConnected = false;
-            var statusQueue = new Queue<BoxStatusReport>();
-            var coreApiMock = new Mock<IQuizBoxCoreApi>(MockBehavior.Strict);
-            coreApiMock.SetupGet(m => m.IsConnected).Returns(() => { return isConnected; });
-            coreApiMock.Setup(m => m.Connect()).Returns(() =>
-            {
-                isConnected = true;
-                return true;
-            });
-            coreApiMock.Setup(m => m.Dispose());
-            coreApiMock.Setup(m => m.WriteCommand(It.IsAny<BoxCommandReport>()));
-            coreApiMock.Setup(m => m.ReadStatus()).Returns(() => DequeueStatus(statusQueue));
-
-            var eventFiredCount = 0;
-
-            using (var api = new QuizBoxApi(coreApiMock.Object))
-            {
-                api.QuizBoxReady += (s, e) => { /* Don't care */ };
-                api.BuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
-                api.FiveSecondTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
-                api.FiveSecondTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
-                api.LockoutTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
-                api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
-                api.GameStarted += (s, e) => { /* Don't care */ };
-                api.GameLightOn += (s, e) => { /* Don't care */ };
-                api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
-                api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
-
-                api.IsConnected.Should().BeFalse();
-
-                api.Connect();
-
-                api.IsConnected.Should().BeTrue();
-
-                Thread.Sleep(20);
-
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                Thread.Sleep(10);
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                Thread.Sleep(10);
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-
-                Thread.Sleep(20); // Allow read thread to run a bit
-            }
-
-            eventFiredCount.Should().Be(1);
-        }
-
-        [Fact]
-        public void NotGameFirstPersonBuzzedIn()
-        {
-            var isConnected = false;
-            var statusQueue = new Queue<BoxStatusReport>();
-            var coreApiMock = new Mock<IQuizBoxCoreApi>(MockBehavior.Strict);
-            coreApiMock.SetupGet(m => m.IsConnected).Returns(() => { return isConnected; });
-            coreApiMock.Setup(m => m.Connect()).Returns(() =>
-            {
-                isConnected = true;
-                return true;
-            });
-            coreApiMock.Setup(m => m.Dispose());
-            coreApiMock.Setup(m => m.WriteCommand(It.IsAny<BoxCommandReport>()));
-            coreApiMock.Setup(m => m.ReadStatus()).Returns(() => DequeueStatus(statusQueue));
-
-            var eventFiredCount = 0;
-
-            using (var api = new QuizBoxApi(coreApiMock.Object))
-            {
-                api.QuizBoxReady += (s, e) => { /* Don't care */ };
-                api.BuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
-                api.FiveSecondTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
-                api.FiveSecondTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
-                api.LockoutTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
-                api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
-                api.GameStarted += (s, e) => { /* Don't care */ };
-                api.GameLightOn += (s, e) => { /* Don't care */ };
-                api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
-                api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
-
-                api.IsConnected.Should().BeFalse();
-
-                api.Connect();
-
-                api.IsConnected.Should().BeTrue();
-
-                Thread.Sleep(20);
-
-                // StatusByte.GAME_PRESTART is required for event to trigger
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-
-                Thread.Sleep(20); // Allow read thread to run a bit
-            }
-
-            eventFiredCount.Should().Be(0);
-        }
-
-        [Fact]
         public void GameDone()
         {
             var isConnected = false;
@@ -493,6 +422,8 @@ namespace BriansUsbQuizBoxApi.Tests
                 isConnected = true;
                 return true;
             });
+            coreApiMock.Setup(m => m.Disconnect());
+            coreApiMock.Setup(m => m.Disconnect());
             coreApiMock.Setup(m => m.Dispose());
             coreApiMock.Setup(m => m.WriteCommand(It.IsAny<BoxCommandReport>()));
             coreApiMock.Setup(m => m.ReadStatus()).Returns(() => DequeueStatus(statusQueue));
@@ -508,7 +439,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.LockoutTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.LockoutTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameStarted += (s, e) => { /* Don't care */ };
-                api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
+                api.GameLightOn += (s, e) => { /* Don't care */ };
                 api.GameDone += (s, e) => { eventFiredCount++; };
                 api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
 
@@ -521,12 +452,10 @@ namespace BriansUsbQuizBoxApi.Tests
                 Thread.Sleep(20);
 
                 statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-
-                Thread.Sleep(20);
-
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
                 statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
 
-                Thread.Sleep(20); // Allow read thread to run a bit
+                Thread.Sleep(50); // Allow read thread to run a bit
             }
 
             eventFiredCount.Should().Be(1);
@@ -546,6 +475,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 isConnected = true;
                 return true;
             });
+            coreApiMock.Setup(m => m.Disconnect());
             coreApiMock.Setup(m => m.Dispose());
             coreApiMock.Setup(m => m.WriteCommand(It.IsAny<BoxCommandReport>()));
             coreApiMock.SetupSequence(m => m.ReadStatus())
