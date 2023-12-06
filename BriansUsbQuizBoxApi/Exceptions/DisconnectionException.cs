@@ -4,7 +4,7 @@ using System.IO;
 namespace BriansUsbQuizBoxApi.Exceptions
 {
     /// <summary>
-    /// Exception that is thrown when a disconnection is detected on a read/write
+    /// Exception that is thrown when a disconnection is detected on a read/write.  Disconnection cleanup has occurred
     /// </summary>
     public class DisconnectionException : IOException
     {

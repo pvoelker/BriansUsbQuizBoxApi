@@ -449,7 +449,7 @@ namespace BriansUsbQuizBoxApi.Tests
         }
 
         [Fact]
-        public void ReadThreadDisconnection()
+        public void DisconnectionDetected()
         {
             var statusRet = new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER,
                 0, 0, 0, 0, 0, 0, 0, 0);
@@ -491,7 +491,7 @@ namespace BriansUsbQuizBoxApi.Tests
 
                 api.IsConnected.Should().BeTrue();
 
-                Thread.Sleep(200); // Allow read thread to run long enough to hit the exception throw
+                Thread.Sleep(100); // Allow read thread to run long enough to hit the exception throw
             }
 
             eventFiredCount.Should().Be(1);

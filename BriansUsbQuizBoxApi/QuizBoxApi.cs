@@ -317,9 +317,13 @@ namespace BriansUsbQuizBoxApi
                 {
                     commandWritten = WriteData();
                 }
+                catch (TimeoutException)
+                {
+                    // Keep moving on, this can rarely happen on a disconnection
+                }
                 catch (DisconnectionException ex)
                 {
-                    HardDisconnect();
+                    DisconnectCleanup();
 
                     if (DisconnectionDetected != null)
                     {
@@ -344,7 +348,7 @@ namespace BriansUsbQuizBoxApi
                     }
                     catch (DisconnectionException ex)
                     {
-                        HardDisconnect();
+                        DisconnectCleanup();
 
                         if (DisconnectionDetected != null)
                         {
@@ -371,7 +375,7 @@ namespace BriansUsbQuizBoxApi
             _api.Disconnect();
         }
 
-        private void HardDisconnect()
+        private void DisconnectCleanup()
         {
             if (_done != null)
             {
