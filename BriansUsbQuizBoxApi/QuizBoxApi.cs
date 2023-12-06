@@ -62,7 +62,7 @@ namespace BriansUsbQuizBoxApi
         public event EventHandler<BuzzInStatsEventArgs>? BuzzInStats;
         
         /// <inheritdoc/>
-        public event EventHandler<DisconnectionEventArgs>? ReadThreadDisconnection;
+        public event EventHandler<DisconnectionEventArgs>? DisconnectionDetected;
 
         #endregion
 
@@ -321,9 +321,9 @@ namespace BriansUsbQuizBoxApi
                 {
                     HardDisconnect();
 
-                    if (ReadThreadDisconnection != null)
+                    if (DisconnectionDetected != null)
                     {
-                        ReadThreadDisconnection.Invoke(this, new DisconnectionEventArgs(ex));
+                        DisconnectionDetected.Invoke(this, new DisconnectionEventArgs(ex));
                     }
                 }
                 catch
@@ -346,9 +346,9 @@ namespace BriansUsbQuizBoxApi
                     {
                         HardDisconnect();
 
-                        if (ReadThreadDisconnection != null)
+                        if (DisconnectionDetected != null)
                         {
-                            ReadThreadDisconnection.Invoke(this, new DisconnectionEventArgs(ex));
+                            DisconnectionDetected.Invoke(this, new DisconnectionEventArgs(ex));
                         }
                     }
                     catch

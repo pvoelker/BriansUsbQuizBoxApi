@@ -63,9 +63,9 @@ namespace BriansUsbQuizBoxApi
         event EventHandler<BuzzInStatsEventArgs>? BuzzInStats;
 
         /// <summary>
-        /// Event fired when a disconnection occurs in the background read thread
+        /// Event fired when a disconnection from the connected quiz box is detected
         /// </summary>
-        event EventHandler<DisconnectionEventArgs>? ReadThreadDisconnection;
+        event EventHandler<DisconnectionEventArgs>? DisconnectionDetected;
 
         #endregion
 

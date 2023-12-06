@@ -42,7 +42,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
-                api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
+                api.DisconnectionDetected += (s, e) => { Assert.Fail("This should not be called"); };
 
                 api.IsConnected.Should().BeFalse();
 
@@ -83,7 +83,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
-                api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
+                api.DisconnectionDetected += (s, e) => { Assert.Fail("This should not be called"); };
 
                 api.IsConnected.Should().BeFalse();
 
@@ -130,7 +130,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
-                api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
+                api.DisconnectionDetected += (s, e) => { Assert.Fail("This should not be called"); };
 
                 api.IsConnected.Should().BeFalse();
 
@@ -177,7 +177,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
-                api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
+                api.DisconnectionDetected += (s, e) => { Assert.Fail("This should not be called"); };
 
                 api.IsConnected.Should().BeFalse();
 
@@ -224,7 +224,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
-                api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
+                api.DisconnectionDetected += (s, e) => { Assert.Fail("This should not be called"); };
 
                 api.IsConnected.Should().BeFalse();
 
@@ -279,7 +279,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
-                api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
+                api.DisconnectionDetected += (s, e) => { Assert.Fail("This should not be called"); };
 
                 api.IsConnected.Should().BeFalse();
 
@@ -333,7 +333,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.GameStarted += (s, e) => { eventFiredCount++; };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
-                api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
+                api.DisconnectionDetected += (s, e) => { Assert.Fail("This should not be called"); };
 
                 api.IsConnected.Should().BeFalse();
 
@@ -380,7 +380,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { eventFiredCount++; };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
-                api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
+                api.DisconnectionDetected += (s, e) => { Assert.Fail("This should not be called"); };
 
                 api.IsConnected.Should().BeFalse();
 
@@ -428,7 +428,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.GameStarted += (s, e) => { /* Don't care */ };
                 api.GameLightOn += (s, e) => { /* Don't care */ };
                 api.GameDone += (s, e) => { eventFiredCount++; };
-                api.ReadThreadDisconnection += (s, e) => { Assert.Fail("This should not be called"); };
+                api.DisconnectionDetected += (s, e) => { Assert.Fail("This should not be called"); };
 
                 api.IsConnected.Should().BeFalse();
 
@@ -483,7 +483,7 @@ namespace BriansUsbQuizBoxApi.Tests
                 api.GameStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameLightOn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.GameDone += (s, e) => { Assert.Fail("This should not be called"); };
-                api.ReadThreadDisconnection += (s, e) => { eventFiredCount++; };
+                api.DisconnectionDetected += (s, e) => { eventFiredCount++; };
 
                 api.IsConnected.Should().BeFalse();
 

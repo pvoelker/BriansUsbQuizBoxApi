@@ -24,12 +24,11 @@ api.GameStarted += Api_GameStarted;
 api.GameLightOn += Api_GameLightOn;
 api.GameDone += Api_GameDone;
 api.BuzzInStats += Api_BuzzInStats;
+api.DisconnectionDetected += Api_DisconnectionDetected;
 
-api.ReadThreadDisconnection += Api_ReadThreadDisconnection;
-
-void Api_ReadThreadDisconnection(object? sender, DisconnectionEventArgs e)
+void Api_DisconnectionDetected(object? sender, DisconnectionEventArgs e)
 {
-    Console.WriteLine("ERROR: Disconnection occurred in background read thread! Program will need to be restarted...");
+    Console.WriteLine("ERROR: Disconnection from quiz box detected! Program will need to be restarted...");
 }
 
 void Api_GameStarted(object? sender, EventArgs e)
