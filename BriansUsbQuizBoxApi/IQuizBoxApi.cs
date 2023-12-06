@@ -10,11 +10,6 @@ namespace BriansUsbQuizBoxApi
         #region Events
 
         /// <summary>
-        /// Event fired when quiz box is ready
-        /// </summary>
-        event EventHandler? QuizBoxReady;
-
-        /// <summary>
         /// Event fired when someone buzzes in
         /// </summary>
         event EventHandler<BuzzInEventArgs>? BuzzIn;

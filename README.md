@@ -15,7 +15,6 @@ Console.WriteLine("--- Brian's USB Quiz Box Test App ---");
 
 using var api = new QuizBoxApi(new QuizBoxCoreApi());
 
-api.QuizBoxReady += Api_QuizBoxReady;
 api.BuzzIn += Api_BuzzIn;
 api.FiveSecondTimerStarted += Api_FiveSecondTimerStarted;
 api.FiveSecondTimerExpired += Api_FiveSecondTimerExpired;
@@ -70,11 +69,6 @@ void Api_BuzzInStats(object? sender, BuzzInStatsEventArgs e)
     Console.WriteLine($"Green 2 Time = {(e.Green2TimeDelta.HasValue ? e.Green2TimeDelta + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Green 3 Time = {(e.Green3TimeDelta.HasValue ? e.Green3TimeDelta + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Green 4 Time = {(e.Green4TimeDelta.HasValue ? e.Green4TimeDelta + "ms" : "-no buzz in-")}");
-}
-
-void Api_QuizBoxReady(object? sender, EventArgs e)
-{
-    Console.WriteLine("Quiz box is ready");
 }
 
 void Api_BuzzIn(object? sender, BuzzInEventArgs e)

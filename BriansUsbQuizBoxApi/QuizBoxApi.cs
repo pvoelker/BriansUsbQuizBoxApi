@@ -35,9 +35,6 @@ namespace BriansUsbQuizBoxApi
         #region Events
 
         /// <inheritdoc/>
-        public event EventHandler? QuizBoxReady;
-
-        /// <inheritdoc/>
         public event EventHandler<BuzzInEventArgs>? BuzzIn;
 
         /// <inheritdoc/>
@@ -81,7 +78,6 @@ namespace BriansUsbQuizBoxApi
                 () => FiveSecondTimerExpired?.Invoke(this, null)
             );
             _statusByteSM = new StatusByteSM(
-                () => QuizBoxReady?.Invoke(this, null),
                 () => FiveSecondTimerStarted?.Invoke(this, null),
                 () => LockoutTimerStarted?.Invoke(this, null),
                 () => LockoutTimerExpired?.Invoke(this, null)

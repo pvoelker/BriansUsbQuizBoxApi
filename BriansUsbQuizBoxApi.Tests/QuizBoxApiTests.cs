@@ -32,11 +32,8 @@ namespace BriansUsbQuizBoxApi.Tests
             coreApiMock.Setup(m => m.ReadStatus()).Returns(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER,
                 0, 0, 0, 0, 0, 0, 0 ,0));
 
-            var eventFiredCount = 0;
-
             using (var api = new QuizBoxApi(coreApiMock.Object))
             {
-                api.QuizBoxReady += (s, e) => { eventFiredCount++; };
                 api.BuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
@@ -55,8 +52,6 @@ namespace BriansUsbQuizBoxApi.Tests
 
                 Thread.Sleep(40); // Allow read thread to run a bit
             }
-
-            eventFiredCount.Should().Be(1);
         }
 
         [Fact]
@@ -80,7 +75,6 @@ namespace BriansUsbQuizBoxApi.Tests
 
             using (var api = new QuizBoxApi(coreApiMock.Object))
             {
-                api.QuizBoxReady += (s, e) => { /* Don't care */ };
                 api.BuzzIn += (s, e) => { eventFiredCount++; };
                 api.FiveSecondTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
@@ -128,7 +122,6 @@ namespace BriansUsbQuizBoxApi.Tests
 
             using (var api = new QuizBoxApi(coreApiMock.Object))
             {
-                api.QuizBoxReady += (s, e) => { /* Don't care */ };
                 api.BuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerStarted += (s, e) => { eventFiredCount++; };
                 api.FiveSecondTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
@@ -176,7 +169,6 @@ namespace BriansUsbQuizBoxApi.Tests
 
             using (var api = new QuizBoxApi(coreApiMock.Object))
             {
-                api.QuizBoxReady += (s, e) => { /* Don't care */ };
                 api.BuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerExpired += (s, e) => { eventFiredCount++; };
@@ -224,7 +216,6 @@ namespace BriansUsbQuizBoxApi.Tests
 
             using (var api = new QuizBoxApi(coreApiMock.Object))
             {
-                api.QuizBoxReady += (s, e) => { /* Don't care */ };
                 api.BuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
@@ -280,7 +271,6 @@ namespace BriansUsbQuizBoxApi.Tests
 
             using (var api = new QuizBoxApi(coreApiMock.Object))
             {
-                api.QuizBoxReady += (s, e) => { /* Don't care */ };
                 api.BuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
@@ -335,7 +325,6 @@ namespace BriansUsbQuizBoxApi.Tests
 
             using (var api = new QuizBoxApi(coreApiMock.Object))
             {
-                api.QuizBoxReady += (s, e) => { /* Don't care */ };
                 api.BuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
@@ -383,7 +372,6 @@ namespace BriansUsbQuizBoxApi.Tests
 
             using (var api = new QuizBoxApi(coreApiMock.Object))
             {
-                api.QuizBoxReady += (s, e) => { /* Don't care */ };
                 api.BuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
@@ -432,7 +420,6 @@ namespace BriansUsbQuizBoxApi.Tests
 
             using (var api = new QuizBoxApi(coreApiMock.Object))
             {
-                api.QuizBoxReady += (s, e) => { /* Don't care */ };
                 api.BuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
@@ -488,7 +475,6 @@ namespace BriansUsbQuizBoxApi.Tests
 
             using (var api = new QuizBoxApi(coreApiMock.Object))
             {
-                api.QuizBoxReady += (s, e) => { /* Don't care */ };
                 api.BuzzIn += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerStarted += (s, e) => { Assert.Fail("This should not be called"); };
                 api.FiveSecondTimerExpired += (s, e) => { Assert.Fail("This should not be called"); };
