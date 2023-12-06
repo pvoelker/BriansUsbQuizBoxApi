@@ -10,11 +10,6 @@ namespace BriansUsbQuizBoxApi
         #region Events
 
         /// <summary>
-        /// Event fired when quiz box is ready
-        /// </summary>
-        event EventHandler? QuizBoxReady;
-
-        /// <summary>
         /// Event fired when someone buzzes in
         /// </summary>
         event EventHandler<BuzzInEventArgs>? BuzzIn;
@@ -68,9 +63,9 @@ namespace BriansUsbQuizBoxApi
         event EventHandler<BuzzInStatsEventArgs>? BuzzInStats;
 
         /// <summary>
-        /// Event fired when a disconnection occurs in the background read thread
+        /// Event fired when a disconnection from the connected quiz box is detected
         /// </summary>
-        event EventHandler<DisconnectionEventArgs>? ReadThreadDisconnection;
+        event EventHandler<DisconnectionEventArgs>? DisconnectionDetected;
 
         #endregion
 

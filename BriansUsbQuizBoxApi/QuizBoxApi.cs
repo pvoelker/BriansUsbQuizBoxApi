@@ -35,9 +35,6 @@ namespace BriansUsbQuizBoxApi
         #region Events
 
         /// <inheritdoc/>
-        public event EventHandler? QuizBoxReady;
-
-        /// <inheritdoc/>
         public event EventHandler<BuzzInEventArgs>? BuzzIn;
 
         /// <inheritdoc/>
@@ -65,7 +62,7 @@ namespace BriansUsbQuizBoxApi
         public event EventHandler<BuzzInStatsEventArgs>? BuzzInStats;
         
         /// <inheritdoc/>
-        public event EventHandler<DisconnectionEventArgs>? ReadThreadDisconnection;
+        public event EventHandler<DisconnectionEventArgs>? DisconnectionDetected;
 
         #endregion
 
@@ -81,7 +78,6 @@ namespace BriansUsbQuizBoxApi
                 () => FiveSecondTimerExpired?.Invoke(this, null)
             );
             _statusByteSM = new StatusByteSM(
-                () => QuizBoxReady?.Invoke(this, null),
                 () => FiveSecondTimerStarted?.Invoke(this, null),
                 () => LockoutTimerStarted?.Invoke(this, null),
                 () => LockoutTimerExpired?.Invoke(this, null)
@@ -321,13 +317,17 @@ namespace BriansUsbQuizBoxApi
                 {
                     commandWritten = WriteData();
                 }
+                catch (TimeoutException)
+                {
+                    // Keep moving on, this can rarely happen on a disconnection
+                }
                 catch (DisconnectionException ex)
                 {
-                    HardDisconnect();
+                    DisconnectCleanup();
 
-                    if (ReadThreadDisconnection != null)
+                    if (DisconnectionDetected != null)
                     {
-                        ReadThreadDisconnection.Invoke(this, new DisconnectionEventArgs(ex));
+                        DisconnectionDetected.Invoke(this, new DisconnectionEventArgs(ex));
                     }
                 }
                 catch
@@ -348,11 +348,11 @@ namespace BriansUsbQuizBoxApi
                     }
                     catch (DisconnectionException ex)
                     {
-                        HardDisconnect();
+                        DisconnectCleanup();
 
-                        if (ReadThreadDisconnection != null)
+                        if (DisconnectionDetected != null)
                         {
-                            ReadThreadDisconnection.Invoke(this, new DisconnectionEventArgs(ex));
+                            DisconnectionDetected.Invoke(this, new DisconnectionEventArgs(ex));
                         }
                     }
                     catch
@@ -375,7 +375,7 @@ namespace BriansUsbQuizBoxApi
             _api.Disconnect();
         }
 
-        private void HardDisconnect()
+        private void DisconnectCleanup()
         {
             if (_done != null)
             {

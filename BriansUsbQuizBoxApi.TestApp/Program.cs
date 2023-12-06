@@ -1,10 +1,11 @@
 ﻿using BriansUsbQuizBoxApi;
 
+Console.ForegroundColor = ConsoleColor.Blue;
 Console.WriteLine("--- Brian's USB Quiz Box Test App ---");
+Console.ForegroundColor = ConsoleColor.White;
 
 using var api = new QuizBoxApi(new QuizBoxCoreApi());
 
-api.QuizBoxReady += Api_QuizBoxReady;
 api.BuzzIn += Api_BuzzIn;
 api.FiveSecondTimerStarted += Api_FiveSecondTimerStarted;
 api.FiveSecondTimerExpired += Api_FiveSecondTimerExpired;
@@ -14,15 +15,14 @@ api.GameStarted += Api_GameStarted;
 api.GameLightOn += Api_GameLightOn;
 api.GameDone += Api_GameDone;
 api.BuzzInStats += Api_BuzzInStats;
+api.DisconnectionDetected += Api_DisconnectionDetected;
 
-api.ReadThreadDisconnection += Api_ReadThreadDisconnection;
-
-void Api_ReadThreadDisconnection(object? sender, DisconnectionEventArgs e)
+void Api_DisconnectionDetected(object? sender, DisconnectionEventArgs e)
 {
     var bk = Console.BackgroundColor;
     Console.BackgroundColor = ConsoleColor.DarkRed;
 
-    Console.WriteLine("ERROR: Disconnection occurred in background read thread! Program will need to be restarted...");
+    Console.WriteLine("ERROR: Disconnection from quiz box detected! Program will need to be restarted...");
 
     Console.BackgroundColor = bk;
 }
@@ -78,15 +78,6 @@ void Api_BuzzInStats(object? sender, BuzzInStatsEventArgs e)
     Console.WriteLine($"Green 2 Time = {(e.Green2TimeDelta.HasValue ? e.Green2TimeDelta + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Green 3 Time = {(e.Green3TimeDelta.HasValue ? e.Green3TimeDelta + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Green 4 Time = {(e.Green4TimeDelta.HasValue ? e.Green4TimeDelta + "ms" : "-no buzz in-")}");
-
-    Console.ForegroundColor = ConsoleColor.White;
-}
-
-void Api_QuizBoxReady(object? sender, EventArgs e)
-{
-    Console.ForegroundColor = ConsoleColor.Cyan;
-
-    Console.WriteLine("Quiz box is ready");
 
     Console.ForegroundColor = ConsoleColor.White;
 }

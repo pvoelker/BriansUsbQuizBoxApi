@@ -15,7 +15,6 @@ Console.WriteLine("--- Brian's USB Quiz Box Test App ---");
 
 using var api = new QuizBoxApi(new QuizBoxCoreApi());
 
-api.QuizBoxReady += Api_QuizBoxReady;
 api.BuzzIn += Api_BuzzIn;
 api.FiveSecondTimerStarted += Api_FiveSecondTimerStarted;
 api.FiveSecondTimerExpired += Api_FiveSecondTimerExpired;
@@ -25,12 +24,11 @@ api.GameStarted += Api_GameStarted;
 api.GameLightOn += Api_GameLightOn;
 api.GameDone += Api_GameDone;
 api.BuzzInStats += Api_BuzzInStats;
+api.DisconnectionDetected += Api_DisconnectionDetected;
 
-api.ReadThreadDisconnection += Api_ReadThreadDisconnection;
-
-void Api_ReadThreadDisconnection(object? sender, DisconnectionEventArgs e)
+void Api_DisconnectionDetected(object? sender, DisconnectionEventArgs e)
 {
-    Console.WriteLine("ERROR: Disconnection occurred in background read thread! Program will need to be restarted...");
+    Console.WriteLine("ERROR: Disconnection from quiz box detected! Program will need to be restarted...");
 }
 
 void Api_GameStarted(object? sender, EventArgs e)
@@ -70,11 +68,6 @@ void Api_BuzzInStats(object? sender, BuzzInStatsEventArgs e)
     Console.WriteLine($"Green 2 Time = {(e.Green2TimeDelta.HasValue ? e.Green2TimeDelta + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Green 3 Time = {(e.Green3TimeDelta.HasValue ? e.Green3TimeDelta + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Green 4 Time = {(e.Green4TimeDelta.HasValue ? e.Green4TimeDelta + "ms" : "-no buzz in-")}");
-}
-
-void Api_QuizBoxReady(object? sender, EventArgs e)
-{
-    Console.WriteLine("Quiz box is ready");
 }
 
 void Api_BuzzIn(object? sender, BuzzInEventArgs e)
