@@ -1,7 +1,8 @@
 ﻿using BriansUsbQuizBoxApi;
+using System;
 
 Console.ForegroundColor = ConsoleColor.Blue;
-Console.WriteLine("--- Brian's USB Quiz Box Test App ---");
+Console.WriteLine("--- Brian's USB Quiz Box Communication Protocol Test App ---");
 Console.ForegroundColor = ConsoleColor.White;
 
 using var api = new QuizBoxApi(new QuizBoxCoreApi());
@@ -147,6 +148,8 @@ if (api.Connect() == false)
 }
 else
 {
+    Console.WriteLine("Connected quiz box type: " + api.ConnectedQuizBoxType);
+    Console.WriteLine();
     Console.WriteLine("Press 'G' to start reaction timing game.");
     Console.WriteLine("Press 'T' to start 5 second buzz in timer.");
     Console.WriteLine("Press 'S' to start indefinite paddle lockout timer.");

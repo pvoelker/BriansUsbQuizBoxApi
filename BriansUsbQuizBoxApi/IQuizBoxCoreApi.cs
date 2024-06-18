@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace BriansUsbQuizBoxApi
 {
     /// <summary>
-    /// Core interface for Brian's Quiz Box
+    /// Core interface for Brian's Quiz Box Communication Protocol
     /// </summary>
     public interface IQuizBoxCoreApi : IDisposable
     {
@@ -13,6 +13,11 @@ namespace BriansUsbQuizBoxApi
         /// True if connected to a quiz box, otherwise false
         /// </summary>
         bool IsConnected { get; }
+
+        /// <summary>
+        /// Type of quiz box currently connected to, null if not connected to a quiz box
+        /// </summary>
+        QuizBoxTypeEnum? ConnectedQuizBoxType { get; }
 
         /// <summary>
         /// Attempt to connect to a quiz box

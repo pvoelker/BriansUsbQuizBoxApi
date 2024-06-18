@@ -9,7 +9,7 @@ using System.Threading;
 namespace BriansUsbQuizBoxApi
 {
     /// <summary>
-    /// Event based implementation for Brian's Quiz Box
+    /// Event based implementation for Brian's Quiz Box Communication Protocol
     /// </summary>
     public class QuizBoxApi : IQuizBoxApi
     {
@@ -94,6 +94,11 @@ namespace BriansUsbQuizBoxApi
         public bool IsConnected
         {
             get { return _api.IsConnected; }
+        }
+
+        public QuizBoxTypeEnum? ConnectedQuizBoxType
+        {
+            get { return _api.ConnectedQuizBoxType; }
         }
 
         /// <inheritdoc/>

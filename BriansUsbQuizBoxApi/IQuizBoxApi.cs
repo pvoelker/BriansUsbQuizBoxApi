@@ -3,7 +3,7 @@
 namespace BriansUsbQuizBoxApi
 {
     /// <summary>
-    /// Event based interface for Brian's Quiz Box
+    /// Event based interface for Brian's Quiz Box Communication Protocol
     /// </summary>
     public interface IQuizBoxApi : IDisposable
     {
@@ -73,6 +73,11 @@ namespace BriansUsbQuizBoxApi
         /// True if connected to a quiz box, otherwise false
         /// </summary>
         bool IsConnected { get; }
+
+        /// <summary>
+        /// Type of quiz box currently connected to, null if not connected to a quiz box
+        /// </summary>
+        QuizBoxTypeEnum? ConnectedQuizBoxType { get; }
 
         /// <summary>
         /// Attempt to connect to a quiz box

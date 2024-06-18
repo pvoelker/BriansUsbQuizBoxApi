@@ -9,3 +9,9 @@ Track changes made to the API.
 ## Version 1.0.1 (1.0.7.7)
 
 - Documentation update regarding MacOS / Mac Catalyst entitlements
+
+## Version 1.1.0-alpha (1.1.8.0)
+
+- Initial support added for Kirkman Basic Quiz Box
+- Documentation adjusted to generically refer to 'Brian's USB Quiz Box Communication Protocol'
+- Corrected file version format to [major].[minor].[build].[revision] instead of [major].[minor].[build].[build]
