@@ -1,8 +1,10 @@
-# Brian's USB Quiz Box API
+# Brian's USB Quiz Box Communication Protocol API
 
 ##  About
 
-An API for interfacing with a USB Quiz Box by Brian's Boxes
+An API for interfacing with USB quiz boxes using the Brian's Quiz Box communication protocol.  These include:
+- Brian's Quiz Boxes
+- Kirkman Basic Quiz Boxes (name TBD)
 
 ## How to Use
 
@@ -11,7 +13,7 @@ Create an instance of 'QuizBoxApi'. Register with events and then call 'Connect'
 ```cs
 using BriansUsbQuizBoxApi;
 
-Console.WriteLine("--- Brian's USB Quiz Box Test App ---");
+Console.WriteLine("--- Brian's USB Quiz Box Communication Protocol Test App ---");
 
 using var api = new QuizBoxApi(new QuizBoxCoreApi());
 
@@ -129,4 +131,5 @@ Complete example located at: https://github.com/pvoelker/BriansUsbQuizBoxApi/tre
 
 ## Credits
 
-- Brian McKevett <bmckevett@yahoo.com> for providing technical documentation about the quiz boxes
+- Brian McKevett <bmckevett@yahoo.com> for providing technical documentation about the quiz box communication protocol
+- Steve Kirkman <kirkmans@aol.com> for working with me on adding support for the Kirkman quiz boxes

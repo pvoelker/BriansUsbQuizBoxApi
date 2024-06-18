@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace BriansUsbQuizBoxApi
 {
     /// <summary>
-    /// Core implementation for Brian's Quiz Box
+    /// Core implementation for Brian's Quiz Box Communication Protocol
     /// </summary>
     public class QuizBoxCoreApi : IQuizBoxCoreApi
     {
@@ -17,10 +17,17 @@ namespace BriansUsbQuizBoxApi
 
         private HidStream? _stream = null;
 
+        private QuizBoxTypeEnum? _connectedType = null;
+
         /// <inheritdoc/>
         public bool IsConnected
         {
             get { return _stream != null; }
+        }
+
+        public QuizBoxTypeEnum? ConnectedQuizBoxType
+        {
+            get { return _connectedType; }
         }
 
         /// <inheritdoc/>
@@ -30,16 +37,18 @@ namespace BriansUsbQuizBoxApi
         {
             if (_stream == null)
             {
-                var devices = DeviceList.Local.GetHidDevices();
-
-                HidDevice? box = null;
-                try
+                HidDevice? box = GetBriansBoxDevice();
+                if(box != null)
                 {
-                    box = devices.SingleOrDefault(x => x.VendorID == 1240 && x.ProductID == 128 && x.GetManufacturer() == "Brians Box");
+                    _connectedType = QuizBoxTypeEnum.BriansQuizBox;
                 }
-                catch(InvalidOperationException ex)
+                else
                 {
-                    throw new MultipleDevicesException("More than one quiz box is connected", ex);
+                    box = GetBasicQuizBoxDevice();
+                    if(box != null)
+                    {
+                        _connectedType = QuizBoxTypeEnum.KirkmanQuizBox;
+                    }
                 }
 
                 if (box != null)
@@ -174,6 +183,8 @@ namespace BriansUsbQuizBoxApi
         /// <inheritdoc/>
         public void Disconnect()
         {
+            _connectedType = null;
+
             if (_stream != null)
             {
                 _stream.Dispose();
@@ -192,6 +203,42 @@ namespace BriansUsbQuizBoxApi
 
                 _disposedValue = true;
             }
+        }
+
+        private HidDevice? GetBriansBoxDevice()
+        {
+            // NOTE: The PID for Brian's Quiz Boxes is NOT unique, so the manufacturer name must be looked at
+            var devices = DeviceList.Local.GetHidDevices(0x04D8, 0x0080);
+
+            HidDevice? box = null;
+            try
+            {
+                box = devices.SingleOrDefault(x => x.GetManufacturer() == "Brians Box");
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new MultipleDevicesException("More than one Brian's Quiz Box is connected", ex);
+            }
+
+            return box;
+        }
+
+        private HidDevice? GetBasicQuizBoxDevice()
+        {
+            // NOTE: The PID for the Kirkman Quiz Boxes IS unique
+            var devices = DeviceList.Local.GetHidDevices(0x04D8, 0xE5DC);
+
+            HidDevice? box = null;
+            try
+            {
+                box = devices.SingleOrDefault();
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new MultipleDevicesException("More than one Kirkman Quiz Box is connected", ex);
+            }
+
+            return box;
         }
 
         /// <inheritdoc/>

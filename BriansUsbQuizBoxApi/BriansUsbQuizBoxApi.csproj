@@ -4,21 +4,21 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Title>Brian's USB Quiz Box API</Title>
+    <Title>Brian's USB Quiz Box Communication Protocol API</Title>
     <Copyright>Copyright © 2024 Paul Voelker</Copyright>
-    <Description>An API for interfacing with a Brian's USB Quiz Box by Brian's Boxes of McKevett Enterprises</Description>
+    <Description>An API for interfacing with quiz boxes implementing the Brian's Quiz Box Communication Protocol</Description>
     <RepositoryUrl>https://github.com/pvoelker/BriansUsbQuizBoxApi</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags></PackageTags>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>1.0.1</Version>
+    <Version>1.1.0-alpha</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.7.7</FileVersion>
+    <FileVersion>1.1.8.0</FileVersion>
     <PackageId>BriansUsbQuizBoxApi</PackageId>
     <Authors>HerrVlkr</Authors>
     <Company>Paul Voelker</Company>
-    <Product>Brian's USB Quiz Box API</Product>
+    <Product>Brian's USB Quiz Box Communication Protocol API</Product>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
