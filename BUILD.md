@@ -4,7 +4,7 @@
 
 # Versioning
 
-File version format is: [major].[minor].[revision].[build].  Build number never resets and keeps incrementing.  Revision will typically be zero (0)
+File version format is: [major].[minor].[build].[revision].  Build number never resets and keeps incrementing.  Revision will typically be zero (0)
 
 Using:
 
