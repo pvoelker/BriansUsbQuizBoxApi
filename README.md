@@ -105,6 +105,8 @@ if (api.Connect() == false)
 }
 else
 {
+    Console.WriteLine("Connected quiz box type: " + api.ConnectedQuizBoxType);
+    Console.WriteLine("");
     Console.WriteLine("Press 'G' to start reaction timing game. Press [ENTER] to exit program...");
 }
 
@@ -132,4 +134,4 @@ Complete example located at: https://github.com/pvoelker/BriansUsbQuizBoxApi/tre
 ## Credits
 
 - Brian McKevett <bmckevett@yahoo.com> for providing technical documentation about the quiz box communication protocol
-- Steve Kirkman <kirkmans@aol.com> for working with me on adding support for the Kirkman quiz boxes
+- Steve Kirkman <kirkmans@aol.com> and Brian McKevett <bmckevett@yahoo.com> for working with me on adding support for the Kirkman quiz boxes

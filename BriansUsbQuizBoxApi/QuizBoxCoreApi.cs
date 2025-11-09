@@ -1,4 +1,5 @@
 ﻿using BriansUsbQuizBoxApi.Exceptions;
+using BriansUsbQuizBoxApi.Helpers;
 using BriansUsbQuizBoxApi.Protocols;
 using HidSharp;
 using System;
@@ -18,6 +19,10 @@ namespace BriansUsbQuizBoxApi
         private HidStream? _stream = null;
 
         private QuizBoxTypeEnum? _connectedType = null;
+
+#if DEBUG
+        private BoxStatusReport? _lastBoxStatusReport = null;
+#endif
 
         /// <inheritdoc/>
         public bool IsConnected
@@ -135,6 +140,14 @@ namespace BriansUsbQuizBoxApi
                 {
                     retVal = BoxStatusReport.Parse(inputReportBuffer);
                 }
+
+#if DEBUG
+                if (_lastBoxStatusReport != retVal)
+                {
+                    DebugHelpers.WriteLine(retVal == null ? "[null]" : retVal.ToString());
+                }
+                _lastBoxStatusReport = retVal;
+#endif
 
                 return retVal;
             }

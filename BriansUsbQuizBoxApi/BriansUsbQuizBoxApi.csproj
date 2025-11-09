@@ -5,16 +5,16 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Brian's USB Quiz Box Communication Protocol API</Title>
-    <Copyright>Copyright © 2024 Paul Voelker</Copyright>
+    <Copyright>Copyright © 2025 Paul Voelker</Copyright>
     <Description>An API for interfacing with quiz boxes implementing the Brian's Quiz Box Communication Protocol</Description>
     <RepositoryUrl>https://github.com/pvoelker/BriansUsbQuizBoxApi</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags></PackageTags>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>1.1.0-alpha</Version>
+    <Version>1.1.0-beta</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.1.8.0</FileVersion>
+    <FileVersion>1.1.9.0</FileVersion>
     <PackageId>BriansUsbQuizBoxApi</PackageId>
     <Authors>HerrVlkr</Authors>
     <Company>Paul Voelker</Company>
@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HidSharp" Version="2.1.0" />
+    <PackageReference Include="HidSharp" Version="2.6.4" />
   </ItemGroup>
 
 </Project>

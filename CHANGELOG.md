@@ -15,3 +15,10 @@ Track changes made to the API.
 - Initial support added for Kirkman Basic Quiz Box
 - Documentation adjusted to generically refer to 'Brian's USB Quiz Box Communication Protocol'
 - Corrected file version format to [major].[minor].[build].[revision] instead of [major].[minor].[build].[build]
+
+## Version 1.1.0-beta (1.1.9.0)
+
+- Beta support for Kirkman Basic Quiz Box
+- Enhanced test application
+- Updated projects to .NET Core 9 and latest dependencies (including HidSharp)
+- Enhanced 'Read Me' sample code
