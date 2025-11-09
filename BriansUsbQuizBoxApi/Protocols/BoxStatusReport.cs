@@ -6,7 +6,7 @@ namespace BriansUsbQuizBoxApi.Protocols
     /// <summary>
     /// Quiz box status input HID report
     /// </summary>
-    public class BoxStatusReport
+    public class BoxStatusReport : IEquatable<BoxStatusReport>
     {
         public StatusByte Status { get; private set; }
 
@@ -64,6 +64,80 @@ namespace BriansUsbQuizBoxApi.Protocols
             Green4Time = green4Time;
         }
 
+        /// <summary>
+        /// Object check for equality
+        /// </summary>
+        /// <param name="obj">Object to check against</param>
+        /// <returns>True if equal, otherwise false</returns>
+        public override bool Equals(object obj) => this.Equals(obj as BoxStatusReport);
+
+        /// <summary>
+        /// Check for equality
+        /// </summary>
+        /// <param name="p">Object to check against</param>
+        /// <returns>True if equal, otherwise false</returns>
+        public bool Equals(BoxStatusReport? p)
+        {
+            if (p is null)
+            {
+                return false;
+            }
+
+            if (Object.ReferenceEquals(this, p))
+            {
+                return true;
+            }
+
+            return Status == p.Status &&
+                Winner == p.Winner &&
+                Red1Time == p.Red1Time &&
+                Red2Time == p.Red2Time &&
+                Red3Time == p.Red3Time &&
+                Red4Time == p.Red4Time &&
+                Green1Time == p.Green1Time &&
+                Green2Time == p.Green2Time &&
+                Green3Time == p.Green3Time &&
+                Green4Time == p.Green4Time;
+        }
+
+        /// <summary>
+        /// Generate hash code
+        /// </summary>
+        /// <returns>Hash code</returns>
+        public override int GetHashCode() => (Status, Winner, Red1Time, Red2Time, Red3Time, Red4Time,
+            Green1Time, Green2Time, Green3Time, Green4Time).GetHashCode();
+
+        /// <summary>
+        /// Operator '==' (equal)
+        /// </summary>
+        /// <param name="lhs">Left hand side to check</param>
+        /// <param name="rhs">Right hand side to check</param>
+        /// <returns>True if equal, otherwise false</returns>
+        public static bool operator==(BoxStatusReport? lhs, BoxStatusReport? rhs)
+        {
+            if (lhs is null)
+            {
+                if (rhs is null)
+                {
+                    return true;
+                }
+
+                // Only the left side is null.
+                return false;
+            }
+
+            // Equals handles case of null on right side.
+            return lhs.Equals(rhs);
+        }
+
+        /// <summary>
+        /// Operator '!=' (not equal)
+        /// </summary>
+        /// <param name="lhs">Left hand side to check</param>
+        /// <param name="rhs">Right hand side to check</param>
+        /// <returns>True if not equal, otherwise false</returns>
+        public static bool operator!=(BoxStatusReport? lhs, BoxStatusReport? rhs) => !(lhs == rhs);
+
         public static BoxStatusReport Parse(byte[] data)
         {
             if (data.Length != BuzzerConstants.REPORT_LENGTH)
@@ -100,9 +174,15 @@ namespace BriansUsbQuizBoxApi.Protocols
 
         public override string ToString()
         {
-            return $"Status: {Status}; Winner: {Winner}" + Environment.NewLine
-                + $"Red 1 Time: {Red1Time}; Red 2 Time: {Red2Time}; Red 3 Time: {Red3Time}; Red 4 Time: {Red4Time}" + Environment.NewLine
-                + $"Green 1 Time: {Green1Time}; Green 2 Time: {Green2Time}; Green 3 Time: {Green3Time}; Green 4 Time: {Green4Time}";
+            return $"Status: {Status} (0x{Status:X}); Winner: {Winner} (0x{Winner:X}); "
+                + $"Red 1 Time: {(Red1Time.HasValue ? Red1Time.Value.ToString() + "ms" : "[None]")}; "
+                + $"Red 2 Time: {(Red2Time.HasValue ? Red2Time.Value.ToString() + "ms" : "[None]")}; "
+                + $"Red 3 Time: {(Red3Time.HasValue ? Red3Time.Value.ToString() + "ms" : "[None]")}; "
+                + $"Red 4 Time: {(Red4Time.HasValue ? Red4Time.Value.ToString() + "ms" : "[None]")}; "
+                + $"Green 1 Time: {(Green1Time.HasValue ? Green1Time.Value.ToString() + "ms" : "[None]")}; "
+                + $"Green 2 Time: {(Green2Time.HasValue ? Green2Time.Value.ToString() + "ms" : "[None]")}; "
+                + $"Green 3 Time: {(Green3Time.HasValue ? Green3Time.Value.ToString() + "ms" : "[None]")}; "
+                + $"Green 4 Time: {(Green4Time.HasValue ? Green4Time.Value.ToString() + "ms" : "[None]")}";
         }
     }
 }

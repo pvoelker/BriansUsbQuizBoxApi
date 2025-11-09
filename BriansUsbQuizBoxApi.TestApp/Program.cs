@@ -154,6 +154,11 @@ else
     Console.WriteLine("Press 'T' to start 5 second buzz in timer.");
     Console.WriteLine("Press 'S' to start indefinite paddle lockout timer.");
     Console.WriteLine("Press 'E' to end indefinite paddle lockout timer.");
+    Console.WriteLine("Press '1' to start 30 second paddle lockout timer.");
+    Console.WriteLine("Press '2' to start 1 minute paddle lockout timer.");
+    Console.WriteLine("Press '3' to start 2 minute paddle lockout timer.");
+    Console.WriteLine("Press '4' to start 3 minute paddle lockout timer.");
+    Console.WriteLine("Press 'R' to reset quiz box.");
     Console.WriteLine("Press [ENTER] to exit program...");
 }
 
@@ -179,6 +184,31 @@ while(key.Key != ConsoleKey.Enter)
     {
         Console.WriteLine("Ending indefinite paddle lockout timer...");
         api.StopPaddleLockout();
+    }
+    else if (key.Key == ConsoleKey.D1)
+    {
+        Console.WriteLine("Start 30 second paddle lockout timer...");
+        api.StartPaddleLockoutTimer(LockoutTimerEnum.Timer30Seconds);
+    }
+    else if (key.Key == ConsoleKey.D2)
+    {
+        Console.WriteLine("Start 1 minute paddle lockout timer...");
+        api.StartPaddleLockoutTimer(LockoutTimerEnum.Timer1Minute);
+    }
+    else if (key.Key == ConsoleKey.D3)
+    {
+        Console.WriteLine("Start 2 minute paddle lockout timer...");
+        api.StartPaddleLockoutTimer(LockoutTimerEnum.Timer2Minutes);
+    }
+    else if (key.Key == ConsoleKey.D4)
+    {
+        Console.WriteLine("Start 3 minute paddle lockout timer...");
+        api.StartPaddleLockoutTimer(LockoutTimerEnum.Timer3Minutes);
+    }
+    else if (key.Key == ConsoleKey.R)
+    {
+        Console.WriteLine("Reseting...");
+        api.Reset();
     }
 
     key = Console.ReadKey();
