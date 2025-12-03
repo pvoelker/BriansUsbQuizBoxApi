@@ -19,16 +19,16 @@ namespace BriansUsbQuizBoxApi
 
         private bool _idleMode = false;
 
-        private WinnerByteSM _winnerByteSM;
-        private StatusByteSM _statusByteSM;
-        private GameStatusByteSM _gameStatusByteSM;
+        private readonly WinnerByteSM _winnerByteSM;
+        private readonly StatusByteSM _statusByteSM;
+        private readonly GameStatusByteSM _gameStatusByteSM;
 
         private EventWaitHandle? _done = null;
         private EventWaitHandle? _doneComplete = null;
 
-        private ConcurrentQueue<BoxCommandReport> _commands = new ConcurrentQueue<BoxCommandReport>();
+        private readonly ConcurrentQueue<BoxCommandReport> _commands = new ConcurrentQueue<BoxCommandReport>();
 
-        private IQuizBoxCoreApi _api;
+        private readonly IQuizBoxCoreApi _api;
 
         private int? _threadId;
 
@@ -115,8 +115,10 @@ namespace BriansUsbQuizBoxApi
 
                     try
                     {
-                        var thread = new Thread(new ThreadStart(ReadData));
-                        thread.Name = "Quiz Box I/O Thread";
+                        var thread = new Thread(new ThreadStart(ReadData))
+                        {
+                            Name = "Quiz Box I/O Thread"
+                        };
                         thread.Start();
 
                         _threadId = thread.ManagedThreadId;
@@ -182,6 +184,8 @@ namespace BriansUsbQuizBoxApi
             {
                 CheckCommandThreadAndThrow();
 
+                DebugHelpers.WriteLine("RESET");
+
                 _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.CLEAR });
             }
             else
@@ -198,6 +202,8 @@ namespace BriansUsbQuizBoxApi
             if (_api != null)
             {
                 CheckCommandThreadAndThrow();
+
+                DebugHelpers.WriteLine("START 5 SEC BUZZ IN TIMER");
 
                 _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_5_SEC_TIMER });
             }
@@ -240,6 +246,8 @@ namespace BriansUsbQuizBoxApi
             {
                 CheckCommandThreadAndThrow();
 
+                DebugHelpers.WriteLine("START PADDLE LOCKOUT TIMER ({0})", Enum.GetName(typeof(LockoutTimerEnum), timer));
+
                 _commands.Enqueue(new BoxCommandReport { CommandHeader = command });
             }
             else
@@ -257,6 +265,8 @@ namespace BriansUsbQuizBoxApi
             {
                 CheckCommandThreadAndThrow();
 
+                DebugHelpers.WriteLine("START PADDLE LOCKOUT");
+
                 _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_INFINITE_TIMER });
             }
             else
@@ -268,11 +278,19 @@ namespace BriansUsbQuizBoxApi
         /// <inheritdoc/>
         /// <exception cref="NotConnectedException">Quiz box is not yet connected</exception>
         /// <exception cref="InvalidOperationException">Call was made from Quiz Box I/O thread</exception>
+        /// <exception cref="NotSupportedException">Function not supported on the Kirkman Quizbox Plus/exception>
         public void StopPaddleLockout()
         {
             if (_api != null)
             {
+                if(_api.ConnectedQuizBoxType == QuizBoxTypeEnum.KirkmanQuizBox)
+                {
+                    throw new NotSupportedException("Stopping infinite paddle lockout is not supported on the Kirkman Quizbox Plus");
+                }
+
                 CheckCommandThreadAndThrow();
+
+                DebugHelpers.WriteLine("STOP PADDLE LOCKOUT");
 
                 _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.END_INFINITE_TIMER_BUZZ });
             }
@@ -290,6 +308,8 @@ namespace BriansUsbQuizBoxApi
             if (_api != null)
             {
                 CheckCommandThreadAndThrow();
+
+                DebugHelpers.WriteLine("START REACTION GAME");
 
                 _commands.Enqueue(new BoxCommandReport { CommandHeader = CommandHeaderByte.START_REACTION_TIMING_GAME });
             }
@@ -330,10 +350,7 @@ namespace BriansUsbQuizBoxApi
                 {
                     DisconnectCleanup();
 
-                    if (DisconnectionDetected != null)
-                    {
-                        DisconnectionDetected.Invoke(this, new DisconnectionEventArgs(ex));
-                    }
+                    DisconnectionDetected?.Invoke(this, new DisconnectionEventArgs(ex));
                 }
                 catch
                 {
@@ -355,10 +372,7 @@ namespace BriansUsbQuizBoxApi
                     {
                         DisconnectCleanup();
 
-                        if (DisconnectionDetected != null)
-                        {
-                            DisconnectionDetected.Invoke(this, new DisconnectionEventArgs(ex));
-                        }
+                        DisconnectionDetected?.Invoke(this, new DisconnectionEventArgs(ex));
                     }
                     catch
                     {
@@ -472,10 +486,7 @@ namespace BriansUsbQuizBoxApi
                 {
                     Disconnect();
 
-                    if (_api != null)
-                    {
-                        _api.Dispose();
-                    }
+                    _api?.Dispose();
                 }
 
                 _disposedValue = true;

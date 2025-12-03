@@ -29,17 +29,8 @@ namespace BriansUsbQuizBoxApi.StateMachines
             BuzzInCallback buzzInCallback,
             FiveSecondTimerExpiredCallback fiveSecondTimerExpiredCallback)
         {
-            if (buzzInCallback == null)
-            {
-                throw new ArgumentNullException(nameof(buzzInCallback));
-            }
-            if (fiveSecondTimerExpiredCallback == null)
-            {
-                throw new ArgumentNullException(nameof(fiveSecondTimerExpiredCallback));
-            }
-
-            _buzzInCallback = buzzInCallback;
-            _fiveSecondTimerExpiredCallback = fiveSecondTimerExpiredCallback;
+            _buzzInCallback = buzzInCallback ?? throw new ArgumentNullException(nameof(buzzInCallback));
+            _fiveSecondTimerExpiredCallback = fiveSecondTimerExpiredCallback ?? throw new ArgumentNullException(nameof(fiveSecondTimerExpiredCallback));
         }
 
         /// <summary>

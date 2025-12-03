@@ -11,7 +11,7 @@ namespace BriansUsbQuizBoxApi
         [Description("Brian's Quiz Box")]
         BriansQuizBox = 1,
 
-        [Description("Kirkman Basic Quizbox")]
+        [Description("Kirkman Basic Quizbox Plus")]
         KirkmanQuizBox = 2
     }
 }

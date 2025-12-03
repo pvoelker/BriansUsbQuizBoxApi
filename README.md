@@ -3,8 +3,8 @@
 ##  About
 
 An API for interfacing with USB quiz boxes using the Brian's Quiz Box communication protocol.  These include:
-- Brian's Quiz Boxes
-- Kirkman Basic Quiz Boxes (name TBD)
+- Brian's Quiz Box
+- Kirkman Basic Quizbox Plus (light gray bottom)
 
 ## How to Use
 
