@@ -45,6 +45,7 @@ namespace BriansUsbQuizBoxApi.StateMachines
         /// <summary>
         /// Process a new winner byte
         /// </summary>
+        /// <param name="statusByte">Status byte</param>
         /// <param name="winnerByte">Winner byte</param>
         public void Process(StatusByte statusByte, WinnerByte winnerByte)
         {

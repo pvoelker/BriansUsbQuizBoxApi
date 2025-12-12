@@ -2,9 +2,14 @@
 
 ##  About
 
-An API for interfacing with USB quiz boxes using the Brian's Quiz Box communication protocol.  These include:
+An API for interfacing with USB quiz boxes using the Brian's Quiz Box communication protocol.  At the time this documentation was written, these include:
 - Brian's Quiz Box
-- Kirkman Basic Quizbox Plus (light gray bottom)
+- Kirkman Basic Quizbox Plus (light gray bottom) -- https://www.quizequipment.com/
+
+## 'Kirkman Basic Quizbox Plus' Deviations and Departures
+
+- 'StopPaddleLockout' is not supported, however 'Reset' will clear a paddle lockout
+- Buzz in times are not gaurenteed to be the same as Brian's Quiz Box due to hardware differences. They are close, but may vary by a few milliseconds
 
 ## How to Use
 
@@ -127,9 +132,11 @@ Complete example located at: https://github.com/pvoelker/BriansUsbQuizBoxApi/tre
 
 ## Notes
 
+- Times between different quiz box models may vary slightly (within a few milliseconds) due to hardware differences
 - Do **not** block on events from QuizBoxApi.  This will prevent the background read thread from running
 - Do **not** make call command methods (like 'Reset') from events on QuizBoxApi. An exception will be thrown if this is attempted. Using Task.Run is a way to get around this limitation
 - On MacOS / Mac Catalyst if the application is running in a 'sandbox' (com.apple.security.app-sandbox), you will need to apply the 'com.apple.security.device.usb' entitlement. Otherwise quiz boxes will **not** be detected
+- It is recommended you use .NET Core 10 or later
 
 ## Credits
 

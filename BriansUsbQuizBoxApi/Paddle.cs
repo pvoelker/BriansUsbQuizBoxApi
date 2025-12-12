@@ -28,7 +28,7 @@ namespace BriansUsbQuizBoxApi
             _number = number;
         }
 
-        private PaddleColorEnum _color = PaddleColorEnum.None;
+        private readonly PaddleColorEnum _color = PaddleColorEnum.None;
 
         /// <summary>
         /// Paddle color
@@ -38,7 +38,7 @@ namespace BriansUsbQuizBoxApi
             get { return _color; }
         }
 
-        private PaddleNumberEnum _number = PaddleNumberEnum.None;
+        private readonly PaddleNumberEnum _number = PaddleNumberEnum.None;
 
         /// <summary>
         /// Paddle number
