@@ -6,12 +6,22 @@ An API for interfacing with USB quiz boxes using the Brian's Quiz Box communicat
 - Brian's Quiz Box
 - Kirkman Basic Quizbox Plus (light gray bottom) -- https://www.quizequipment.com/
 
+The goal of this API is to provide an easy to use interface for developers to create software that uses these quiz boxes.
+
+If there are any issues or feature requests, please contact me via my GitHub account: https://github.com/pvoelker/
+
 ## 'Kirkman Basic Quizbox Plus' Deviations and Departures
 
 - 'StopPaddleLockout' is not supported, however 'Reset' will clear a paddle lockout
-- Buzz in times are not gaurenteed to be the same as Brian's Quiz Box due to hardware differences. They are close, but may vary by a few milliseconds
+- Buzz in times are not guaranteed to be the same as Brian's Quiz Box due to hardware differences. They are close, but may vary by a few milliseconds
+
+## NuGet Package
+
+https://www.nuget.org/packages/BriansUsbQuizBoxApi/
 
 ## How to Use
+
+Add a reference to 'BriansUsbQuizBoxApi' NuGet package to your project.
 
 Create an instance of 'QuizBoxApi'. Register with events and then call 'Connect'.
 

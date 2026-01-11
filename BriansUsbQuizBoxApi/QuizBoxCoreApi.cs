@@ -238,7 +238,7 @@ namespace BriansUsbQuizBoxApi
 
         private HidDevice? GetBasicQuizboxPlusDevice()
         {
-            // NOTE: The PID for the Kirkman Quizboxes IS unique
+            // NOTE: The PID for the Kirkman Basic Quizbox Plus IS unique
             var devices = DeviceList.Local.GetHidDevices(0x04D8, 0xE5DC);
 
             HidDevice? box;
@@ -248,7 +248,7 @@ namespace BriansUsbQuizBoxApi
             }
             catch (InvalidOperationException ex)
             {
-                throw new MultipleDevicesException("More than one Kirkman Quiz Box is connected", ex);
+                throw new MultipleDevicesException("More than one Kirkman Basic Quizbox Plus is connected", ex);
             }
 
             return box;

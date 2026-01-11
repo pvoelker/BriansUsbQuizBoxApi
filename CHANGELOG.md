@@ -23,7 +23,9 @@ Track changes made to the API.
 - Updated projects to .NET Core 9 and latest dependencies (including HidSharp)
 - Enhanced 'Read Me' sample code
 
-## Version 1.1.0 (1.1.10.0)
+## Version 1.1.0-beta.2 (1.1.10.0)
 
-- Official release of Kirkman Basic Quizbox Plus support
+- Second beta of Kirkman Basic Quizbox Plus support
+- Documentation improvements for new support
+- General code cleanup
 - Update project to .NET Core 10
