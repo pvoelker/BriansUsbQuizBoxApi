@@ -45,27 +45,10 @@ namespace BriansUsbQuizBoxApi.StateMachines
             GameDoneCallback gameDoneCallback,
             BuzzInStatsCallback buzzInStatsCallback)
         {
-            if (gameStartedCallback == null)
-            {
-                throw new ArgumentNullException(nameof(gameStartedCallback));
-            }
-            if (gameLightOnCallback == null)
-            {
-                throw new ArgumentNullException(nameof(gameLightOnCallback));
-            }
-            if (gameDoneCallback == null)
-            {
-                throw new ArgumentNullException(nameof(gameDoneCallback));
-            }
-            if (buzzInStatsCallback == null)
-            {
-                throw new ArgumentNullException(nameof(buzzInStatsCallback));
-            }
-
-            _gameStartedCallback = gameStartedCallback;
-            _gameLightOnCallback = gameLightOnCallback;
-            _gameDoneCallback = gameDoneCallback;
-            _buzzInStatsCallback = buzzInStatsCallback;
+            _gameStartedCallback = gameStartedCallback ?? throw new ArgumentNullException(nameof(gameStartedCallback));
+            _gameLightOnCallback = gameLightOnCallback ?? throw new ArgumentNullException(nameof(gameLightOnCallback));
+            _gameDoneCallback = gameDoneCallback ?? throw new ArgumentNullException(nameof(gameDoneCallback));
+            _buzzInStatsCallback = buzzInStatsCallback ?? throw new ArgumentNullException(nameof(buzzInStatsCallback));
          }
 
         /// <summary>

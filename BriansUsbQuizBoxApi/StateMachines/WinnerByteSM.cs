@@ -29,17 +29,8 @@ namespace BriansUsbQuizBoxApi.StateMachines
             BuzzInCallback buzzInCallback,
             FiveSecondTimerExpiredCallback fiveSecondTimerExpiredCallback)
         {
-            if (buzzInCallback == null)
-            {
-                throw new ArgumentNullException(nameof(buzzInCallback));
-            }
-            if (fiveSecondTimerExpiredCallback == null)
-            {
-                throw new ArgumentNullException(nameof(fiveSecondTimerExpiredCallback));
-            }
-
-            _buzzInCallback = buzzInCallback;
-            _fiveSecondTimerExpiredCallback = fiveSecondTimerExpiredCallback;
+            _buzzInCallback = buzzInCallback ?? throw new ArgumentNullException(nameof(buzzInCallback));
+            _fiveSecondTimerExpiredCallback = fiveSecondTimerExpiredCallback ?? throw new ArgumentNullException(nameof(fiveSecondTimerExpiredCallback));
         }
 
         /// <summary>
@@ -54,6 +45,7 @@ namespace BriansUsbQuizBoxApi.StateMachines
         /// <summary>
         /// Process a new winner byte
         /// </summary>
+        /// <param name="statusByte">Status byte</param>
         /// <param name="winnerByte">Winner byte</param>
         public void Process(StatusByte statusByte, WinnerByte winnerByte)
         {

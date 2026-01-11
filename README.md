@@ -2,11 +2,26 @@
 
 ##  About
 
-An API for interfacing with USB quiz boxes using the Brian's Quiz Box communication protocol.  These include:
-- Brian's Quiz Boxes
-- Kirkman Basic Quiz Boxes (name TBD)
+An API for interfacing with USB quiz boxes using the Brian's Quiz Box communication protocol.  At the time this documentation was written, these include:
+- Brian's Quiz Box
+- Kirkman Basic Quizbox Plus (light gray bottom) -- https://www.quizequipment.com/
+
+The goal of this API is to provide an easy to use interface for developers to create software that uses these quiz boxes.
+
+If there are any issues or feature requests, please contact me via my GitHub account: https://github.com/pvoelker/
+
+## 'Kirkman Basic Quizbox Plus' Deviations and Departures
+
+- 'StopPaddleLockout' is not supported, however 'Reset' will clear a paddle lockout
+- Buzz in times are not guaranteed to be the same as Brian's Quiz Box due to hardware differences. They are close, but may vary by a few milliseconds
+
+## NuGet Package
+
+https://www.nuget.org/packages/BriansUsbQuizBoxApi/
 
 ## How to Use
+
+Add a reference to 'BriansUsbQuizBoxApi' NuGet package to your project.
 
 Create an instance of 'QuizBoxApi'. Register with events and then call 'Connect'.
 
@@ -127,9 +142,11 @@ Complete example located at: https://github.com/pvoelker/BriansUsbQuizBoxApi/tre
 
 ## Notes
 
+- Times between different quiz box models may vary slightly (within a few milliseconds) due to hardware differences
 - Do **not** block on events from QuizBoxApi.  This will prevent the background read thread from running
 - Do **not** make call command methods (like 'Reset') from events on QuizBoxApi. An exception will be thrown if this is attempted. Using Task.Run is a way to get around this limitation
 - On MacOS / Mac Catalyst if the application is running in a 'sandbox' (com.apple.security.app-sandbox), you will need to apply the 'com.apple.security.device.usb' entitlement. Otherwise quiz boxes will **not** be detected
+- It is recommended you use .NET Core 10 or later
 
 ## Credits
 

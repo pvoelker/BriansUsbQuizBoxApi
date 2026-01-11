@@ -49,7 +49,7 @@ namespace BriansUsbQuizBoxApi
                 }
                 else
                 {
-                    box = GetBasicQuizBoxDevice();
+                    box = GetBasicQuizboxPlusDevice();
                     if(box != null)
                     {
                         _connectedType = QuizBoxTypeEnum.KirkmanQuizBox;
@@ -236,19 +236,19 @@ namespace BriansUsbQuizBoxApi
             return box;
         }
 
-        private HidDevice? GetBasicQuizBoxDevice()
+        private HidDevice? GetBasicQuizboxPlusDevice()
         {
-            // NOTE: The PID for the Kirkman Quiz Boxes IS unique
+            // NOTE: The PID for the Kirkman Basic Quizbox Plus IS unique
             var devices = DeviceList.Local.GetHidDevices(0x04D8, 0xE5DC);
 
-            HidDevice? box = null;
+            HidDevice? box;
             try
             {
                 box = devices.SingleOrDefault();
             }
             catch (InvalidOperationException ex)
             {
-                throw new MultipleDevicesException("More than one Kirkman Quiz Box is connected", ex);
+                throw new MultipleDevicesException("More than one Kirkman Basic Quizbox Plus is connected", ex);
             }
 
             return box;

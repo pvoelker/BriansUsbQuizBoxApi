@@ -183,7 +183,18 @@ while(key.Key != ConsoleKey.Enter)
     else if (key.Key == ConsoleKey.E)
     {
         Console.WriteLine("Ending indefinite paddle lockout timer...");
-        api.StopPaddleLockout();
+        try
+        {
+            api.StopPaddleLockout();
+        }
+        catch(NotSupportedException ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+
+            Console.WriteLine("WARNING: " + ex.Message);
+
+            Console.ForegroundColor = ConsoleColor.White;
+        }
     }
     else if (key.Key == ConsoleKey.D1)
     {

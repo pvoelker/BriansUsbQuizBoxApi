@@ -33,22 +33,9 @@ namespace BriansUsbQuizBoxApi.StateMachines
             LockoutTimerStartedCallback lockoutTimerStartedCallback,
             LockoutTimerExpiredCallback lockoutTimerExpiredCallback)
         {
-            if (fiveSecondTimerStartedCallback == null)
-            {
-                throw new ArgumentNullException(nameof(fiveSecondTimerStartedCallback));
-            }
-            if (lockoutTimerStartedCallback == null)
-            {
-                throw new ArgumentNullException(nameof(lockoutTimerStartedCallback));
-            }
-            if (lockoutTimerExpiredCallback == null)
-            {
-                throw new ArgumentNullException(nameof(lockoutTimerExpiredCallback));
-            }
-
-            _fiveSecondTimerStartedCallback = fiveSecondTimerStartedCallback;
-            _lockoutTimerStartedCallback = lockoutTimerStartedCallback;
-            _lockoutTimerExpiredCallback = lockoutTimerExpiredCallback;
+            _fiveSecondTimerStartedCallback = fiveSecondTimerStartedCallback ?? throw new ArgumentNullException(nameof(fiveSecondTimerStartedCallback));
+            _lockoutTimerStartedCallback = lockoutTimerStartedCallback ?? throw new ArgumentNullException(nameof(lockoutTimerStartedCallback));
+            _lockoutTimerExpiredCallback = lockoutTimerExpiredCallback ?? throw new ArgumentNullException(nameof(lockoutTimerExpiredCallback));
         }
 
         /// <summary>
