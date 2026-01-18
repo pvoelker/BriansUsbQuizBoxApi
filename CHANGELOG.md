@@ -29,3 +29,7 @@ Track changes made to the API.
 - Documentation improvements for new support
 - General code cleanup
 - Update project to .NET Core 10
+
+## Version 1.1.0 (1.1.11.0)
+
+- Release version of Kirkman Basic Quizbox Plus support
