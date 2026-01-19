@@ -6,7 +6,7 @@ namespace BriansUsbQuizBoxApi.Helpers
     /// <summary>
     /// Various debugging helpers
     /// </summary>
-    static public class DebugHelpers
+    static internal class DebugHelpers
     {
         /// <summary>
         /// Debug write line with timestamp

@@ -4,14 +4,14 @@ using System;
 
 namespace BriansUsbQuizBoxApi.StateMachines
 {
-    public delegate void BuzzInCallback(Paddle paddle);
+    internal delegate void BuzzInCallback(Paddle paddle);
 
-    public delegate void FiveSecondTimerExpiredCallback();
+    internal delegate void FiveSecondTimerExpiredCallback();
 
     /// <summary>
     /// Winner Byte state machine
     /// </summary>
-    public class WinnerByteSM
+    internal class WinnerByteSM
     {
         private readonly BuzzInCallback _buzzInCallback;
         private readonly FiveSecondTimerExpiredCallback _fiveSecondTimerExpiredCallback;

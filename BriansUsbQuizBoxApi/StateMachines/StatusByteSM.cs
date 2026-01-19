@@ -3,16 +3,16 @@ using System;
 
 namespace BriansUsbQuizBoxApi.StateMachines
 {
-    public delegate void FiveSecondTimerStartedCallback();
+    internal delegate void FiveSecondTimerStartedCallback();
 
-    public delegate void LockoutTimerStartedCallback();
+    internal delegate void LockoutTimerStartedCallback();
 
-    public delegate void LockoutTimerExpiredCallback();
+    internal delegate void LockoutTimerExpiredCallback();
 
     /// <summary>
     /// Status Byte state machine
     /// </summary>
-    public class StatusByteSM
+    internal class StatusByteSM
     {
         private readonly FiveSecondTimerStartedCallback _fiveSecondTimerStartedCallback;
         private readonly LockoutTimerStartedCallback _lockoutTimerStartedCallback;

@@ -7,14 +7,38 @@ namespace BriansUsbQuizBoxApi
     /// </summary>
     public class Paddle : IEquatable<Paddle>
     {
+        /// <summary>
+        /// Represents red paddle 1
+        /// </summary>
         static readonly public Paddle RED_1 = new Paddle(PaddleColorEnum.Red, PaddleNumberEnum.One);
+        /// <summary>
+        /// Represents red paddle 2
+        /// </summary>
         static readonly public Paddle RED_2 = new Paddle(PaddleColorEnum.Red, PaddleNumberEnum.Two);
+        /// <summary>
+        /// Represents red paddle 3
+        /// </summary>
         static readonly public Paddle RED_3 = new Paddle(PaddleColorEnum.Red, PaddleNumberEnum.Three);
+        /// <summary>
+        /// Represents red paddle 4
+        /// </summary>
         static readonly public Paddle RED_4 = new Paddle(PaddleColorEnum.Red, PaddleNumberEnum.Four);
 
+        /// <summary>
+        /// Represents green paddle 1
+        /// </summary>
         static readonly public Paddle GREEN_1 = new Paddle(PaddleColorEnum.Green, PaddleNumberEnum.One);
+        /// <summary>
+        /// Represents green paddle 2
+        /// </summary>
         static readonly public Paddle GREEN_2 = new Paddle(PaddleColorEnum.Green, PaddleNumberEnum.Two);
+        /// <summary>
+        /// Represents green paddle 3
+        /// </summary>
         static readonly public Paddle GREEN_3 = new Paddle(PaddleColorEnum.Green, PaddleNumberEnum.Three);
+        /// <summary>
+        /// Represents green paddle 4
+        /// </summary>
         static readonly public Paddle GREEN_4 = new Paddle(PaddleColorEnum.Green, PaddleNumberEnum.Four);
 
         /// <summary>

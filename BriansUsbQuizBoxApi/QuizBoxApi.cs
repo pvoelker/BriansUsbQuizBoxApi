@@ -159,17 +159,11 @@ namespace BriansUsbQuizBoxApi
                     _doneComplete?.WaitOne();
                 }
 
-                if (_done != null)
-                {
-                    _done.Dispose();
-                    _done = null;
-                }
+                _done?.Dispose();
+                _done = null;
 
-                if (_doneComplete != null)
-                {
-                    _doneComplete.Dispose();
-                    _doneComplete = null;
-                }
+                _doneComplete?.Dispose();
+                _doneComplete = null;
 
                 _threadId = null;
             }
@@ -386,27 +380,18 @@ namespace BriansUsbQuizBoxApi
                 }
             }
 
-            if (_doneComplete != null)
-            {
-                _doneComplete.Set();
-            }
+            _doneComplete?.Set();
 
             _api.Disconnect();
         }
 
         private void DisconnectCleanup()
         {
-            if (_done != null)
-            {
-                _done.Dispose();
-                _done = null;
-            }
+            _done?.Dispose();
+            _done = null;
 
-            if (_doneComplete != null)
-            {
-                _doneComplete.Dispose();
-                _doneComplete = null;
-            }
+            _doneComplete?.Dispose();
+            _doneComplete = null;
 
             _threadId = null;
         }

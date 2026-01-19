@@ -4,15 +4,15 @@ using System;
 
 namespace BriansUsbQuizBoxApi.StateMachines
 {
-    public delegate void GameStartedCallback();
+    internal delegate void GameStartedCallback();
 
-    public delegate void GameLightOnCallback();
+    internal delegate void GameLightOnCallback();
 
-    public delegate void GameDoneCallback(Paddle? winner,
+    internal delegate void GameDoneCallback(Paddle? winner,
         decimal? Red1Time, decimal? Red2Time, decimal? Red3Time, decimal? Red4Time,
         decimal? Green1Time, decimal? Green2Time, decimal? Green3Time, decimal? Green4Time);
 
-    public delegate void BuzzInStatsCallback(Paddle? winner,
+    internal delegate void BuzzInStatsCallback(Paddle? winner,
         decimal? red1TimeDelta, decimal? red2TimeDelta, decimal? red3TimeDelta, decimal? red4TimeDelta,
         decimal? green1TimeDelta, decimal? green2TimeDelta, decimal? green3TimeDelta, decimal? green4TimeDelta);
 
@@ -21,7 +21,7 @@ namespace BriansUsbQuizBoxApi.StateMachines
     /// <summary>
     /// Status Byte state machine for reaction time game
     /// </summary>
-    public class GameStatusByteSM
+    internal class GameStatusByteSM
     {
         private readonly GameStartedCallback _gameStartedCallback;
         private readonly GameLightOnCallback _gameLightOnCallback;

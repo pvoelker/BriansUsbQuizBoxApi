@@ -6,7 +6,7 @@ namespace BriansUsbQuizBoxApi.Helpers
     /// <summary>
     /// Various time related helpers
     /// </summary>
-    static public class TimeHelpers
+    static internal class TimeHelpers
     {
         static readonly private decimal COUNTER_INCREMENT_VALUE = 1.02m;
 
