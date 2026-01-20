@@ -8,9 +8,44 @@ namespace BriansUsbQuizBoxApi
     public class BuzzInStatsEventArgs : EventArgs
     {
         /// <summary>
-        /// Winner paddle that was pressed. Null is no winner
+        /// First place winner paddle that was pressed. Null is no winner
         /// </summary>
         public Paddle? Winner { get; private set; }
+
+        /// <summary>
+        /// Second place winner paddle that was pressed. Null is no winner
+        /// </summary>
+        public Paddle? Winner2 { get; private set; }
+
+        /// <summary>
+        /// Third place winner paddle that was pressed. Null is no winner
+        /// </summary>
+        public Paddle? Winner3 { get; private set; }
+
+        /// <summary>
+        /// Fourth place winner paddle that was pressed. Null is no winner
+        /// </summary>
+        public Paddle? Winner4 { get; private set; }
+
+        /// <summary>
+        /// Fifth place winner paddle that was pressed. Null is no winner
+        /// </summary>
+        public Paddle? Winner5 { get; private set; }
+
+        /// <summary>
+        /// Sixth place winner paddle that was pressed. Null is no winner
+        /// </summary>
+        public Paddle? Winner6 { get; private set; }
+
+        /// <summary>
+        /// Seventh place winner paddle that was pressed. Null is no winner
+        /// </summary>
+        public Paddle? Winner7 { get; private set; }
+
+        /// <summary>
+        /// Eigth place winner paddle that was pressed. Null is no winner
+        /// </summary>
+        public Paddle? Winner8 { get; private set; }
 
         /// <summary>
         /// Milliseconds from first buzz in (paddle press) for red 1 paddle. Null if no buzz in for red 1 paddle
@@ -55,7 +90,14 @@ namespace BriansUsbQuizBoxApi
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="winner">Winner paddle that was pressed. Null if no winner</param>
+        /// <param name="winner1">First place winner paddle that was pressed. Null if no winner</param>
+        /// <param name="winner2">Second winner paddle that was pressed. Null if no winner</param>
+        /// <param name="winner3">Third winner paddle that was pressed. Null if no winner</param>
+        /// <param name="winner4">Fourth winner paddle that was pressed. Null if no winner</param>
+        /// <param name="winner5">Fifth winner paddle that was pressed. Null if no winner</param>
+        /// <param name="winner6">Sixth winner paddle that was pressed. Null if no winner</param>
+        /// <param name="winner7">Seventh winner paddle that was pressed. Null if no winner</param>
+        /// <param name="winner8">Eight winner paddle that was pressed. Null if no winner</param>
         /// <param name="red1TimeDelta">Milliseconds from first buzz in (paddle press) for red 1 paddle. Null if no buzz in for red 1 paddle</param>
         /// <param name="red2TimeDelta">Milliseconds from first buzz in (paddle press) for red 2 paddle. Null if no buzz in for red 1 paddle</param>
         /// <param name="red3TimeDelta">Milliseconds from first buzz in (paddle press) for red 3 paddle. Null if no buzz in for red 1 paddle</param>
@@ -64,11 +106,19 @@ namespace BriansUsbQuizBoxApi
         /// <param name="green2TimeDelta">Milliseconds from first buzz in (paddle press) for green 2 paddle. Null if no buzz in for red 1 paddle</param>
         /// <param name="green3TimeDelta">Milliseconds from first buzz in (paddle press) for green 3 paddle. Null if no buzz in for red 1 paddle</param>
         /// <param name="green4TimeDelta">Milliseconds from first buzz in (paddle press) for green 4 paddle. Null if no buzz in for red 1 paddle</param>
-        public BuzzInStatsEventArgs(Paddle? winner,
+        public BuzzInStatsEventArgs(Paddle? winner1, Paddle? winner2, Paddle? winner3, Paddle? winner4,
+            Paddle? winner5, Paddle? winner6, Paddle? winner7, Paddle? winner8,
             decimal? red1TimeDelta, decimal? red2TimeDelta, decimal? red3TimeDelta, decimal? red4TimeDelta,
             decimal? green1TimeDelta, decimal? green2TimeDelta, decimal? green3TimeDelta, decimal? green4TimeDelta)
         {
-            Winner = winner;
+            Winner = winner1;
+            Winner2 = winner2;
+            Winner3 = winner3;
+            Winner4 = winner4;
+            Winner5 = winner5;
+            Winner6 = winner6;
+            Winner7 = winner7;
+            Winner8 = winner8;
             Red1TimeDelta = red1TimeDelta;
             Red2TimeDelta = red2TimeDelta;
             Red3TimeDelta = red3TimeDelta;

@@ -30,6 +30,10 @@ Track changes made to the API.
 - General code cleanup
 - Update project to .NET Core 10
 
-## Version 1.1.0 (1.1.11.0)
+## Version 1.1.0-beta.3 (1.1.11.0)
 
-- Release version of Kirkman Basic Quizbox Plus support
+- Third beta of Kirkman Basic Quizbox Plus support
+- Implementation of communication protocol version 1 (document version 1.2). This adds:
+	- Communication protocol version number byte
+	- Additional winner bytes for second through eigth place
+- Add additional unit test cases for new protocol features

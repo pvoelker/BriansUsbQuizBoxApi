@@ -6,9 +6,9 @@ using System;
 namespace BriansUsbQuizBoxApi.Tests.StateMachines
 {
     /// <summary>
-    /// Game status byte state machine tests for version 0 protocol
+    /// Game status byte state machine tests for version 1 protocol
     /// </summary>
-    public class GameStatusByteSMTests
+    public class GameStatusByteSMTestsV1
     {
         [Fact]
         public void Idle()
@@ -18,7 +18,10 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
                 (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
                 (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
 
-            sm.Process(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+            sm.Process(new BoxStatusReport(StatusByte.IDLE_MODE,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                0, 0, 0, 0, 0, 0, 0, 0));
         }
 
         [Fact]
@@ -31,7 +34,10 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
                 (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
                 (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
 
-            sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                0, 0, 0, 0, 0, 0, 0, 0));
 
             callbackCalled.Should().BeTrue();
         }
@@ -46,8 +52,14 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
                 (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
                 (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
 
-            sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-            sm.Process(new BoxStatusReport(StatusByte.GAME_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                0, 0, 0, 0, 0, 0, 0, 0));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_RUNNING,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                0, 0, 0, 0, 0, 0, 0, 0));
 
             callbackCalled.Should().BeTrue();
         }
@@ -62,9 +74,18 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
                 (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => callbackCalled = true,
                 (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
 
-            sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-            sm.Process(new BoxStatusReport(StatusByte.GAME_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                0, 0, 0, 0, 0, 0, 0, 0));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_RUNNING,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                0, 0, 0, 0, 0, 0, 0, 0));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                0, 0, 0, 0, 0, 0, 0, 0));
 
             callbackCalled.Should().BeTrue();
         }
@@ -98,20 +119,32 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
                 },
                 (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
 
-            sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-            sm.Process(new BoxStatusReport(StatusByte.GAME_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.GREEN_4, 1.0m, 2.0m, 3.0m, 4.0m, 5.0m, 6.0m, 7.0m, null));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_PRESTART,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                0, 0, 0, 0, 0, 0, 0, 0));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_RUNNING,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                0, 0, 0, 0, 0, 0, 0, 0));
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                0, 0, 0, 0, 0, 0, 0, 0));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE,
+                WinnerByte.GREEN_4, WinnerByte.RED_4, WinnerByte.GREEN_3, WinnerByte.RED_3,
+                WinnerByte.GREEN_2, WinnerByte.RED_2, WinnerByte.GREEN_1, WinnerByte.RED_1,
+                1.0m, 2.0m, 3.0m, 4.0m, 5.0m, 6.0m, 7.0m, null));
 
             callbackCalled.Should().BeTrue();
             pd1.Should().Be(Paddle.GREEN_4);
-            pd2.Should().BeNull();
-            pd3.Should().BeNull();
-            pd4.Should().BeNull();
-            pd5.Should().BeNull();
-            pd6.Should().BeNull();
-            pd7.Should().BeNull();
-            pd8.Should().BeNull();
+            pd2.Should().Be(Paddle.RED_4);
+            pd3.Should().Be(Paddle.GREEN_3);
+            pd4.Should().Be(Paddle.RED_3);
+            pd5.Should().Be(Paddle.GREEN_2);
+            pd6.Should().Be(Paddle.RED_2);
+            pd7.Should().Be(Paddle.GREEN_1);
+            pd8.Should().Be(Paddle.RED_1);
             cr1.Should().Be(1.0m);
             cr2.Should().Be(2.0m);
             cr3.Should().Be(3.0m);
@@ -152,16 +185,19 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
                     cg4 = g4;
                 });
 
-            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.RED_4, null, 1.0m, null, 0, null, 1.2m, null, 999.9m));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE,
+                WinnerByte.RED_4, WinnerByte.NO_VALID_WINNER, WinnerByte.RED_3, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.RED_2, WinnerByte.NO_VALID_WINNER, WinnerByte.RED_1, WinnerByte.NO_VALID_WINNER,
+                null, 1.0m, null, 0, null, 1.2m, null, 999.9m));
 
             callbackCalled.Should().BeTrue();
             pd1.Should().Be(Paddle.RED_4);
             pd2.Should().BeNull();
-            pd3.Should().BeNull();
+            pd3.Should().Be(Paddle.RED_3);
             pd4.Should().BeNull();
-            pd5.Should().BeNull();
+            pd5.Should().Be(Paddle.RED_2);
             pd6.Should().BeNull();
-            pd7.Should().BeNull();
+            pd7.Should().Be(Paddle.RED_1);
             pd8.Should().BeNull();
             cr1.Should().BeNull();
             cr2.Should().Be(1.0m);
@@ -203,7 +239,10 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
                     cg4 = g4;
                 });
 
-            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.NO_VALID_WINNER, null, null, null, null, null, null, null, null));
+            sm.Process(new BoxStatusReport(StatusByte.GAME_DONE,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                null, null, null, null, null, null, null, null));
 
             callbackCalled.Should().BeTrue();
             pd1.Should().BeNull();
@@ -232,7 +271,10 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
                 (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"),
                 (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => Assert.Fail("This should not be called"));
 
-            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_4, 0, 0, 0, 0, 0, 0, 0, 0));
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN,
+                WinnerByte.RED_4, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                0, 0, 0, 0, 0, 0, 0, 0));
         }
     }
 }

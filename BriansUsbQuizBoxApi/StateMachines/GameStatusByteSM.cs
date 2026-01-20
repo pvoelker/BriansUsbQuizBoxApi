@@ -8,11 +8,13 @@ namespace BriansUsbQuizBoxApi.StateMachines
 
     internal delegate void GameLightOnCallback();
 
-    internal delegate void GameDoneCallback(Paddle? winner,
+    internal delegate void GameDoneCallback(Paddle? winner1, Paddle? winner2, Paddle? winner3, Paddle? winner4,
+        Paddle? winner5, Paddle? winner6, Paddle? winner7, Paddle? winner8,
         decimal? Red1Time, decimal? Red2Time, decimal? Red3Time, decimal? Red4Time,
         decimal? Green1Time, decimal? Green2Time, decimal? Green3Time, decimal? Green4Time);
 
-    internal delegate void BuzzInStatsCallback(Paddle? winner,
+    internal delegate void BuzzInStatsCallback(Paddle? winner1, Paddle? winner2, Paddle? winner3, Paddle? winner4,
+        Paddle? winner5, Paddle? winner6, Paddle? winner7, Paddle? winner8,
         decimal? red1TimeDelta, decimal? red2TimeDelta, decimal? red3TimeDelta, decimal? red4TimeDelta,
         decimal? green1TimeDelta, decimal? green2TimeDelta, decimal? green3TimeDelta, decimal? green4TimeDelta);
 
@@ -93,9 +95,17 @@ namespace BriansUsbQuizBoxApi.StateMachines
                 {
                     if (_lastGameState != QuizBoxGameState.Done)
                     {
-                        if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddle))
+                        if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddle1)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner2, out var paddle2)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner3, out var paddle3)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner4, out var paddle4)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner5, out var paddle5)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner6, out var paddle6)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner7, out var paddle7)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner8, out var paddle8))
                         {
-                            _gameDoneCallback(paddle,
+                            _gameDoneCallback(paddle1, paddle2, paddle3, paddle4,
+                                paddle5, paddle6, paddle7, paddle8,
                                 status.Red1Time,
                                 status.Red2Time,
                                 status.Red3Time,
@@ -114,9 +124,17 @@ namespace BriansUsbQuizBoxApi.StateMachines
                 {
                     if (_buzzInState == false)
                     {
-                        if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddle))
+                        if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddle1)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner2, out var paddle2)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner3, out var paddle3)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner4, out var paddle4)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner5, out var paddle5)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner6, out var paddle6)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner7, out var paddle7)
+                            && PaddleHelpers.TryParseWinnerByte(status.Winner8, out var paddle8))
                         {
-                            _buzzInStatsCallback(paddle,
+                            _buzzInStatsCallback(paddle1, paddle2, paddle3, paddle4,
+                                paddle5, paddle6, paddle7, paddle8,
                                 (status.Winner == WinnerByte.RED_1) ? 0 : status.Red1Time,
                                 (status.Winner == WinnerByte.RED_2) ? 0 : status.Red2Time,
                                 (status.Winner == WinnerByte.RED_3) ? 0 : status.Red3Time,
