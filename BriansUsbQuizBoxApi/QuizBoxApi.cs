@@ -21,6 +21,11 @@ namespace BriansUsbQuizBoxApi
 
         private byte? _protocolVersion = null;
 
+        /// <summary>
+        /// True if the protocol version supports additional winner information (beyond first place winner)
+        /// </summary>
+        private bool _hasAdditionalWinnerInfo = false;
+
         private readonly WinnerByteSM _winnerByteSM;
         private readonly StatusByteSM _statusByteSM;
         private readonly GameStatusByteSM _gameStatusByteSM;
@@ -90,8 +95,8 @@ namespace BriansUsbQuizBoxApi
             _gameStatusByteSM = new GameStatusByteSM(
                 () => GameStarted?.Invoke(this, null),
                 () => GameLightOn?.Invoke(this, null),
-                (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => GameDone?.Invoke(this, new GameDoneEventArgs(p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4)),
-                (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => BuzzInStats?.Invoke(this, new BuzzInStatsEventArgs(p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4))
+                (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => GameDone?.Invoke(this, new GameDoneEventArgs(_hasAdditionalWinnerInfo, p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4)),
+                (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => BuzzInStats?.Invoke(this, new BuzzInStatsEventArgs(_hasAdditionalWinnerInfo, p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4))
             );
         }
 
@@ -439,6 +444,7 @@ namespace BriansUsbQuizBoxApi
             if (_protocolVersion.HasValue == false)
             {
                 _protocolVersion = status.ProtocolVersion;
+                _hasAdditionalWinnerInfo = _protocolVersion.Value > 0;
                 bConnectionComplete = true;
             }
 
@@ -484,7 +490,7 @@ namespace BriansUsbQuizBoxApi
 
             if (bConnectionComplete)
             {
-                ConnectionComplete?.Invoke(this, new ConnectionCompleteEventArgs(_protocolVersion.Value));
+                ConnectionComplete?.Invoke(this, new ConnectionCompleteEventArgs(_protocolVersion.Value, _hasAdditionalWinnerInfo));
             }
         }
 

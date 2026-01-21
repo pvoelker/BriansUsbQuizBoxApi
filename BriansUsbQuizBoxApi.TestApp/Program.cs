@@ -24,7 +24,8 @@ void Api_ConnectionComplete(object? sender, ConnectionCompleteEventArgs e)
     Console.ForegroundColor = ConsoleColor.Cyan;
 
     Console.WriteLine($"Connection complete...");
-    Console.WriteLine($"Communication protocol version: {api.ProtocolVersion}");
+    Console.WriteLine($"Communication protocol version: {e.ProtocolVersion}");
+    Console.WriteLine($"Has additional winner information: {e.HasAdditionalWinnerInfo}");
 
     Console.ForegroundColor = ConsoleColor.White;
 }
@@ -63,6 +64,7 @@ void Api_GameDone(object? sender, GameDoneEventArgs e)
     Console.ForegroundColor = ConsoleColor.Magenta;
 
     Console.WriteLine("Game done!");
+    Console.WriteLine($"Additional Winner Info = {e.HasAdditionalWinnerInfo}");
     Console.WriteLine($"First Place Winner = {(e.Winner != null ? e.Winner : "-none-")}");
     Console.WriteLine($"Second Place Winner = {(e.Winner2 != null ? e.Winner2 : "-none-")}");
     Console.WriteLine($"Third Place Winner = {(e.Winner3 != null ? e.Winner3 : "-none-")}");
@@ -91,6 +93,7 @@ void Api_BuzzInStats(object? sender, BuzzInStatsEventArgs e)
     Console.ForegroundColor = ConsoleColor.DarkCyan;
 
     Console.WriteLine("Buzz in statistics:");
+    Console.WriteLine($"Additional Winner Info = {e.HasAdditionalWinnerInfo}");
     Console.WriteLine($"First Place Winner = {(e.Winner != null ? e.Winner : "-none-")}");
     Console.WriteLine($"Second Place Winner = {(e.Winner2 != null ? e.Winner2 : "-none-")}");
     Console.WriteLine($"Third Place Winner = {(e.Winner3 != null ? e.Winner3 : "-none-")}");

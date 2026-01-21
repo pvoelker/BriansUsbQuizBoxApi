@@ -8,9 +8,14 @@ namespace BriansUsbQuizBoxApi
     public class GameDoneEventArgs : EventArgs
     {
         /// <summary>
-        /// First place winner paddle that was pressed. Null is no winner
+        /// First place winner paddle that was pressed. Null if no winner
         /// </summary>
         public Paddle? Winner { get; private set; }
+
+        /// <summary>
+        /// True if additional winner information (beyond first place winner) is included, otherwise false
+        /// </summary>
+        public bool HasAdditionalWinnerInfo { get; private set; }
 
         /// <summary>
         /// Second place winner paddle that was pressed. Null if no winner
@@ -90,6 +95,7 @@ namespace BriansUsbQuizBoxApi
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="additionalWinnerInfo">True if additional winner info (beyond first place winner) is included, other false</param>
         /// <param name="winner1">First place winner paddle that was pressed. Null if no winner</param>
         /// <param name="winner2">Second winner paddle that was pressed. Null if no winner</param>
         /// <param name="winner3">Third winner paddle that was pressed. Null if no winner</param>
@@ -106,11 +112,13 @@ namespace BriansUsbQuizBoxApi
         /// <param name="green2Time">Reaction time for green 2 paddle in milliseconds. Null if no buzz in (paddle press) for green 2 paddle</param>
         /// <param name="green3Time">Reaction time for green 3 paddle in milliseconds. Null if no buzz in (paddle press) for green 3 paddle</param>
         /// <param name="green4Time">Reaction time for green 4 paddle in milliseconds. Null if no buzz in (paddle press) for green 4 paddle</param>
-        public GameDoneEventArgs(Paddle? winner1, Paddle? winner2, Paddle? winner3, Paddle? winner4,
+        public GameDoneEventArgs(bool additionalWinnerInfo,
+            Paddle? winner1, Paddle? winner2, Paddle? winner3, Paddle? winner4,
             Paddle? winner5, Paddle? winner6, Paddle? winner7, Paddle? winner8,
             decimal? red1Time, decimal? red2Time, decimal? red3Time, decimal? red4Time,
             decimal? green1Time, decimal? green2Time, decimal? green3Time, decimal? green4Time)
         {
+            HasAdditionalWinnerInfo = additionalWinnerInfo;
             Winner = winner1;
             Winner2 = winner2;
             Winner3 = winner3;
