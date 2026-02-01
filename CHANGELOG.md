@@ -35,5 +35,5 @@ Track changes made to the API.
 - Third beta of Kirkman Basic Quizbox Plus support
 - Implementation of communication protocol version 1 (document version 1.2). This adds:
 	- Communication protocol version number byte
-	- Additional winner bytes for second through eigth place
+	- Additional winner bytes for second through eighth place
 - Add additional unit test cases for new protocol features
