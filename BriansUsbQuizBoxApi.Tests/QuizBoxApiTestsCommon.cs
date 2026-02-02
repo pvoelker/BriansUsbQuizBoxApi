@@ -7,7 +7,7 @@ using System;
 namespace BriansUsbQuizBoxApi.Tests
 {
     /// <summary>
-    /// Quiz Box API Tests for all protocol verions
+    /// Quiz Box API Tests for all protocol versions
     /// 
     /// NOTE: If you are seeing problems with tests not running, make sure to check the
     ///       'test output'.  Exceptions thrown into the 'I/O thread' sometimes get
