@@ -7,6 +7,7 @@ Console.ForegroundColor = ConsoleColor.White;
 
 using var api = new QuizBoxApi(new QuizBoxCoreApi());
 
+api.ConnectionComplete += Api_ConnectionComplete;
 api.BuzzIn += Api_BuzzIn;
 api.FiveSecondTimerStarted += Api_FiveSecondTimerStarted;
 api.FiveSecondTimerExpired += Api_FiveSecondTimerExpired;
@@ -17,6 +18,18 @@ api.GameLightOn += Api_GameLightOn;
 api.GameDone += Api_GameDone;
 api.BuzzInStats += Api_BuzzInStats;
 api.DisconnectionDetected += Api_DisconnectionDetected;
+
+void Api_ConnectionComplete(object? sender, ConnectionCompleteEventArgs e)
+{
+    Console.ForegroundColor = ConsoleColor.Cyan;
+
+    Console.WriteLine($"Connection complete...");
+    Console.WriteLine($"Communication protocol version: {e.ProtocolVersion}");
+    Console.WriteLine($"Has additional winner information: {e.HasAdditionalWinnerInfo}");
+
+    Console.ForegroundColor = ConsoleColor.White;
+}
+
 
 void Api_DisconnectionDetected(object? sender, DisconnectionEventArgs e)
 {
@@ -51,6 +64,15 @@ void Api_GameDone(object? sender, GameDoneEventArgs e)
     Console.ForegroundColor = ConsoleColor.Magenta;
 
     Console.WriteLine("Game done!");
+    Console.WriteLine($"Additional Winner Info = {e.HasAdditionalWinnerInfo}");
+    Console.WriteLine($"First Place Winner = {(e.Winner != null ? e.Winner : "-none-")}");
+    Console.WriteLine($"Second Place Winner = {(e.Winner2 != null ? e.Winner2 : "-none-")}");
+    Console.WriteLine($"Third Place Winner = {(e.Winner3 != null ? e.Winner3 : "-none-")}");
+    Console.WriteLine($"Fourth Place Winner = {(e.Winner4 != null ? e.Winner4 : "-none-")}");
+    Console.WriteLine($"Fifth Place Winner = {(e.Winner5 != null ? e.Winner5 : "-none-")}");
+    Console.WriteLine($"Sixth Place Winner = {(e.Winner6 != null ? e.Winner6 : "-none-")}");
+    Console.WriteLine($"Seventh Place Winner = {(e.Winner7 != null ? e.Winner7 : "-none-")}");
+    Console.WriteLine($"Eigth Place Winner = {(e.Winner8 != null ? e.Winner8 : "-none-")}");
     Console.WriteLine($"Red 1 Time = {(e.Red1Time.HasValue ? e.Red1Time + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Red 2 Time = {(e.Red2Time.HasValue ? e.Red2Time + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Red 3 Time = {(e.Red3Time.HasValue ? e.Red3Time + "ms" : "-no buzz in-")}");
@@ -71,6 +93,15 @@ void Api_BuzzInStats(object? sender, BuzzInStatsEventArgs e)
     Console.ForegroundColor = ConsoleColor.DarkCyan;
 
     Console.WriteLine("Buzz in statistics:");
+    Console.WriteLine($"Additional Winner Info = {e.HasAdditionalWinnerInfo}");
+    Console.WriteLine($"First Place Winner = {(e.Winner != null ? e.Winner : "-none-")}");
+    Console.WriteLine($"Second Place Winner = {(e.Winner2 != null ? e.Winner2 : "-none-")}");
+    Console.WriteLine($"Third Place Winner = {(e.Winner3 != null ? e.Winner3 : "-none-")}");
+    Console.WriteLine($"Fourth Place Winner = {(e.Winner4 != null ? e.Winner4 : "-none-")}");
+    Console.WriteLine($"Fifth Place Winner = {(e.Winner5 != null ? e.Winner5 : "-none-")}");
+    Console.WriteLine($"Sixth Place Winner = {(e.Winner6 != null ? e.Winner6 : "-none-")}");
+    Console.WriteLine($"Seventh Place Winner = {(e.Winner7 != null ? e.Winner7 : "-none-")}");
+    Console.WriteLine($"Eigth Place Winner = {(e.Winner8 != null ? e.Winner8 : "-none-")}");
     Console.WriteLine($"Red 1 Time = {(e.Red1TimeDelta.HasValue ? e.Red1TimeDelta + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Red 2 Time = {(e.Red2TimeDelta.HasValue ? e.Red2TimeDelta + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Red 3 Time = {(e.Red3TimeDelta.HasValue ? e.Red3TimeDelta + "ms" : "-no buzz in-")}");

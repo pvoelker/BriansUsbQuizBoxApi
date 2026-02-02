@@ -10,6 +10,11 @@ namespace BriansUsbQuizBoxApi
         #region Events
 
         /// <summary>
+        /// Event fired when a connection to a quiz box is complete
+        /// </summary>
+        event EventHandler<ConnectionCompleteEventArgs>? ConnectionComplete;
+
+        /// <summary>
         /// Event fired when someone buzzes in
         /// </summary>
         event EventHandler<BuzzInEventArgs>? BuzzIn;
@@ -78,6 +83,11 @@ namespace BriansUsbQuizBoxApi
         /// Type of quiz box currently connected to, null if not connected to a quiz box
         /// </summary>
         QuizBoxTypeEnum? ConnectedQuizBoxType { get; }
+
+        /// <summary>
+        /// Communication protocol version for the connected quiz box, null if not connected to a quiz box
+        /// </summary>
+        byte? ProtocolVersion { get; }
 
         /// <summary>
         /// Attempt to connect to a quiz box

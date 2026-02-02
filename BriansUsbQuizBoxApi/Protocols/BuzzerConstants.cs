@@ -5,7 +5,7 @@ namespace BriansUsbQuizBoxApi.Protocols
     /// <summary>
     /// Miscellaneous constants for quiz box HID reports
     /// </summary>
-    public static class BuzzerConstants
+    internal static class BuzzerConstants
     {
         /// <summary>
         /// Quiz box input and output report length

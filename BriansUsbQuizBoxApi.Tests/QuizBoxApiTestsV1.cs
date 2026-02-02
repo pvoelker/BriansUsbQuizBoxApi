@@ -6,13 +6,13 @@ using System;
 namespace BriansUsbQuizBoxApi.Tests
 {
     /// <summary>
-    /// Quiz Box API Tests for communication protocol version 0
+    /// Quiz Box API Tests for communication protocol version 1
     /// 
     /// NOTE: If you are seeing problems with tests not running, make sure to check the
     ///       'test output'.  Exceptions thrown into the 'I/O thread' sometimes get
     ///       swallowed up...
     /// </summary>
-    public class QuizBoxApiTests
+    public class QuizBoxApiTestsV1
     {
         [Fact]
         public void BuzzIn()
@@ -53,7 +53,10 @@ namespace BriansUsbQuizBoxApi.Tests
 
                 Thread.Sleep(20);
 
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.RED_1, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE,
+                    WinnerByte.RED_1, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
 
                 Thread.Sleep(20); // Allow read thread to run a bit
             }
@@ -100,7 +103,10 @@ namespace BriansUsbQuizBoxApi.Tests
 
                 Thread.Sleep(20);
 
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.RUNNING_5_SEC_TIMER, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.RUNNING_5_SEC_TIMER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
 
                 Thread.Sleep(20); // Allow read thread to run a bit
             }
@@ -147,7 +153,10 @@ namespace BriansUsbQuizBoxApi.Tests
 
                 Thread.Sleep(20);
 
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.FIVE_SEC_TIMER_EXPIRED, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE,
+                    WinnerByte.FIVE_SEC_TIMER_EXPIRED, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
 
                 Thread.Sleep(20); // Allow read thread to run a bit
             }
@@ -195,14 +204,34 @@ namespace BriansUsbQuizBoxApi.Tests
                 Thread.Sleep(20);
 
                 // Queue up a bunch of these so we never hit the 'lockout expired' state
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
 
                 Thread.Sleep(20); // Allow read thread to run a bit
             }
@@ -249,14 +278,38 @@ namespace BriansUsbQuizBoxApi.Tests
 
                 Thread.Sleep(20);
 
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.EXTENDED_TIMER_RUNNING,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.IDLE_MODE,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
 
                 Thread.Sleep(20); // Allow read thread to run a bit
             }
@@ -303,7 +356,10 @@ namespace BriansUsbQuizBoxApi.Tests
 
                 Thread.Sleep(20);
 
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_PRESTART,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
 
                 Thread.Sleep(20); // Allow read thread to run a bit
             }
@@ -350,7 +406,10 @@ namespace BriansUsbQuizBoxApi.Tests
 
                 Thread.Sleep(20);
 
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_RUNNING,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
 
                 Thread.Sleep(20); // Allow read thread to run a bit
             }
@@ -398,9 +457,18 @@ namespace BriansUsbQuizBoxApi.Tests
 
                 Thread.Sleep(20);
 
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_PRESTART, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_RUNNING, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
-                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_DONE, WinnerByte.NO_VALID_WINNER, 0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_PRESTART,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_RUNNING,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
+                statusQueue.Enqueue(new BoxStatusReport(StatusByte.GAME_DONE,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER, WinnerByte.NO_VALID_WINNER,
+                    0, 0, 0, 0, 0, 0, 0, 0));
 
                 Thread.Sleep(50); // Allow read thread to run a bit
             }

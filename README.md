@@ -32,6 +32,7 @@ Console.WriteLine("--- Brian's USB Quiz Box Communication Protocol Test App ---"
 
 using var api = new QuizBoxApi(new QuizBoxCoreApi());
 
+api.ConnectionComplete += Api_ConnectionComplete;
 api.BuzzIn += Api_BuzzIn;
 api.FiveSecondTimerStarted += Api_FiveSecondTimerStarted;
 api.FiveSecondTimerExpired += Api_FiveSecondTimerExpired;
@@ -42,6 +43,13 @@ api.GameLightOn += Api_GameLightOn;
 api.GameDone += Api_GameDone;
 api.BuzzInStats += Api_BuzzInStats;
 api.DisconnectionDetected += Api_DisconnectionDetected;
+
+void Api_ConnectionComplete(object? sender, ConnectionCompleteEventArgs e)
+{
+    Console.WriteLine($"Connection complete...");
+    Console.WriteLine($"Communication protocol version: {e.ProtocolVersion}");
+    Console.WriteLine($"Has additional winner information: {e.HasAdditionalWinnerInfo}");
+}
 
 void Api_DisconnectionDetected(object? sender, DisconnectionEventArgs e)
 {
@@ -61,6 +69,15 @@ void Api_GameLightOn(object? sender, EventArgs e)
 void Api_GameDone(object? sender, GameDoneEventArgs e)
 {
     Console.WriteLine("Game done!");
+    Console.WriteLine($"Additional Winner Info = {e.HasAdditionalWinnerInfo}");
+    Console.WriteLine($"First Place Winner = {(e.Winner != null ? e.Winner : "-none-")}");
+    Console.WriteLine($"Second Place Winner = {(e.Winner2 != null ? e.Winner2 : "-none-")}");
+    Console.WriteLine($"Third Place Winner = {(e.Winner3 != null ? e.Winner3 : "-none-")}");
+    Console.WriteLine($"Fourth Place Winner = {(e.Winner4 != null ? e.Winner4 : "-none-")}");
+    Console.WriteLine($"Fifth Place Winner = {(e.Winner5 != null ? e.Winner5 : "-none-")}");
+    Console.WriteLine($"Sixth Place Winner = {(e.Winner6 != null ? e.Winner6 : "-none-")}");
+    Console.WriteLine($"Seventh Place Winner = {(e.Winner7 != null ? e.Winner7 : "-none-")}");
+    Console.WriteLine($"Eigth Place Winner = {(e.Winner8 != null ? e.Winner8 : "-none-")}");
     Console.WriteLine($"Red 1 Time = {(e.Red1Time.HasValue ? e.Red1Time + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Red 2 Time = {(e.Red2Time.HasValue ? e.Red2Time + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Red 3 Time = {(e.Red3Time.HasValue ? e.Red3Time + "ms" : "-no buzz in-")}");
@@ -77,6 +94,15 @@ void Api_GameDone(object? sender, GameDoneEventArgs e)
 void Api_BuzzInStats(object? sender, BuzzInStatsEventArgs e)
 {
     Console.WriteLine("Buzz in statistics:");
+    Console.WriteLine($"Additional Winner Info = {e.HasAdditionalWinnerInfo}");
+    Console.WriteLine($"First Place Winner = {(e.Winner != null ? e.Winner : "-none-")}");
+    Console.WriteLine($"Second Place Winner = {(e.Winner2 != null ? e.Winner2 : "-none-")}");
+    Console.WriteLine($"Third Place Winner = {(e.Winner3 != null ? e.Winner3 : "-none-")}");
+    Console.WriteLine($"Fourth Place Winner = {(e.Winner4 != null ? e.Winner4 : "-none-")}");
+    Console.WriteLine($"Fifth Place Winner = {(e.Winner5 != null ? e.Winner5 : "-none-")}");
+    Console.WriteLine($"Sixth Place Winner = {(e.Winner6 != null ? e.Winner6 : "-none-")}");
+    Console.WriteLine($"Seventh Place Winner = {(e.Winner7 != null ? e.Winner7 : "-none-")}");
+    Console.WriteLine($"Eigth Place Winner = {(e.Winner8 != null ? e.Winner8 : "-none-")}");
     Console.WriteLine($"Red 1 Time = {(e.Red1TimeDelta.HasValue ? e.Red1TimeDelta + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Red 2 Time = {(e.Red2TimeDelta.HasValue ? e.Red2TimeDelta + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Red 3 Time = {(e.Red3TimeDelta.HasValue ? e.Red3TimeDelta + "ms" : "-no buzz in-")}");
@@ -121,8 +147,17 @@ if (api.Connect() == false)
 else
 {
     Console.WriteLine("Connected quiz box type: " + api.ConnectedQuizBoxType);
-    Console.WriteLine("");
-    Console.WriteLine("Press 'G' to start reaction timing game. Press [ENTER] to exit program...");
+    Console.WriteLine();
+    Console.WriteLine("Press 'G' to start reaction timing game.");
+    Console.WriteLine("Press 'T' to start 5 second buzz in timer.");
+    Console.WriteLine("Press 'S' to start indefinite paddle lockout timer.");
+    Console.WriteLine("Press 'E' to end indefinite paddle lockout timer.");
+    Console.WriteLine("Press '1' to start 30 second paddle lockout timer.");
+    Console.WriteLine("Press '2' to start 1 minute paddle lockout timer.");
+    Console.WriteLine("Press '3' to start 2 minute paddle lockout timer.");
+    Console.WriteLine("Press '4' to start 3 minute paddle lockout timer.");
+    Console.WriteLine("Press 'R' to reset quiz box.");
+    Console.WriteLine("Press [ENTER] to exit program...");
 }
 
 var key = Console.ReadKey();
@@ -132,6 +167,53 @@ while(key.Key != ConsoleKey.Enter)
     {
         Console.WriteLine("Starting reaction time game...");
         api.StartReactionTimingGame();
+    }
+    else if (key.Key == ConsoleKey.T)
+    {
+        Console.WriteLine("Starting 5 second buzz in timer...");
+        api.Start5SecondBuzzInTimer();
+    }
+    else if (key.Key == ConsoleKey.S)
+    {
+        Console.WriteLine("Starting indefinite paddle lockout timer...");
+        api.StartPaddleLockout();
+    }
+    else if (key.Key == ConsoleKey.E)
+    {
+        Console.WriteLine("Ending indefinite paddle lockout timer...");
+        try
+        {
+            api.StopPaddleLockout();
+        }
+        catch(NotSupportedException ex)
+        {
+            Console.WriteLine("WARNING: " + ex.Message);
+        }
+    }
+    else if (key.Key == ConsoleKey.D1)
+    {
+        Console.WriteLine("Start 30 second paddle lockout timer...");
+        api.StartPaddleLockoutTimer(LockoutTimerEnum.Timer30Seconds);
+    }
+    else if (key.Key == ConsoleKey.D2)
+    {
+        Console.WriteLine("Start 1 minute paddle lockout timer...");
+        api.StartPaddleLockoutTimer(LockoutTimerEnum.Timer1Minute);
+    }
+    else if (key.Key == ConsoleKey.D3)
+    {
+        Console.WriteLine("Start 2 minute paddle lockout timer...");
+        api.StartPaddleLockoutTimer(LockoutTimerEnum.Timer2Minutes);
+    }
+    else if (key.Key == ConsoleKey.D4)
+    {
+        Console.WriteLine("Start 3 minute paddle lockout timer...");
+        api.StartPaddleLockoutTimer(LockoutTimerEnum.Timer3Minutes);
+    }
+    else if (key.Key == ConsoleKey.R)
+    {
+        Console.WriteLine("Reseting...");
+        api.Reset();
     }
 
     key = Console.ReadKey();

@@ -6,7 +6,7 @@ namespace BriansUsbQuizBoxApi.Helpers
     /// <summary>
     /// Various command header helpers
     /// </summary>
-    static public class CommandHeaderHelpers
+    static internal class CommandHeaderHelpers
     {
         /// <summary>
         /// Returns whether the command header is expected to return a status report

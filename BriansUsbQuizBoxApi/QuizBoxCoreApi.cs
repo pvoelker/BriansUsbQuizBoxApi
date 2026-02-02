@@ -197,12 +197,8 @@ namespace BriansUsbQuizBoxApi
         public void Disconnect()
         {
             _connectedType = null;
-
-            if (_stream != null)
-            {
-                _stream.Dispose();
-                _stream = null;
-            }
+            _stream?.Dispose();
+            _stream = null;
         }
 
         protected virtual void Dispose(bool disposing)

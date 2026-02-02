@@ -19,6 +19,13 @@ namespace BriansUsbQuizBoxApi
 
         private bool _idleMode = false;
 
+        private byte? _protocolVersion = null;
+
+        /// <summary>
+        /// True if the protocol version supports additional winner information (beyond first place winner)
+        /// </summary>
+        private bool _hasAdditionalWinnerInfo = false;
+
         private readonly WinnerByteSM _winnerByteSM;
         private readonly StatusByteSM _statusByteSM;
         private readonly GameStatusByteSM _gameStatusByteSM;
@@ -33,6 +40,9 @@ namespace BriansUsbQuizBoxApi
         private int? _threadId;
 
         #region Events
+
+        /// <inheritdoc/>
+        public event EventHandler<ConnectionCompleteEventArgs>? ConnectionComplete;
 
         /// <inheritdoc/>
         public event EventHandler<BuzzInEventArgs>? BuzzIn;
@@ -85,8 +95,8 @@ namespace BriansUsbQuizBoxApi
             _gameStatusByteSM = new GameStatusByteSM(
                 () => GameStarted?.Invoke(this, null),
                 () => GameLightOn?.Invoke(this, null),
-                (p, r1, r2, r3, r4, g1, g2, g3, g4) => GameDone?.Invoke(this, new GameDoneEventArgs(p, r1, r2, r3, r4, g1, g2, g3, g4)),
-                (p, r1, r2, r3, r4, g1, g2, g3, g4) => BuzzInStats?.Invoke(this, new BuzzInStatsEventArgs(p, r1, r2, r3, r4, g1, g2, g3, g4))
+                (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => GameDone?.Invoke(this, new GameDoneEventArgs(_hasAdditionalWinnerInfo, p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4)),
+                (p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4) => BuzzInStats?.Invoke(this, new BuzzInStatsEventArgs(_hasAdditionalWinnerInfo, p1, p2, p3, p4, p5, p6, p7, p8, r1, r2, r3, r4, g1, g2, g3, g4))
             );
         }
 
@@ -96,9 +106,16 @@ namespace BriansUsbQuizBoxApi
             get { return _api.IsConnected; }
         }
 
+        /// <inheritdoc/>
         public QuizBoxTypeEnum? ConnectedQuizBoxType
         {
             get { return _api.ConnectedQuizBoxType; }
+        }
+
+        /// <inheritdoc/>
+        public byte? ProtocolVersion
+        {
+            get { return _protocolVersion; }
         }
 
         /// <inheritdoc/>
@@ -159,17 +176,11 @@ namespace BriansUsbQuizBoxApi
                     _doneComplete?.WaitOne();
                 }
 
-                if (_done != null)
-                {
-                    _done.Dispose();
-                    _done = null;
-                }
+                _done?.Dispose();
+                _done = null;
 
-                if (_doneComplete != null)
-                {
-                    _doneComplete.Dispose();
-                    _doneComplete = null;
-                }
+                _doneComplete?.Dispose();
+                _doneComplete = null;
 
                 _threadId = null;
             }
@@ -386,27 +397,18 @@ namespace BriansUsbQuizBoxApi
                 }
             }
 
-            if (_doneComplete != null)
-            {
-                _doneComplete.Set();
-            }
+            _doneComplete?.Set();
 
             _api.Disconnect();
         }
 
         private void DisconnectCleanup()
         {
-            if (_done != null)
-            {
-                _done.Dispose();
-                _done = null;
-            }
+            _done?.Dispose();
+            _done = null;
 
-            if (_doneComplete != null)
-            {
-                _doneComplete.Dispose();
-                _doneComplete = null;
-            }
+            _doneComplete?.Dispose();
+            _doneComplete = null;
 
             _threadId = null;
         }
@@ -437,6 +439,15 @@ namespace BriansUsbQuizBoxApi
 
         private void ProcessRead(BoxStatusReport status, bool checkCommandWrite)
         {
+            bool bConnectionComplete = false;
+
+            if (_protocolVersion.HasValue == false)
+            {
+                _protocolVersion = status.ProtocolVersion;
+                _hasAdditionalWinnerInfo = _protocolVersion.Value > 0;
+                bConnectionComplete = true;
+            }
+
             _winnerByteSM.Process(status.Status, status.Winner);
 
             _statusByteSM.Process(status.Status);
@@ -475,6 +486,11 @@ namespace BriansUsbQuizBoxApi
             else
             {
                 _idleMode = false;
+            }
+
+            if (bConnectionComplete)
+            {
+                ConnectionComplete?.Invoke(this, new ConnectionCompleteEventArgs(_protocolVersion.Value, _hasAdditionalWinnerInfo));
             }
         }
 

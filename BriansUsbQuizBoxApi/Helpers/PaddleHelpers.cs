@@ -6,7 +6,7 @@ namespace BriansUsbQuizBoxApi.Helpers
     /// <summary>
     /// Various paddle winner byte related helpers
     /// </summary>
-    static public class PaddleHelpers
+    static internal class PaddleHelpers
     {
         /// <summary>
         /// Convert a paddle winner byte to a paddle number and color
