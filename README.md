@@ -77,7 +77,7 @@ void Api_GameDone(object? sender, GameDoneEventArgs e)
     Console.WriteLine($"Fifth Place Winner = {(e.Winner5 != null ? e.Winner5 : "-none-")}");
     Console.WriteLine($"Sixth Place Winner = {(e.Winner6 != null ? e.Winner6 : "-none-")}");
     Console.WriteLine($"Seventh Place Winner = {(e.Winner7 != null ? e.Winner7 : "-none-")}");
-    Console.WriteLine($"Eigth Place Winner = {(e.Winner8 != null ? e.Winner8 : "-none-")}");
+    Console.WriteLine($"Eighth Place Winner = {(e.Winner8 != null ? e.Winner8 : "-none-")}");
     Console.WriteLine($"Red 1 Time = {(e.Red1Time.HasValue ? e.Red1Time + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Red 2 Time = {(e.Red2Time.HasValue ? e.Red2Time + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Red 3 Time = {(e.Red3Time.HasValue ? e.Red3Time + "ms" : "-no buzz in-")}");
@@ -102,7 +102,7 @@ void Api_BuzzInStats(object? sender, BuzzInStatsEventArgs e)
     Console.WriteLine($"Fifth Place Winner = {(e.Winner5 != null ? e.Winner5 : "-none-")}");
     Console.WriteLine($"Sixth Place Winner = {(e.Winner6 != null ? e.Winner6 : "-none-")}");
     Console.WriteLine($"Seventh Place Winner = {(e.Winner7 != null ? e.Winner7 : "-none-")}");
-    Console.WriteLine($"Eigth Place Winner = {(e.Winner8 != null ? e.Winner8 : "-none-")}");
+    Console.WriteLine($"Eighth Place Winner = {(e.Winner8 != null ? e.Winner8 : "-none-")}");
     Console.WriteLine($"Red 1 Time = {(e.Red1TimeDelta.HasValue ? e.Red1TimeDelta + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Red 2 Time = {(e.Red2TimeDelta.HasValue ? e.Red2TimeDelta + "ms" : "-no buzz in-")}");
     Console.WriteLine($"Red 3 Time = {(e.Red3TimeDelta.HasValue ? e.Red3TimeDelta + "ms" : "-no buzz in-")}");

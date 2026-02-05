@@ -48,7 +48,7 @@ namespace BriansUsbQuizBoxApi
         public Paddle? Winner7 { get; private set; }
 
         /// <summary>
-        /// Eigth place winner paddle that was pressed. Null if no winner
+        /// Eighth place winner paddle that was pressed. Null if no winner
         /// </summary>
         public Paddle? Winner8 { get; private set; }
 
