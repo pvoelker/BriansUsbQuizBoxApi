@@ -7,6 +7,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
 {
     public class WinnerByteSMTests
     {
+        const int DONT_CARE = 0;
+
         [Fact]
         public void PaddleRed1Pressed()
         {
@@ -15,7 +17,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             var sm = new WinnerByteSM((p) => { paddle = p; },
                 () => Assert.Fail("This should not be called"));
 
-            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_1);
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_1,
+                DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE));
 
             paddle.Should().Be(Paddle.RED_1);
         }
@@ -28,7 +31,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             var sm = new WinnerByteSM((p) => { paddle = p; },
                 () => Assert.Fail("This should not be called"));
 
-            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_2);
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_2,
+                DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE));
 
             paddle.Should().Be(Paddle.RED_2);
         }
@@ -41,7 +45,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             var sm = new WinnerByteSM((p) => { paddle = p; },
                 () => Assert.Fail("This should not be called"));
 
-            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_3);
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_3,
+                DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE));
 
             paddle.Should().Be(Paddle.RED_3);
         }
@@ -54,7 +59,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             var sm = new WinnerByteSM((p) => { paddle = p; },
                 () => Assert.Fail("This should not be called"));
 
-            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_4);
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.RED_4,
+                DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE));
 
             paddle.Should().Be(Paddle.RED_4);
         }
@@ -67,7 +73,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             var sm = new WinnerByteSM((p) => { paddle = p; },
                 () => Assert.Fail("This should not be called"));
 
-            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_1);
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_1,
+                DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE));
 
             paddle.Should().Be(Paddle.GREEN_1);
         }
@@ -80,7 +87,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             var sm = new WinnerByteSM((p) => { paddle = p; },
                 () => Assert.Fail("This should not be called"));
 
-            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_2);
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_2,
+                DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE));
 
             paddle.Should().Be(Paddle.GREEN_2);
         }
@@ -93,7 +101,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             var sm = new WinnerByteSM((p) => { paddle = p; },
                 () => Assert.Fail("This should not be called"));
 
-            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_3);
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_3,
+                DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE));
 
             paddle.Should().Be(Paddle.GREEN_3);
         }
@@ -106,7 +115,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             var sm = new WinnerByteSM((p) => { paddle = p; },
                 () => Assert.Fail("This should not be called"));
 
-            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_4);
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.GREEN_4,
+                DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE));
 
             paddle.Should().Be(Paddle.GREEN_4);
         }
@@ -119,7 +129,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             var sm = new WinnerByteSM((p) => Assert.Fail("This should not be called"),
                 () => { timerExpired = true; });
 
-            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.FIVE_SEC_TIMER_EXPIRED);
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.FIVE_SEC_TIMER_EXPIRED,
+                DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE));
 
             timerExpired.Should().BeTrue();
         }
@@ -130,7 +141,8 @@ namespace BriansUsbQuizBoxApi.Tests.StateMachines
             var sm = new WinnerByteSM((p) => Assert.Fail("This should not be called"),
                 () => Assert.Fail("This should not be called"));
 
-            sm.Process(StatusByte.PERSON_BUZZED_IN, WinnerByte.NO_VALID_WINNER);
+            sm.Process(new BoxStatusReport(StatusByte.PERSON_BUZZED_IN, WinnerByte.NO_VALID_WINNER,
+                DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE));
 
             // No callbacks should be called
         }
