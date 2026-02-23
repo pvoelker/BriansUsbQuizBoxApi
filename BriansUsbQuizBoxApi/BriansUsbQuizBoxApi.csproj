@@ -5,16 +5,16 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Brian's USB Quiz Box Communication Protocol API</Title>
-    <Copyright>Copyright © 2025 Paul Voelker</Copyright>
+    <Copyright>Copyright © $([System.DateTime]::Now.Year) Paul Voelker</Copyright>
     <Description>An API for interfacing with quiz boxes implementing the Brian's Quiz Box Communication Protocol</Description>
     <RepositoryUrl>https://github.com/pvoelker/BriansUsbQuizBoxApi</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags></PackageTags>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>1.1.0-beta.3</Version>
+    <Version>1.1.0</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.1.11.0</FileVersion>
+    <FileVersion>1.1.12.0</FileVersion>
     <PackageId>BriansUsbQuizBoxApi</PackageId>
     <Authors>HerrVlkr</Authors>
     <Company>Paul Voelker</Company>
