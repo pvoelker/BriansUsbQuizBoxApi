@@ -40,4 +40,6 @@ Track changes made to the API.
 
 ## Version 1.1.0 (1.1.12.0)
 
-- Final release of Kirkman Basic Quizbox Plus support
+- First release of Kirkman Basic Quizbox Plus support
+- Add ability to connect to specific quiz box types
+- Documentation cleanup
