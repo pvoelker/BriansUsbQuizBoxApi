@@ -448,7 +448,7 @@ namespace BriansUsbQuizBoxApi
                 bConnectionComplete = true;
             }
 
-            _winnerByteSM.Process(status.Status, status.Winner);
+            _winnerByteSM.Process(status);
 
             _statusByteSM.Process(status.Status);
 
@@ -479,6 +479,8 @@ namespace BriansUsbQuizBoxApi
                     _winnerByteSM.Reset();
                     _statusByteSM.Reset();
                     _gameStatusByteSM.Reset();
+
+                    DebugHelpers.WriteLine("STATE MACHINE RESET");
 
                     _idleMode = true;
                 }

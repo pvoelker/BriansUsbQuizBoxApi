@@ -17,7 +17,7 @@ namespace BriansUsbQuizBoxApi.StateMachines
         private readonly FiveSecondTimerExpiredCallback _fiveSecondTimerExpiredCallback;
 
         private Paddle? _lastPaddle = null;
-        private bool _lastFiveSecondTimerExpired = false;
+        private bool _bLastFiveSecondTimerExpired = false;
 
         /// <summary>
         /// Constructor
@@ -39,37 +39,43 @@ namespace BriansUsbQuizBoxApi.StateMachines
         public void Reset()
         {
             _lastPaddle = null;
-            _lastFiveSecondTimerExpired = false;
+            _bLastFiveSecondTimerExpired = false;
         }
 
         /// <summary>
         /// Process a new winner byte
         /// </summary>
-        /// <param name="statusByte">Status byte</param>
-        /// <param name="winnerByte">Winner byte</param>
-        public void Process(StatusByte statusByte, WinnerByte winnerByte)
+        /// <param name="status">Box status report</param>
+        public void Process(BoxStatusReport status)
         {
-            if (PaddleHelpers.TryParseWinnerByte(winnerByte, out var paddle))
+            if (PaddleHelpers.TryParseWinnerByte(status.Winner, out var paddle1)
+                && PaddleHelpers.TryParseWinnerByte(status.Winner2, out var paddle2)
+                && PaddleHelpers.TryParseWinnerByte(status.Winner3, out var paddle3)
+                && PaddleHelpers.TryParseWinnerByte(status.Winner4, out var paddle4)
+                && PaddleHelpers.TryParseWinnerByte(status.Winner5, out var paddle5)
+                && PaddleHelpers.TryParseWinnerByte(status.Winner6, out var paddle6)
+                && PaddleHelpers.TryParseWinnerByte(status.Winner7, out var paddle7)
+                && PaddleHelpers.TryParseWinnerByte(status.Winner8, out var paddle8))
             {
-                var fiveSecondTimerExpired = winnerByte == WinnerByte.FIVE_SEC_TIMER_EXPIRED;
+                var bFiveSecondTimerExpired = status.Winner == WinnerByte.FIVE_SEC_TIMER_EXPIRED;
 
-                if (paddle != _lastPaddle)
+                if (paddle1 != _lastPaddle)
                 {
-                    if (paddle != null)
+                    if (paddle1 != null)
                     {
-                        _buzzInCallback(paddle);
+                        _buzzInCallback(paddle1);
                     }
 
-                    _lastPaddle = paddle;
+                    _lastPaddle = paddle1;
                 }
 
-                if (fiveSecondTimerExpired != _lastFiveSecondTimerExpired)
+                if (bFiveSecondTimerExpired != _bLastFiveSecondTimerExpired)
                 {
-                    if (fiveSecondTimerExpired == true)
+                    if (bFiveSecondTimerExpired == true)
                     {
                         _fiveSecondTimerExpiredCallback();
                     }
-                    _lastFiveSecondTimerExpired = fiveSecondTimerExpired;
+                    _bLastFiveSecondTimerExpired = bFiveSecondTimerExpired;
                 }
             }
         }

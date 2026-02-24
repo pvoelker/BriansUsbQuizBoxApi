@@ -65,7 +65,7 @@ namespace BriansUsbQuizBoxApi.StateMachines
         /// <summary>
         /// Process a new winner byte
         /// </summary>
-        /// <param name="statusByte">Status byte</param>
+        /// <param name="status">Box status report</param>
         public void Process(BoxStatusReport status)
         {
             var statusByte = status.Status;

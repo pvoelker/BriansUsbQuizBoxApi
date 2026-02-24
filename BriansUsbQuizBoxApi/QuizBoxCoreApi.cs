@@ -40,45 +40,15 @@ namespace BriansUsbQuizBoxApi
         /// <exception cref="InvalidOperationException">Already connected to a quiz box</exception>
         public bool Connect()
         {
-            if (_stream == null)
-            {
-                HidDevice? box = GetBriansBoxDevice();
-                if(box != null)
-                {
-                    _connectedType = QuizBoxTypeEnum.BriansQuizBox;
-                }
-                else
-                {
-                    box = GetBasicQuizboxPlusDevice();
-                    if(box != null)
-                    {
-                        _connectedType = QuizBoxTypeEnum.KirkmanQuizBox;
-                    }
-                }
+            return ConnectInternal(null);
+        }
 
-                if (box != null)
-                {
-                    if (box.TryOpen(out _stream))
-                    {
-                        // Don't wait on reads
-                        _stream.ReadTimeout = 0;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException("Already connected to a quiz box");
-            }
+        /// <inheritdoc/>
+        /// <exception cref="MultipleDevicesException">More than one quiz box is detected</exception>
+        /// <exception cref="InvalidOperationException">Already connected to a quiz box</exception>
+        public bool Connect(QuizBoxTypeEnum quizBoxType)
+        {
+            return ConnectInternal(quizBoxType);
         }
 
         /// <inheritdoc/>
@@ -211,6 +181,64 @@ namespace BriansUsbQuizBoxApi
                 }
 
                 _disposedValue = true;
+            }
+        }
+
+        /// <summary>
+        /// Attempt to connect to a specific or any quiz box type
+        /// </summary>
+        /// <param name="quizBoxType">The type of quiz box to connect to. Null to connect to any quiz box type</param>
+        /// <exception cref="MultipleDevicesException">More than one quiz box is detected</exception>
+        /// <exception cref="InvalidOperationException">Already connected to a quiz box</exception>
+        protected bool ConnectInternal(QuizBoxTypeEnum? quizBoxTypeEnum)
+        {
+            if (_stream == null)
+            {
+                HidDevice? box = null;
+
+                if (quizBoxTypeEnum == null || quizBoxTypeEnum == QuizBoxTypeEnum.BriansQuizBox)
+                {
+                    box = GetBriansBoxDevice();
+                    if (box != null)
+                    {
+                        _connectedType = QuizBoxTypeEnum.BriansQuizBox;
+                    }
+                }
+
+                if (box == null)
+                {
+                    if (quizBoxTypeEnum == null || quizBoxTypeEnum == QuizBoxTypeEnum.KirkmanQuizBox)
+                    {
+                        box = GetBasicQuizboxPlusDevice();
+                        if (box != null)
+                        {
+                            _connectedType = QuizBoxTypeEnum.KirkmanQuizBox;
+                        }
+                    }
+                }
+
+                if (box != null)
+                {
+                    if (box.TryOpen(out _stream))
+                    {
+                        // Don't wait on reads
+                        _stream.ReadTimeout = 0;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Already connected to a quiz box");
             }
         }
 

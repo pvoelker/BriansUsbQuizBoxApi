@@ -73,9 +73,10 @@ namespace BriansUsbQuizBoxApi.Helpers
             }
             else if (command == CommandHeaderByte.END_INFINITE_TIMER_BUZZ)
             {
-                // There is no way to track the state change for this
+                // There is no way to track the state change for this on Brian's Box
                 // After this command is sent, the state EXTENDED_TIMER_RUNNING sticks around for a bit
                 // Resending the command sends the API into an infinite paddle lockout loop
+                // This command is NOT implemented on the Kirkman Box
                 return (x) => true;
             }
             else if (command == CommandHeaderByte.STATUS_REQUEST)

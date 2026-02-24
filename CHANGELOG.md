@@ -37,3 +37,9 @@ Track changes made to the API.
 	- Communication protocol version number byte
 	- Additional winner bytes for second through eighth place
 - Add additional unit test cases for new protocol features
+
+## Version 1.1.0 (1.1.12.0)
+
+- First release of Kirkman Basic Quizbox Plus support
+- Add ability to connect to specific quiz box types
+- Documentation cleanup

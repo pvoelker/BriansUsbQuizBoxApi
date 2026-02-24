@@ -66,7 +66,7 @@ namespace BriansUsbQuizBoxApi.Protocols
         public WinnerByte Winner7 { get; private set; }
 
         /// <summary>
-        /// Eigth place winner, will always be zero for protocol version 0
+        /// Eighth place winner, will always be zero for protocol version 0
         /// </summary>
         public WinnerByte Winner8 { get; private set; }
 

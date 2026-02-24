@@ -1,6 +1,6 @@
 # Updating Copyright
 
-- BriansUsbQuizBoxApi -> [Right Click] -> Properties -> Package -> General -> Copyright (can also be directly edited in 'BriansUsbQuizBoxApi' project file)
+- Copyright year is now automatically set to the current year when a build is done. So no manual update is needed
 
 # Versioning
 
