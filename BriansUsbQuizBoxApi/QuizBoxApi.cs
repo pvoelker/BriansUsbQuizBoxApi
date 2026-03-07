@@ -123,46 +123,15 @@ namespace BriansUsbQuizBoxApi
         /// <exception cref="InvalidOperationException">Already connected to a quiz box</exception>
         public bool Connect()
         {
-            if (_api.IsConnected == false)
-            {
-                if (_api.Connect())
-                {
-                    _done = new EventWaitHandle(false, EventResetMode.ManualReset);
-                    _doneComplete = new EventWaitHandle(false, EventResetMode.ManualReset);
+            return ConnectInternal(null);
+        }
 
-                    try
-                    {
-                        var thread = new Thread(new ThreadStart(ReadData))
-                        {
-                            Name = "Quiz Box I/O Thread"
-                        };
-                        thread.Start();
-
-                        _threadId = thread.ManagedThreadId;
-                    }
-                    catch
-                    {
-                        _threadId = null;
-
-                        _done.Dispose();
-                        _done = null;
-                        _doneComplete.Dispose();
-                        _doneComplete = null;
-
-                        throw;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-
-                return true;
-            }
-            else
-            {
-                throw new InvalidOperationException("Already connected to a quiz box");
-            }
+        /// <inheritdoc/>
+        /// <exception cref="MultipleDevicesException">More than one quiz box is detected</exception>
+        /// <exception cref="InvalidOperationException">Already connected to a quiz box</exception>
+        public bool Connect(QuizBoxTypeEnum quizBoxType)
+        {
+            return ConnectInternal(quizBoxType);
         }
 
         /// <inheritdoc/>
@@ -493,6 +462,57 @@ namespace BriansUsbQuizBoxApi
             if (bConnectionComplete)
             {
                 ConnectionComplete?.Invoke(this, new ConnectionCompleteEventArgs(_protocolVersion.Value, _hasAdditionalWinnerInfo));
+            }
+        }
+
+        /// <summary>
+        /// Attempt to connect to a specific quiz box type or any quiz box type
+        /// </summary>
+        /// <param name="quizBoxType">The type of quiz box to connect to. Null to connect to any quiz box type</param>
+        /// <returns>True if connection successful, otherwise false</returns>
+        /// <exception cref="MultipleDevicesException">More than one quiz box is detected</exception>
+        /// <exception cref="InvalidOperationException">Already connected to a quiz box</exception>
+        private bool ConnectInternal(QuizBoxTypeEnum? quizBoxType)
+        {
+            if (_api.IsConnected == false)
+            {
+                if (quizBoxType == null ? _api.Connect() : _api.Connect(quizBoxType.Value))
+                {
+                    _done = new EventWaitHandle(false, EventResetMode.ManualReset);
+                    _doneComplete = new EventWaitHandle(false, EventResetMode.ManualReset);
+
+                    try
+                    {
+                        var thread = new Thread(new ThreadStart(ReadData))
+                        {
+                            Name = "Quiz Box I/O Thread"
+                        };
+                        thread.Start();
+
+                        _threadId = thread.ManagedThreadId;
+                    }
+                    catch
+                    {
+                        _threadId = null;
+
+                        _done.Dispose();
+                        _done = null;
+                        _doneComplete.Dispose();
+                        _doneComplete = null;
+
+                        throw;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            else
+            {
+                throw new InvalidOperationException("Already connected to a quiz box");
             }
         }
 

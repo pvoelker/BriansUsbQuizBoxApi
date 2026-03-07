@@ -96,6 +96,13 @@ namespace BriansUsbQuizBoxApi
         bool Connect();
 
         /// <summary>
+        /// Attempt to connect to a specific quiz box type
+        /// </summary>
+        /// <param name="quizBoxType">The type of quiz box to connect to</param>
+        /// <returns>True if connection successful, otherwise false</returns>
+        bool Connect(QuizBoxTypeEnum quizBoxType);
+
+        /// <summary>
         /// Send the reset command to the quiz box.  All timers and game modes are cancelled
         /// </summary>
         void Reset();
