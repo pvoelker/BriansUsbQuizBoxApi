@@ -13,7 +13,7 @@ If there are any issues or feature requests, please contact me via my GitHub acc
 ## 'Kirkman Basic Quizbox Plus' Deviations and Departures
 
 - 'StopPaddleLockout' is not supported, however 'Reset' will clear a paddle lockout
-- Buzz in times are not guaranteed to be the same as Brian's Quiz Box due to hardware differences. They are close, but may vary by a few milliseconds
+- Buzz in times are not guaranteed to be the same as Brian's Quiz Box due to hardware differences. They are close, but may vary by a few milliseconds. The Kirkman Basic Quizbox Plus uses a 4.08ms resolution timer, while the Brian's Quiz Box uses a 1.02ms resolution timer
 
 ## NuGet Package
 

@@ -43,3 +43,7 @@ Track changes made to the API.
 - First release of Kirkman Basic Quizbox Plus support
 - Add ability to connect to specific quiz box types
 - Documentation cleanup
+
+## Version 1.1.1 (1.1.13.0)
+
+- Complete implementation of connecting to specific quiz box types
